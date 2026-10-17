@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/timed_platform.gd" id="1_s6max"]
+[ext_resource type="PackedScene" path="res://art/models/PLAT_Timed.glb" id="2_22i6k"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_eywg0"]
+height = 0.6
+radius = 1.55
+
+[node name="TimedPlatform" type="StaticBody3D" unique_id=639702862]
+collision_mask = 0
+script = ExtResource("1_s6max")
+
+[node name="Model" type="Node3D" parent="." unique_id=1593910829 instance=ExtResource("2_22i6k")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1004770007]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("CylinderShape3D_eywg0")

@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/gem.gd" id="1_45ngq"]
+[ext_resource type="PackedScene" path="res://art/models/PROP_Gem.glb" id="2_pg3i0"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kgw6u"]
+radius = 0.9
+
+[node name="Gem" type="Area3D" unique_id=689307480]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_45ngq")
+
+[node name="Model" type="Node3D" parent="." unique_id=2072902042 instance=ExtResource("2_pg3i0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1696099292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_kgw6u")

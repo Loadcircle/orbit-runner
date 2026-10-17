@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/HAZ_Spikes.glb" id="1_lfwqm"]
+[ext_resource type="Script" path="res://scripts/props/hazard_area.gd" id="2_v1itu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2s2vs"]
+size = Vector3(1.8, 0.5, 1.8)
+
+[node name="Spikes" type="Node3D" unique_id=1590027215]
+
+[node name="Model" type="Node3D" parent="." unique_id=886797986 instance=ExtResource("1_lfwqm")]
+
+[node name="Hazard" type="Area3D" parent="." unique_id=2113808803]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("2_v1itu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hazard" unique_id=666385748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("BoxShape3D_2s2vs")

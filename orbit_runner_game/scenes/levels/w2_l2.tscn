@@ -1,0 +1,888 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/level/level.gd" id="1_r0bb6"]
+[ext_resource type="Resource" path="res://resources/biomes/toyworks.tres" id="2_gbum7"]
+[ext_resource type="PackedScene" path="res://scenes/props/platforms/toy_l.tscn" id="3_3kv1q"]
+[ext_resource type="PackedScene" path="res://scenes/props/platforms/toy_m.tscn" id="4_st167"]
+[ext_resource type="PackedScene" path="res://scenes/props/platforms/toy_wide.tscn" id="5_3oudb"]
+[ext_resource type="PackedScene" path="res://scenes/props/platforms/toy_s.tscn" id="6_4ox8h"]
+[ext_resource type="PackedScene" path="res://scenes/props/platforms/toy_strip.tscn" id="7_5djh4"]
+[ext_resource type="PackedScene" path="res://scenes/props/moving_platform.tscn" id="8_tn6yy"]
+[ext_resource type="Script" path="res://scripts/props/moving_platform.gd" id="9_monub"]
+[ext_resource type="PackedScene" path="res://scenes/props/boost_pad.tscn" id="10_5dp76"]
+[ext_resource type="Script" path="res://scripts/props/boost_pad.gd" id="11_wysh3"]
+[ext_resource type="PackedScene" path="res://scenes/props/trampoline.tscn" id="12_sns2e"]
+[ext_resource type="Script" path="res://scripts/props/trampoline.gd" id="13_wol8l"]
+[ext_resource type="PackedScene" path="res://scenes/props/goal.tscn" id="14_i6q7s"]
+[ext_resource type="Script" path="res://scripts/props/goal.gd" id="15_ykpu7"]
+[ext_resource type="PackedScene" path="res://scenes/props/patrol_bot.tscn" id="16_ut13i"]
+[ext_resource type="Script" path="res://scripts/props/patrol_hazard.gd" id="17_mmrgc"]
+[ext_resource type="PackedScene" path="res://scenes/props/laser_gate.tscn" id="18_kgie4"]
+[ext_resource type="Script" path="res://scripts/props/laser_gate.gd" id="19_cjgeo"]
+[ext_resource type="PackedScene" path="res://scenes/props/spinner.tscn" id="20_svq7j"]
+[ext_resource type="Script" path="res://scripts/props/spinner.gd" id="21_55h2g"]
+[ext_resource type="PackedScene" path="res://scenes/props/spark.tscn" id="22_fwgt7"]
+[ext_resource type="Script" path="res://scripts/props/spark.gd" id="23_h38bt"]
+[ext_resource type="PackedScene" path="res://scenes/props/gem.tscn" id="24_7148f"]
+[ext_resource type="Script" path="res://scripts/props/gem.gd" id="25_81ob0"]
+[ext_resource type="PackedScene" path="res://scenes/props/checkpoint.tscn" id="26_8fipe"]
+[ext_resource type="Script" path="res://scripts/props/checkpoint.gd" id="27_0okjd"]
+[ext_resource type="Script" path="res://scripts/props/camera_zone.gd" id="28_f22im"]
+[ext_resource type="Script" path="res://scripts/props/tutorial_prompt.gd" id="29_lddap"]
+[ext_resource type="PackedScene" path="res://art/models/ENV_ToyBlocks.glb" id="30_11l7o"]
+[ext_resource type="PackedScene" path="res://art/models/ENV_LampPost.glb" id="31_h22ri"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1y40n"]
+size = Vector3(7, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lg3b2"]
+size = Vector3(7, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f20kb"]
+size = Vector3(5, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_syia2"]
+size = Vector3(11, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vhbnn"]
+size = Vector3(7, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y5sa4"]
+size = Vector3(5, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_injkt"]
+size = Vector3(7, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ial56"]
+size = Vector3(7, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1oumn"]
+size = Vector3(4, 14, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6nksp"]
+size = Vector3(3.5, 14, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6uyac"]
+size = Vector3(3.5, 14, 9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_43the"]
+size = Vector3(11, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rxy7f"]
+size = Vector3(5, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s7ajl"]
+size = Vector3(7, 14, 11)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d1jn4"]
+size = Vector3(4, 14, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5lupg"]
+size = Vector3(5, 14, 7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wekgf"]
+size = Vector3(7, 6, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_en1ch"]
+size = Vector3(7, 6, 4)
+
+[node name="w2_l2" type="Node3D" unique_id=37024303]
+script = ExtResource("1_r0bb6")
+biome = ExtResource("2_gbum7")
+kill_height = -9.0
+
+[node name="Geometry" type="Node3D" parent="." unique_id=466429434]
+
+[node name="PlatformToyL" type="StaticBody3D" parent="Geometry" unique_id=1127847377 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+collision_mask = 0
+
+[node name="@StaticBody3D@669" type="StaticBody3D" parent="Geometry" unique_id=675405888 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+collision_mask = 0
+
+[node name="PlatformToyM" type="StaticBody3D" parent="Geometry" unique_id=684234543 instance=ExtResource("4_st167")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -37.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@684" type="StaticBody3D" parent="Geometry" unique_id=709307198 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -48.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@695" type="StaticBody3D" parent="Geometry" unique_id=430760079 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11, 0, -48.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@703" type="StaticBody3D" parent="Geometry" unique_id=1552281091 instance=ExtResource("4_st167")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -22, 1, -48.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@711" type="StaticBody3D" parent="Geometry" unique_id=1924891349 instance=ExtResource("4_st167")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -35.5, 6, -48.5)
+collision_mask = 0
+
+[node name="PlatformToyWide" type="StaticBody3D" parent="Geometry" unique_id=1771400905 instance=ExtResource("5_3oudb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -56.5)
+collision_mask = 0
+
+[node name="PlatformToyS" type="StaticBody3D" parent="Geometry" unique_id=322447814 instance=ExtResource("6_4ox8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.5, 6, -56.5)
+collision_mask = 0
+
+[node name="PlatformToyStrip" type="StaticBody3D" parent="Geometry" unique_id=1623167979 instance=ExtResource("7_5djh4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -79.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@736" type="StaticBody3D" parent="Geometry" unique_id=667680730 instance=ExtResource("7_5djh4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 5, -90.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@743" type="StaticBody3D" parent="Geometry" unique_id=282802108 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 5, -102.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@755" type="StaticBody3D" parent="Geometry" unique_id=655781078 instance=ExtResource("4_st167")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -44.5, 5, -102.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@764" type="StaticBody3D" parent="Geometry" unique_id=404175599 instance=ExtResource("3_3kv1q")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -59.5, 4, -102.5)
+collision_mask = 0
+
+[node name="@StaticBody3D@771" type="StaticBody3D" parent="Geometry" unique_id=1418840648 instance=ExtResource("6_4ox8h")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -61.5, 1, -110)
+collision_mask = 0
+
+[node name="@StaticBody3D@776" type="StaticBody3D" parent="Geometry" unique_id=2074704910 instance=ExtResource("4_st167")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -70.5, 4, -102.5)
+collision_mask = 0
+
+[node name="Elements" type="Node3D" parent="." unique_id=684157960]
+
+[node name="MovingPlatform" type="AnimatableBody3D" parent="Elements" unique_id=698536805 instance=ExtResource("8_tn6yy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -25)
+collision_mask = 0
+script = ExtResource("9_monub")
+travel = Vector3(6, 0, 0)
+
+[node name="@AnimatableBody3D@676" type="AnimatableBody3D" parent="Elements" unique_id=1978596888 instance=ExtResource("8_tn6yy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -30.5)
+collision_mask = 0
+script = ExtResource("9_monub")
+travel = Vector3(-6, 0, 0)
+phase = 0.5
+
+[node name="@AnimatableBody3D@708" type="AnimatableBody3D" parent="Elements" unique_id=773347806 instance=ExtResource("8_tn6yy")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -29, 1, -48.5)
+collision_mask = 0
+script = ExtResource("9_monub")
+travel = Vector3(0, 5, 0)
+period = 3.5
+
+[node name="@AnimatableBody3D@727" type="AnimatableBody3D" parent="Elements" unique_id=363643001 instance=ExtResource("8_tn6yy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -63.5)
+collision_mask = 0
+script = ExtResource("9_monub")
+travel = Vector3(0, 0, -8)
+period = 5.0
+
+[node name="BoostPad" type="Area3D" parent="Elements" unique_id=1578965575 instance=ExtResource("10_5dp76")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -44.5, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_wysh3")
+
+[node name="Trampoline" type="Node3D" parent="Elements" unique_id=1122703242 instance=ExtResource("12_sns2e")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -62.3, 1, -110)
+script = ExtResource("13_wol8l")
+
+[node name="Goal" type="Area3D" parent="Elements" unique_id=563289449 instance=ExtResource("14_i6q7s")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -71.5, 4, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("15_ykpu7")
+
+[node name="Hazards" type="Node3D" parent="." unique_id=1631145762]
+
+[node name="PatrolBot" type="Node3D" parent="Hazards" unique_id=1792305503 instance=ExtResource("16_ut13i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -14)
+script = ExtResource("17_mmrgc")
+travel = Vector3(5, 0, 0)
+
+[node name="@Node3D@674" type="Node3D" parent="Hazards" unique_id=850161245 instance=ExtResource("16_ut13i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -18)
+script = ExtResource("17_mmrgc")
+travel = Vector3(-5, 0, 0)
+phase = 0.5
+
+[node name="LaserGate" type="Node3D" parent="Hazards" unique_id=1325924527 instance=ExtResource("18_kgie4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -48.5)
+script = ExtResource("19_cjgeo")
+width = 5.8
+
+[node name="@Node3D@700" type="Node3D" parent="Hazards" unique_id=800814348 instance=ExtResource("18_kgie4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -9, 0, -48.5)
+script = ExtResource("19_cjgeo")
+width = 5.8
+
+[node name="@Node3D@701" type="Node3D" parent="Hazards" unique_id=129906 instance=ExtResource("18_kgie4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.5, 0, -48.5)
+script = ExtResource("19_cjgeo")
+width = 5.8
+period = 2.0
+
+[node name="@Node3D@716" type="Node3D" parent="Hazards" unique_id=257315144 instance=ExtResource("16_ut13i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.5, 6, -48.5)
+script = ExtResource("17_mmrgc")
+travel = Vector3(-4, 0, 0)
+speed = 2.5
+
+[node name="Spinner" type="Node3D" parent="Hazards" unique_id=844105597 instance=ExtResource("20_svq7j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -56.5)
+script = ExtResource("21_55h2g")
+degrees_per_second = 90.0
+
+[node name="@Node3D@734" type="Node3D" parent="Hazards" unique_id=237930604 instance=ExtResource("18_kgie4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -79.5)
+script = ExtResource("19_cjgeo")
+width = 2.3
+
+[node name="@Node3D@741" type="Node3D" parent="Hazards" unique_id=116244395 instance=ExtResource("16_ut13i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 5, -87.5)
+script = ExtResource("17_mmrgc")
+travel = Vector3(0, 0, -6)
+
+[node name="@Node3D@769" type="Node3D" parent="Hazards" unique_id=632655278 instance=ExtResource("18_kgie4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -57, 4, -102.5)
+script = ExtResource("19_cjgeo")
+width = 5.8
+period = 1.6
+phase = 0.25
+
+[node name="@Node3D@770" type="Node3D" parent="Hazards" unique_id=479109711 instance=ExtResource("18_kgie4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -61, 4, -102.5)
+script = ExtResource("19_cjgeo")
+width = 5.8
+period = 1.6
+phase = 0.75
+
+[node name="Collectibles" type="Node3D" parent="." unique_id=1848984661]
+
+[node name="Spark" type="Area3D" parent="Collectibles" unique_id=337995563 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@665" type="Area3D" parent="Collectibles" unique_id=1327821805 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@668" type="Area3D" parent="Collectibles" unique_id=738170911 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -9.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@672" type="Area3D" parent="Collectibles" unique_id=116548717 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -14)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@673" type="Area3D" parent="Collectibles" unique_id=2118393059 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -18)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@675" type="Area3D" parent="Collectibles" unique_id=1237812315 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -22.25)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@677" type="Area3D" parent="Collectibles" unique_id=1443779784 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2, -27.75)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@678" type="Area3D" parent="Collectibles" unique_id=2006058567 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -33.25)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@681" type="Area3D" parent="Collectibles" unique_id=1242096423 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -36.3)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@682" type="Area3D" parent="Collectibles" unique_id=896288159 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -38.7)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@683" type="Area3D" parent="Collectibles" unique_id=162187670 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -42)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@687" type="Area3D" parent="Collectibles" unique_id=1751342112 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -46.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@688" type="Area3D" parent="Collectibles" unique_id=1514972762 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -50.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@694" type="Area3D" parent="Collectibles" unique_id=469716638 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.5, 2.05, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@698" type="Area3D" parent="Collectibles" unique_id=1653483343 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -9, 1, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@699" type="Area3D" parent="Collectibles" unique_id=2120393452 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13, 1, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@702" type="Area3D" parent="Collectibles" unique_id=638783049 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -17.5, 2.55, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@706" type="Area3D" parent="Collectibles" unique_id=1779272876 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20.8, 2, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@707" type="Area3D" parent="Collectibles" unique_id=86273760 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -23.2, 2, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@709" type="Area3D" parent="Collectibles" unique_id=450556884 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.25, 3, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@710" type="Area3D" parent="Collectibles" unique_id=348363605 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.5, 8, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@714" type="Area3D" parent="Collectibles" unique_id=891317976 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -34.3, 7, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@715" type="Area3D" parent="Collectibles" unique_id=1358292961 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -36.7, 7, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@719" type="Area3D" parent="Collectibles" unique_id=533507303 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 8.05, -52)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@722" type="Area3D" parent="Collectibles" unique_id=200226453 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7, -55.3)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@723" type="Area3D" parent="Collectibles" unique_id=169157898 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7, -57.7)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="Gem" type="Area3D" parent="Collectibles" unique_id=689307480 instance=ExtResource("24_7148f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.5, 6.3, -56.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("25_81ob0")
+
+[node name="@Area3D@728" type="Area3D" parent="Collectibles" unique_id=2042358934 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 8, -60.75)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@729" type="Area3D" parent="Collectibles" unique_id=439443195 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 8, -74.25)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@732" type="Area3D" parent="Collectibles" unique_id=1458591709 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7, -77.9)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@733" type="Area3D" parent="Collectibles" unique_id=1586977329 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7, -81.1)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@735" type="Area3D" parent="Collectibles" unique_id=218137440 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7.55, -85)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@739" type="Area3D" parent="Collectibles" unique_id=425750955 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -88.9)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@740" type="Area3D" parent="Collectibles" unique_id=1928298909 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -92.1)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@742" type="Area3D" parent="Collectibles" unique_id=390719086 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 7.05, -96)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@746" type="Area3D" parent="Collectibles" unique_id=884555362 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -100.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@747" type="Area3D" parent="Collectibles" unique_id=2053345617 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -104.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@749" type="Area3D" parent="Collectibles" unique_id=49720422 instance=ExtResource("24_7148f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 9.6, -104.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("25_81ob0")
+index = 1
+
+[node name="@Area3D@754" type="Area3D" parent="Collectibles" unique_id=1927408977 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -40, 7.05, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@758" type="Area3D" parent="Collectibles" unique_id=1716634136 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -43.3, 6, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@759" type="Area3D" parent="Collectibles" unique_id=160435123 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -45.7, 6, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@760" type="Area3D" parent="Collectibles" unique_id=33308216 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -48.9, 7.368, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@761" type="Area3D" parent="Collectibles" unique_id=1681447673 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -50.3, 7.952, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@762" type="Area3D" parent="Collectibles" unique_id=98540498 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -51.7, 7.7520003, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@763" type="Area3D" parent="Collectibles" unique_id=1310245188 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -53.1, 6.7679996, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@767" type="Area3D" parent="Collectibles" unique_id=798239647 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -57.5, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@768" type="Area3D" parent="Collectibles" unique_id=1706603864 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -61.5, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@774" type="Area3D" parent="Collectibles" unique_id=452253259 instance=ExtResource("24_7148f")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -61.5, 1.3, -110)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("25_81ob0")
+index = 2
+
+[node name="@Area3D@775" type="Area3D" parent="Collectibles" unique_id=382022434 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -66, 6.05, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@779" type="Area3D" parent="Collectibles" unique_id=1252861323 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -69.3, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="@Area3D@780" type="Area3D" parent="Collectibles" unique_id=970254027 instance=ExtResource("22_fwgt7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -71.7, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("23_h38bt")
+
+[node name="Checkpoints" type="Node3D" parent="." unique_id=259081435]
+
+[node name="Checkpoint" type="Area3D" parent="Checkpoints" unique_id=2058586824 instance=ExtResource("26_8fipe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -37.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("27_0okjd")
+
+[node name="@Area3D@724" type="Area3D" parent="Checkpoints" unique_id=1967557462 instance=ExtResource("26_8fipe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -56.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("27_0okjd")
+
+[node name="@Area3D@748" type="Area3D" parent="Checkpoints" unique_id=1765357209 instance=ExtResource("26_8fipe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 5, -100.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("27_0okjd")
+
+[node name="CameraZones" type="Node3D" parent="." unique_id=3136753]
+
+[node name="@Area3D@664" type="Area3D" parent="CameraZones" unique_id=1399355375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@663" type="CollisionShape3D" parent="CameraZones/@Area3D@664" unique_id=865124858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_1y40n")
+
+[node name="@Area3D@671" type="Area3D" parent="CameraZones" unique_id=1102977157]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@670" type="CollisionShape3D" parent="CameraZones/@Area3D@671" unique_id=861950445]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_lg3b2")
+
+[node name="@Area3D@680" type="Area3D" parent="CameraZones" unique_id=1123018532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -37.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@679" type="CollisionShape3D" parent="CameraZones/@Area3D@680" unique_id=76133212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_f20kb")
+
+[node name="@Area3D@693" type="Area3D" parent="CameraZones" unique_id=927122591]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@692" type="CollisionShape3D" parent="CameraZones/@Area3D@693" unique_id=2084573647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_syia2")
+
+[node name="@Area3D@697" type="Area3D" parent="CameraZones" unique_id=570456358]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11, 0, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@696" type="CollisionShape3D" parent="CameraZones/@Area3D@697" unique_id=846115076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_vhbnn")
+
+[node name="@Area3D@705" type="Area3D" parent="CameraZones" unique_id=474002244]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -22, 1, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@704" type="CollisionShape3D" parent="CameraZones/@Area3D@705" unique_id=1723038465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_y5sa4")
+
+[node name="@Area3D@718" type="Area3D" parent="CameraZones" unique_id=1988770049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -48.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@717" type="CollisionShape3D" parent="CameraZones/@Area3D@718" unique_id=191933058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_injkt")
+
+[node name="@Area3D@721" type="Area3D" parent="CameraZones" unique_id=487296926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -56.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@720" type="CollisionShape3D" parent="CameraZones/@Area3D@721" unique_id=498306289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_ial56")
+
+[node name="@Area3D@726" type="Area3D" parent="CameraZones" unique_id=853597017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.5, 6, -56.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@725" type="CollisionShape3D" parent="CameraZones/@Area3D@726" unique_id=2027766092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_1oumn")
+
+[node name="@Area3D@731" type="Area3D" parent="CameraZones" unique_id=2011704861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 6, -79.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@730" type="CollisionShape3D" parent="CameraZones/@Area3D@731" unique_id=995920113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6nksp")
+
+[node name="@Area3D@738" type="Area3D" parent="CameraZones" unique_id=140620888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 5, -90.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+
+[node name="@CollisionShape3D@737" type="CollisionShape3D" parent="CameraZones/@Area3D@738" unique_id=600357585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_6uyac")
+
+[node name="@Area3D@753" type="Area3D" parent="CameraZones" unique_id=2076204600]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -35.5, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@752" type="CollisionShape3D" parent="CameraZones/@Area3D@753" unique_id=2099799898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_43the")
+
+[node name="@Area3D@757" type="Area3D" parent="CameraZones" unique_id=458801480]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -44.5, 5, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@756" type="CollisionShape3D" parent="CameraZones/@Area3D@757" unique_id=2131465779]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_rxy7f")
+
+[node name="@Area3D@766" type="Area3D" parent="CameraZones" unique_id=1548989712]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -59.5, 4, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@765" type="CollisionShape3D" parent="CameraZones/@Area3D@766" unique_id=564070226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_s7ajl")
+
+[node name="@Area3D@773" type="Area3D" parent="CameraZones" unique_id=81204390]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -61.5, 1, -110)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@772" type="CollisionShape3D" parent="CameraZones/@Area3D@773" unique_id=1714558178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_d1jn4")
+
+[node name="@Area3D@778" type="Area3D" parent="CameraZones" unique_id=122020231]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -70.5, 4, -102.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("28_f22im")
+yaw_degrees = 90.0
+
+[node name="@CollisionShape3D@777" type="CollisionShape3D" parent="CameraZones/@Area3D@778" unique_id=181175234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+shape = SubResource("BoxShape3D_5lupg")
+
+[node name="Prompts" type="Node3D" parent="." unique_id=711922248]
+
+[node name="@Area3D@667" type="Area3D" parent="Prompts" unique_id=841756518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("29_lddap")
+text_key = "HINT_PATROL"
+
+[node name="@CollisionShape3D@666" type="CollisionShape3D" parent="Prompts/@Area3D@667" unique_id=1223384917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_wekgf")
+
+[node name="@Area3D@690" type="Area3D" parent="Prompts" unique_id=1389701118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.5)
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("29_lddap")
+text_key = "HINT_LASER"
+
+[node name="@CollisionShape3D@689" type="CollisionShape3D" parent="Prompts/@Area3D@690" unique_id=1441397839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("BoxShape3D_en1ch")
+
+[node name="Decor" type="Node3D" parent="." unique_id=219943334]
+
+[node name="ENV_ToyBlocks" type="Node3D" parent="Decor" unique_id=74289213 instance=ExtResource("30_11l7o")]
+transform = Transform3D(-0.5189096, 0, 0.9739139, 0, 1.1035286, 0, -0.9739139, 0, -0.5189096, 2.1122947, 0, -0.73080254)
+
+[node name="ENV_LampPost" type="Node3D" parent="Decor" unique_id=793833756 instance=ExtResource("31_h22ri")]
+transform = Transform3D(0.22028118, 0, 0.8591637, 0, 0.88695323, 0, -0.8591637, 0, 0.22028118, -2.377009, 0, -1.9608139)
+
+[node name="@Node3D@691" type="Node3D" parent="Decor" unique_id=1919873757 instance=ExtResource("31_h22ri")]
+transform = Transform3D(0.7471433, 0, 0.31637865, 0, 0.81136835, 0, -0.31637865, 0, 0.7471433, 2.116028, 0, -48.250957)
+
+[node name="@Node3D@750" type="Node3D" parent="Decor" unique_id=799854507 instance=ExtResource("30_11l7o")]
+transform = Transform3D(0.94374853, 0, 0.19593683, 0, 0.96387374, 0, -0.19593683, 0, 0.94374853, -33.227802, 5, -104.03598)
+
+[node name="@Node3D@751" type="Node3D" parent="Decor" unique_id=226280594 instance=ExtResource("31_h22ri")]
+transform = Transform3D(-0.89230776, 0, -0.009077486, 0, 0.89235395, 0, 0.009077486, 0, -0.89230776, -37.89395, 5, -101.923615)
+
+[node name="@Node3D@781" type="Node3D" parent="Decor" unique_id=1475144558 instance=ExtResource("31_h22ri")]
+transform = Transform3D(0.6876995, 0, -0.56969666, 0, 0.8930201, 0, 0.56969666, 0, 0.6876995, -71.998764, 4, -101.4237)
+
+[node name="PlayerStart" type="Marker3D" parent="." unique_id=784098501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)

@@ -1,0 +1,212 @@
+keys,es,en
+TITLE_TAGLINE,"Corre, salta y rebota con tu yo-yo cinético","Run, jump and bounce with your kinetic yo-yo"
+TITLE_PRESS_TOUCH,Toca para empezar,Tap to start
+TITLE_PRESS_KEY,Pulsa cualquier tecla,Press any key
+MENU_PLAY,Jugar,Play
+MENU_CONTINUE,Continuar,Continue
+MENU_LEVELS,Niveles,Levels
+MENU_REWARDS,Recompensas,Rewards
+MENU_ACHIEVEMENTS,Logros,Achievements
+MENU_SETTINGS,Ajustes,Settings
+MENU_CREDITS,Créditos,Credits
+MENU_QUIT,Salir,Quit
+WORLD_1,Islas de la Brisa,Breeze Isles
+WORLD_2,Taller de Juguetes,Toyworks
+WORLD_3,Ruinas Solares,Solar Ruins
+LEVEL_LOCKED_HINT,Completa el nivel anterior,Clear the previous level
+LEVEL_TUTORIAL_SHORT,Tutorial,Tutorial
+LEVEL_TUTORIAL,Primer vuelo,First Flight
+LEVEL_TUTORIAL_HINT,Aprende los controles,Learn the controls
+LEVEL_W1_L1,Islas de la Brisa,Breeze Isles
+LEVEL_W1_L1_HINT,Saltos y trampolines,Jumps and trampolines
+LEVEL_W1_L2,Saltos del Viento,Wind Leaps
+LEVEL_W1_L2_HINT,Corrientes y plataformas móviles,Air currents and moving platforms
+LEVEL_W1_L3,Puentes de Cristal,Crystal Bridges
+LEVEL_W1_L3_HINT,Losas que se rompen y saltos largos,Crumbling tiles and long jumps
+LEVEL_W1_L4,Cumbre de las Nubes,Cloud Summit
+LEVEL_W1_L4_HINT,Una gran escalada,A big climb
+LEVEL_W2_L1,Taller de Juguetes,Toy Workshop
+LEVEL_W2_L1_HINT,"Aspas, impulsos y ritmo","Spinners, boosts and rhythm"
+LEVEL_W2_L2,Engranajes Locos,Crazy Gears
+LEVEL_W2_L2_HINT,Robots patrulla y láseres,Patrol bots and lasers
+LEVEL_W2_L3,Fábrica de Rebotes,Bounce Factory
+LEVEL_W2_L3_HINT,Trampolines en cadena,Chained trampolines
+LEVEL_W3_L1,Ruinas del Alba,Dawn Ruins
+LEVEL_W3_L1_HINT,Precisión bajo el sol,Precision under the sun
+LEVEL_W3_L2,Templo del Viento Solar,Solar Wind Temple
+LEVEL_W3_L2_HINT,Torres de viento y discos,Wind towers and discs
+LEVEL_W3_L3,Corazón del Sol,Heart of the Sun
+LEVEL_W3_L3_HINT,El desafío final,The final challenge
+TUT_MOVE,Usa W A S D o las flechas para moverte. ¡Tú decides el ritmo!,Use W A S D or the arrow keys to move. You set the pace!
+TUT_MOVE_TOUCH,Arrastra el pulgar en la zona izquierda para moverte.,Drag your thumb on the left side to move.
+TUT_JUMP,Pulsa Espacio para saltar. Mantén para saltar más alto.,Press Space to jump. Hold it to jump higher.
+TUT_JUMP_TOUCH,Pulsa el botón naranja para saltar. Mantén para llegar más alto.,Press the orange button to jump. Hold it to go higher.
+TUT_SLIDE,Corre y pulsa Mayús para deslizarte bajo el láser.,Run and press Shift to slide under the laser.
+TUT_SLIDE_TOUCH,Corre y pulsa el botón de flechas para deslizarte bajo el láser.,Run and press the arrows button to slide under the laser.
+TUT_YOYO_GROUND,Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre sobre él para rebotar hasta arriba!,Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce up!
+TUT_YOYO_GROUND_TOUCH,Pulsa el botón del yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!,Press the yo-yo button: a disc appears ahead. Run onto it to bounce up!
+TUT_YOYO_AIR,Salta y pulsa E en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar el vacío!,Jump and press E in the air: the disc appears below you. Bounce across the gap!
+TUT_YOYO_AIR_TOUCH,Salta y pulsa el yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!,Jump and press the yo-yo in the air: the disc appears below you. Bounce across!
+TUT_DASH,Salta y pulsa Mayús en el aire para impulsarte hacia delante.,Jump and press Shift in the air to dash forward.
+TUT_DASH_TOUCH,Salta y pulsa el botón de flechas en el aire para impulsarte.,Jump and press the arrows button in the air to dash.
+TUT_TRAMPOLINE,Los trampolines amarillos te lanzan muy alto. ¡Pisa la flecha!,Yellow trampolines launch you high. Step on the arrow!
+TUT_LONG_JUMP,Salto largo: deslízate y salta mientras te deslizas.,"Long jump: slide, then jump while sliding."
+TUT_WIND,Déjate caer en la corriente de viento para subir.,Drop into the air current to rise.
+TUT_GOAL,¡Cruza el arco dorado para terminar!,Go through the golden arch to finish!
+HINT_WIND,Corriente de viento: entra y te elevará.,Air current: step in and it lifts you.
+HINT_MOVER,Las plataformas azules con flechas se mueven. Súbete y espera el momento.,Blue platforms with arrows move. Hop on and time your jump.
+HINT_CRUMBLE,Las losas agrietadas se rompen al pisarlas. ¡No te detengas!,Cracked tiles break when stepped on. Keep moving!
+HINT_LONG_JUMP,Hueco largo: deslízate (Mayús) y salta para un salto largo.,Long gap: slide (Shift) and jump for a long jump.
+HINT_LONG_JUMP_TOUCH,Hueco largo: deslízate y salta para un salto largo.,Long gap: slide and jump for a long jump.
+HINT_SPINNER,Las aspas magenta son peligrosas. Salta por encima.,Magenta spinners are dangerous. Jump over them.
+HINT_BOOST,Las placas de flechas te aceleran. ¡Aprovecha para saltar lejos!,Arrow pads speed you up. Use them for long jumps!
+HINT_TIMED,Las plataformas hexagonales aparecen y desaparecen. Parpadean antes de irse.,Hexagon platforms appear and vanish. They blink before leaving.
+HINT_PATROL,Los robots con púas patrullan. Pasa cuando se alejen o salta.,"Spiky bots patrol. Pass when they move away, or jump."
+HINT_LASER,Láser: deslízate por debajo. Algunos parpadean.,Laser: slide underneath. Some of them blink.
+HUD_CHECKPOINT,¡Punto de control!,Checkpoint!
+HUD_GOAL,¡Meta!,Goal!
+HUD_GOLD,Oro:,Gold:
+PAUSE_TITLE,Pausa,Paused
+PAUSE_RESUME,Continuar,Resume
+PAUSE_RESTART,Reiniciar nivel,Restart level
+PAUSE_QUIT,Salir a niveles,Exit to levels
+RESULTS_TITLE,¡Nivel completado!,Level complete!
+RESULTS_NEW_BEST,¡Nuevo récord!,New record!
+RESULTS_BEST,Mejor:,Best:
+RESULTS_FLAWLESS,¡Sin caídas!,Flawless!
+RESULTS_RETRY,Repetir,Retry
+RESULTS_LEVELS,Niveles,Levels
+RESULTS_NEXT,Siguiente,Next
+RESULTS_FINALE,Final,Finale
+RESULTS_NEXT_UNLOCKED,¡Nuevo nivel desbloqueado!,New level unlocked!
+MEDAL_BRONZE,Bronce,Bronze
+MEDAL_SILVER,Plata,Silver
+MEDAL_GOLD,Oro,Gold
+WORD_SPARKS,chispas,sparks
+WORD_GEMS,gemas,gems
+WORD_ACHIEVEMENT,Logro,Achievement
+WORD_UNLOCKED,Desbloqueado,Unlocked
+WORD_YES,Sí,Yes
+WORD_NO,No,No
+TOAST_ACHIEVEMENT,¡Logro desbloqueado!,Achievement unlocked!
+TOAST_REWARD,¡Nueva recompensa!,New reward!
+SETTINGS_TITLE,Ajustes,Settings
+SETTINGS_TAB_AUDIO,Audio,Audio
+SETTINGS_TAB_CONTROLS,Controles,Controls
+SETTINGS_TAB_GAME,Juego,Game
+SETTINGS_MASTER,Volumen general,Master volume
+SETTINGS_MUSIC,Música,Music
+SETTINGS_SFX,Efectos,Sound effects
+SETTINGS_VIBRATION,Vibración,Vibration
+SETTINGS_TOUCH_SIZE,Tamaño de controles táctiles,Touch controls size
+SETTINGS_TOUCH_OPACITY,Opacidad de controles,Touch controls opacity
+SETTINGS_LEFT_HANDED,Modo zurdo,Left-handed mode
+SETTINGS_CAMERA_SENS,Sensibilidad de cámara,Camera sensitivity
+SETTINGS_KEYS_HELP,Teclado: WASD/flechas mover · Espacio saltar · E yo-yo · Mayús deslizar/impulso · Q/R girar cámara · Esc pausa. Mando: stick izq. mover · A saltar · X/RB yo-yo · B/LB deslizar/impulso · stick der. cámara.,Keyboard: WASD/arrows move · Space jump · E yo-yo · Shift slide/dash · Q/R turn camera · Esc pause. Gamepad: left stick move · A jump · X/RB yo-yo · B/LB slide/dash · right stick camera.
+SETTINGS_LANGUAGE,Idioma,Language
+SETTINGS_LANG_AUTO,Auto,Auto
+SETTINGS_QUALITY,Calidad gráfica,Graphics quality
+SETTINGS_Q_LOW,Baja,Low
+SETTINGS_Q_MEDIUM,Media,Medium
+SETTINGS_Q_HIGH,Alta,High
+SETTINGS_FPS,Límite de FPS,FPS limit
+SETTINGS_SHAKE,Vibración de cámara,Camera shake
+SETTINGS_TIMER,Mostrar cronómetro,Show timer
+SETTINGS_QUALITY_NOTE,"Baja: sin sombras ni escenario lejano, resolución 75%. Media: sombras. Alta: sombras amplias, antialiasing y brillo. Los cambios de calidad se aplican al iniciar un nivel.","Low: no shadows or distant scenery, 75% resolution. Medium: shadows. High: wider shadows, anti-aliasing and glow. Quality changes apply when a level starts."
+ACH_TAB_LIST,Logros,Achievements
+ACH_TAB_PROGRESS,Progreso,Progress
+PROGRESS_LEVELS,Niveles,Levels
+PROGRESS_SILVER_PLUS,Plata o mejor,Silver or better
+PROGRESS_RESET,Borrar progreso,Reset progress
+PROGRESS_RESET_CONFIRM,"Se borrarán niveles, recompensas, logros y ajustes. ¿Continuar?","Levels, rewards, achievements and settings will be erased. Continue?"
+STAT_JUMPS,Saltos,Jumps
+STAT_YOYO_BOUNCES,Rebotes de yo-yo,Yo-yo bounces
+STAT_DASHES,Impulsos aéreos,Air dashes
+STAT_SLIDES,Deslizamientos,Slides
+STAT_LONG_JUMPS,Saltos largos,Long jumps
+STAT_TRAMPOLINES,Trampolines,Trampolines
+STAT_RESPAWNS,Reapariciones,Respawns
+STAT_SPARKS_TOTAL,Chispas recogidas,Sparks collected
+STAT_LEVELS_FINISHED,Niveles terminados,Levels finished
+WARDROBE_OUTFITS,Trajes,Outfits
+WARDROBE_YOYOS,Yo-yos,Yo-yos
+WARDROBE_EQUIPPED,Equipado,Equipped
+WARDROBE_OWNED,Desbloqueado,Unlocked
+WARDROBE_COST,Precio: %d chispas,Price: %d sparks
+WARDROBE_NEED_GEMS,Gemas: %d/%d,Gems: %d/%d
+WARDROBE_NEED_GOLD,Medallas de oro: %d/%d,Gold medals: %d/%d
+WARDROBE_NEED_ACH,Logro: %s,Achievement: %s
+WARDROBE_PREVIEW,Ver,Preview
+WARDROBE_EQUIP,Equipar,Equip
+WARDROBE_BUY,Comprar,Buy
+COS_OUTFIT_EXPLORER,Explorador,Explorer
+COS_OUTFIT_SUNSET,Atardecer,Sunset
+COS_OUTFIT_FOREST,Bosque,Forest
+COS_OUTFIT_MIDNIGHT,Medianoche,Midnight
+COS_OUTFIT_POLAR,Polar,Polar
+COS_OUTFIT_CORAL,Coral,Coral
+COS_OUTFIT_SOLAR,Campeón Solar,Solar Champion
+COS_OUTFIT_SHADOW,Sombra Prisma,Prism Shadow
+COS_YOYO_CLASSIC,Clásico,Classic
+COS_YOYO_EMBER,Brasa,Ember
+COS_YOYO_LIME,Lima,Lime
+COS_YOYO_STORM,Tormenta,Storm
+COS_YOYO_VIOLET,Violeta,Violet
+COS_YOYO_GOLD,Dorado,Golden
+COS_YOYO_PRISM,Prisma,Prism
+ACH_FIRST_STEPS,Primer vuelo,First flight
+ACH_FIRST_STEPS_DESC,Completa el tutorial.,Complete the tutorial.
+ACH_ISLES_DONE,Brisa conquistada,Breeze conquered
+ACH_ISLES_DONE_DESC,Completa las Islas de la Brisa.,Clear the Breeze Isles.
+ACH_TOYWORKS_DONE,Maestro juguetero,Toy master
+ACH_TOYWORKS_DONE_DESC,Completa el Taller de Juguetes.,Clear the Toyworks.
+ACH_CAMPAIGN_COMPLETE,Leyenda solar,Solar legend
+ACH_CAMPAIGN_COMPLETE_DESC,Completa la campaña.,Complete the campaign.
+ACH_GEMS_10,Buscagemas,Gem seeker
+ACH_GEMS_10_DESC,Encuentra 10 gemas.,Find 10 gems.
+ACH_GEMS_ALL,Tesoro completo,Full treasure
+ACH_GEMS_ALL_DESC,Encuentra las 30 gemas.,Find all 30 gems.
+ACH_FIRST_GOLD,Primer oro,First gold
+ACH_FIRST_GOLD_DESC,Gana una medalla de oro.,Earn a gold medal.
+ACH_GOLD_5,Corredor dorado,Golden runner
+ACH_GOLD_5_DESC,Gana 5 medallas de oro.,Earn 5 gold medals.
+ACH_GOLD_ALL,Perfección,Perfection
+ACH_GOLD_ALL_DESC,Oro en los 10 niveles.,Gold on all 10 levels.
+ACH_FLAWLESS,Sin un rasguño,Not a scratch
+ACH_FLAWLESS_DESC,Termina un nivel sin reaparecer.,Finish a level without respawning.
+ACH_FLAWLESS_5,Pies seguros,Sure-footed
+ACH_FLAWLESS_5_DESC,Termina 5 niveles sin reaparecer.,Finish 5 levels without respawning.
+ACH_COLLECTOR,Coleccionista,Collector
+ACH_COLLECTOR_DESC,Recoge todas las chispas de un nivel.,Collect every spark in a level.
+ACH_COLLECTOR_5,Imán de chispas,Spark magnet
+ACH_COLLECTOR_5_DESC,Recoge todas las chispas en 5 recorridos.,Collect every spark in 5 runs.
+ACH_JUMPER,Muelles en los pies,Springy feet
+ACH_JUMPER_DESC,Salta 500 veces.,Jump 500 times.
+ACH_YOYO_MASTER,Maestro del yo-yo,Yo-yo master
+ACH_YOYO_MASTER_DESC,Rebota 100 veces en el disco del yo-yo.,Bounce 100 times on the yo-yo disc.
+ACH_AIR_ACE,As del aire,Air ace
+ACH_AIR_ACE_DESC,Haz 150 impulsos aéreos.,Perform 150 air dashes.
+ACH_SLIDER,Deslizador,Slider
+ACH_SLIDER_DESC,Deslízate 100 veces.,Slide 100 times.
+ACH_LONG_JUMPER,Salto de longitud,Long jumper
+ACH_LONG_JUMPER_DESC,Haz 50 saltos largos.,Perform 50 long jumps.
+ACH_TRAMPOLINE_FAN,Fan del trampolín,Trampoline fan
+ACH_TRAMPOLINE_FAN_DESC,Usa 60 trampolines.,Use 60 trampolines.
+ACH_BOOSTER,Velocista,Speedster
+ACH_BOOSTER_DESC,Usa 40 placas de impulso.,Use 40 boost pads.
+ACH_WEALTHY,Bolsillos brillantes,Shiny pockets
+ACH_WEALTHY_DESC,Recoge 1500 chispas en total.,Collect 1500 sparks in total.
+ACH_FASHION,Con estilo,Stylish
+ACH_FASHION_DESC,Consigue tu primera recompensa cosmética.,Get your first cosmetic reward.
+ACH_PERSISTENT,Nunca te rindas,Never give up
+ACH_PERSISTENT_DESC,Reaparece 100 veces.,Respawn 100 times.
+CREDITS_THANKS,¡Gracias por jugar!,Thanks for playing!
+CREDITS_DESIGN,Diseño y programación,Design and programming
+CREDITS_TEAM,Equipo de Orbit Runner,The Orbit Runner team
+CREDITS_ART,Arte 3D,3D art
+CREDITS_ART_BODY,Modelos originales creados en Blender para este juego.,Original models created in Blender for this game.
+CREDITS_AUDIO,Música y sonido,Music and sound
+CREDITS_AUDIO_BODY,Música y efectos originales sintetizados por procedimiento para este juego.,"Original music and effects, procedurally synthesised for this game."
+CREDITS_TOOLS,Hecho con,Made with
+CREDITS_TOOLS_BODY,Godot Engine (licencia MIT) · Jolt Physics (licencia MIT) · Blender,Godot Engine (MIT license) · Jolt Physics (MIT license) · Blender
+CREDITS_LICENSES,Licencias de terceros,Third-party licenses

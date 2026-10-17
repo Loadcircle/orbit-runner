@@ -14,3 +14,4 @@ orbit_runner_game/assets_source/blender/scripts/last_build*.json
 orbit_runner_game/assets_source/blender/scripts/last_build.log
 orbit_runner_game/assets_source/blender/scripts/last_character_report.json
 __pycache__/
+orbit_runner_game/tools/_*

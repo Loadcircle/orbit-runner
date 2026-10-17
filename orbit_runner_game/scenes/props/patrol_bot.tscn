@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/patrol_hazard.gd" id="1_ub7co"]
+[ext_resource type="PackedScene" path="res://art/models/HAZ_PatrolBot.glb" id="2_ju6br"]
+[ext_resource type="Script" path="res://scripts/props/hazard_area.gd" id="3_cimne"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_22udg"]
+radius = 0.75
+
+[node name="PatrolBot" type="Node3D" unique_id=1792305503]
+script = ExtResource("1_ub7co")
+
+[node name="Body" type="Node3D" parent="." unique_id=306119665]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="Model" type="Node3D" parent="Body" unique_id=1667296839 instance=ExtResource("2_ju6br")]
+
+[node name="Hazard" type="Area3D" parent="Body" unique_id=43966643]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_cimne")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body/Hazard" unique_id=914502679]
+shape = SubResource("SphereShape3D_22udg")

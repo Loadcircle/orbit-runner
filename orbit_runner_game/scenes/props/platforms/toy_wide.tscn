@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/PLAT_Toy_Wide.glb" id="1_jpcq6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7rnd5"]
+size = Vector3(6, 1, 6)
+
+[node name="PlatformToyWide" type="StaticBody3D" unique_id=1771400905]
+collision_mask = 0
+
+[node name="Model" type="Node3D" parent="." unique_id=1173909083 instance=ExtResource("1_jpcq6")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1445706847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_7rnd5")

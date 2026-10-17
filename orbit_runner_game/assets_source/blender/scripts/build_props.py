@@ -53,7 +53,7 @@ def toy_platform(size_key):
     sx, sy = PLATFORM_SIZES[size_key]
     name = "PLAT_Toy_" + size_key
     C.use_collection(name)
-    cream = C.material("M_ToyCream", "cream", 0.6)
+    cream = C.material("M_ToyTop", "#9edcb2", 0.65)
     teal = C.material("M_ToyTeal", "toy_teal", 0.55)
     red = C.material("M_ToyRed", "toy_red", 0.55)
     metal = C.material("M_Metal", "metal", 0.45, 0.6)

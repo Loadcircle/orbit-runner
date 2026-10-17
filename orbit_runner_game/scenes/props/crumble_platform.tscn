@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/crumble_platform.gd" id="1_ttobc"]
+[ext_resource type="PackedScene" path="res://art/models/PLAT_Crumble.glb" id="2_ge61s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gc4c8"]
+size = Vector3(3, 0.4, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j15ht"]
+size = Vector3(2.8, 0.5, 2.8)
+
+[node name="CrumblePlatform" type="StaticBody3D" unique_id=1402179930]
+collision_mask = 0
+script = ExtResource("1_ttobc")
+
+[node name="Model" type="Node3D" parent="." unique_id=868348965 instance=ExtResource("2_ge61s")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=426831201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+shape = SubResource("BoxShape3D_gc4c8")
+
+[node name="Sensor" type="Area3D" parent="." unique_id=1997462778]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sensor" unique_id=1130441092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_j15ht")

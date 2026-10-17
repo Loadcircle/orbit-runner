@@ -69,7 +69,7 @@ def weight(obj, bone):
 
 def build_body(arm_obj):
     M = {
-        "skin": C.material("M_Skin", "#f2c29b", 0.8),
+        "skin": C.material("M_Skin", "#f9b98a", 0.7),
         "hair": C.material("M_Hair", "#f07a22", 0.7),
         "jacket": C.material("M_Jacket", "#2d5fb8", 0.7),
         "accent": C.material("M_Accent", "#f58a2c", 0.6),
@@ -135,8 +135,8 @@ def build_body(arm_obj):
         add(C.sphere("Eye%d" % side, 0.042, (0.075 * side, 0.195, 1.32), M["eye"], segments=10, rings=8,
                      scale=(0.8, 0.5, 1.15)), "head")
         add(C.sphere("Shine%d" % side, 0.014, (0.067 * side, 0.215, 1.34), M["white"], segments=6, rings=4), "head")
-    add(C.sphere("Smile", 0.04, (0, 0.2, 1.23), C.material("M_Mouth", "#a3402a", 0.6), segments=10, rings=6,
-                 scale=(1.2, 0.4, 0.45)), "head")
+    add(C.sphere("Smile", 0.045, (0, 0.195, 1.235), C.material("M_Mouth", "#8a2f22", 0.6), segments=12, rings=6,
+                 scale=(1.6, 0.35, 0.32)), "head")
 
     body = C.join(parts, "CHR_Adventurer_Body")
     body.parent = arm_obj

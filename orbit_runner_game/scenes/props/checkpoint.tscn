@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/checkpoint.gd" id="1_wh4no"]
+[ext_resource type="PackedScene" path="res://art/models/PROP_Checkpoint.glb" id="2_l2lju"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8llkt"]
+size = Vector3(4, 3, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jvlpv"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.75, 0.3, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_a5iic"]
+material = SubResource("StandardMaterial3D_jvlpv")
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="Curve" id="Curve_t5gg6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Checkpoint" type="Area3D" unique_id=2058586824]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_wh4no")
+
+[node name="Model" type="Node3D" parent="." unique_id=250771606 instance=ExtResource("2_l2lju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=521746422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_8llkt")
+
+[node name="Spawn" type="Marker3D" parent="." unique_id=354977009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="Burst" type="CPUParticles3D" parent="." unique_id=1321113129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 2.4, 0)
+emitting = false
+amount = 20
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("QuadMesh_a5iic")
+direction = Vector3(0, 1, 0)
+spread = 70.0
+gravity = Vector3(0, -9, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 6.0
+scale_amount_curve = SubResource("Curve_t5gg6")

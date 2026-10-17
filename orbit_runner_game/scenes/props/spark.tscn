@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/spark.gd" id="1_8ri7b"]
+[ext_resource type="PackedScene" path="res://art/models/PROP_Spark.glb" id="2_541ub"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_r0b71"]
+radius = 0.6
+
+[node name="Spark" type="Area3D" unique_id=337995563]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_8ri7b")
+
+[node name="Model" type="Node3D" parent="." unique_id=749670980 instance=ExtResource("2_541ub")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1699972748]
+shape = SubResource("SphereShape3D_r0b71")

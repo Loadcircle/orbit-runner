@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://art/models/PLAT_Ruin_XL.glb" id="1_hqqbg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e1ff2"]
+size = Vector3(8, 1, 14)
+
+[node name="PlatformRuinXL" type="StaticBody3D" unique_id=1357881554]
+collision_mask = 0
+
+[node name="Model" type="Node3D" parent="." unique_id=1853137297 instance=ExtResource("1_hqqbg")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161845214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_e1ff2")

@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/spinner.gd" id="1_4ubjr"]
+[ext_resource type="PackedScene" path="res://art/models/HAZ_Spinner.glb" id="2_vqxvq"]
+[ext_resource type="Script" path="res://scripts/props/hazard_area.gd" id="3_vnt7n"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ag60y"]
+height = 1.2
+radius = 0.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m0vqk"]
+size = Vector3(6.6, 0.5, 0.5)
+
+[node name="Spinner" type="Node3D" unique_id=844105597]
+script = ExtResource("1_4ubjr")
+
+[node name="Model" type="Node3D" parent="." unique_id=1559488143 instance=ExtResource("2_vqxvq")]
+
+[node name="Hub" type="StaticBody3D" parent="." unique_id=282016723]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hub" unique_id=975305047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CylinderShape3D_ag60y")
+
+[node name="Arm" type="Node3D" parent="." unique_id=863152181]
+
+[node name="Hazard" type="Area3D" parent="Arm" unique_id=824427404]
+collision_layer = 8
+collision_mask = 2
+monitorable = false
+script = ExtResource("3_vnt7n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arm/Hazard" unique_id=1341173597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("BoxShape3D_m0vqk")
