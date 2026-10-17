@@ -97,6 +97,8 @@ func _ready() -> void:
 	add_child(_results)
 
 	AudioDirector.play_music(biome.music_id if biome else &"isles")
+	# Compile all shaders now, while the scene-change fade hides the screen.
+	ShaderWarmup.run.call_deferred(self, camera_rig.camera)
 
 
 func _physics_process(delta: float) -> void:
