@@ -26,8 +26,15 @@ Actualizado: 2026-10-17 (juego como servicio, fases A y B, rama `feature/juego-c
 ## Juego como servicio (rama `feature/juego-como-servicio`, sin fusionar)
 - Fase A completa salvo A12 (calibración con personas): generador por dificultad, validador, bot v2 (termina los 11 niveles de campaña), índice de dificultad y lotes en paralelo.
 - Fase B completa: desafío diario, Torre del Viento, repeticiones exactas y fantasma, maestría (4 estrellas y 3 trajes), misiones locales; nueva pantalla "Desafíos" en el menú.
-- APK de depuración con todo esto exportado el 2026-10-17 (`build/android/orbit_runner_debug.apk`); **sin probar aún en el S25**.
+- APK de depuración con todo esto exportado el 2026-10-17 (`orbit_runner_game/build/android/orbit_runner_debug.apk`, ~37 MB, firmado con la clave de depuración: sirve para compartir e instalar a mano, no para la tienda). Instalado en el S25 el mismo día; el propietario lo está probando en el teléfono y en la PC.
 - Fases C, D y E esperan decisiones del propietario (público, servidor, precios). Ver `docs/LIVE_SERVICE.md`.
+- Pendientes de la rama (detalle en `docs/LIVE_SERVICE.md`, sección "Pendiente"):
+  1. Recoger las impresiones del propietario tras probar el APK (dificultad de los niveles generados, tirones en la Torre, fantasma, pantalla Desafíos) y ajustar.
+  2. Endurecer Extremo (el bot experto lo supera casi siempre; 1 de 6 aceptados) y generar un lote nuevo.
+  3. Ampliar `resources/generator/daily_seeds.tres` (cubre 2026-10-17 a 10-29; el 30 usa la semilla local) con `dailies=30`.
+  4. A12: calibración con 5–10 personas.
+  5. Decisiones del propietario para C/D/E: servidor (Nakama propio o gestionado), público menor de 13 años, precios y autorización de pagos.
+  6. Fusionar con master solo cuando el propietario lo pida.
 
 ## Pendientes inmediatos (en orden)
 1. Con el APK v2 ya instalado en el S25, medir rendimiento del shader nuevo; confirmar que no hay tirones; recorrer los 10 niveles (sobre todo *Engranajes Locos*, *Fábrica de Rebotes* y *Corazón del Sol*, que el piloto automático no completa por su heurística).

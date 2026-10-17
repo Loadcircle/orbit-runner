@@ -92,9 +92,25 @@ En el lote 2, Fácil, Medio y Difícil salen en su categoría casi siempre (índ
 - **Misiones**: premian chispas; la XP del pase y la rotación por configuración remota llegan con D4 y C6.
 - **Reclasificados**: se guardan siempre en su categoría medida (sin cupos por lote).
 
-## Pendiente y decisiones del propietario
+## Pendiente
 
-1. **A12**: jugar 12 niveles de calibración (3 por categoría) con 5–10 personas y comparar con el bot.
-2. **Fase C (en línea)**: elegir servidor (Nakama propio o gestionado) y decidir si el público incluye menores de 13 años; después cuentas, guardado en la nube, rankings, verificación de repeticiones, configuración remota y analítica.
-3. **Fase D (monetización)**: precios del pase, recargas y tarjeta Órbita; integrar Google Play Billing con validación en servidor. No se ha integrado ningún pago ni servicio externo.
-4. **Fase E (temporadas)**: depende de C y D.
+Estado al 2026-10-17. APK de depuración: `build/android/orbit_runner_debug.apk` (instalado en el S25; en prueba por el propietario).
+
+### Trabajo que puede hacer el agente
+
+1. **Ajustes tras la prueba del propietario**: dificultad de los niveles generados, tirones al generar pisos de la Torre, fantasma, pantalla Desafíos. Es lo prioritario.
+2. **Endurecer Extremo**: el perfil experto lo supera casi siempre (el plan pide 40–80 %), 1 de 6 aceptados en el lote 2. Opciones: huecos y ventanas de tiempo más estrechos en `difficulty_profiles.tres` (vía `tools/build_data.gd`), más motivos combinados, o un perfil experto menos preciso en `bot_skills.gd`. Después, un lote de 24 para comprobar.
+3. **Ampliar los desafíos diarios**: `daily_seeds.tres` cubre del 2026-10-17 al 10-29 (el 30 de octubre usa la semilla local). Regenerar con `dailies=30` antes de que se agote, hasta que exista C7.
+
+### Requiere personas
+
+4. **A12**: jugar 12 niveles de calibración (3 por categoría) con 5–10 personas y comparar con el bot. Hasta entonces la calibración del índice es provisional.
+
+### Decisiones del propietario
+
+5. **Fase C (en línea)**: elegir servidor (Nakama propio o gestionado) y decidir si el público incluye menores de 13 años; después cuentas, guardado en la nube, rankings, verificación de repeticiones, configuración remota y analítica.
+6. **Fase D (monetización)**: precios del pase, recargas y tarjeta Órbita; integrar Google Play Billing con validación en servidor. No se ha integrado ningún pago ni servicio externo.
+7. **Fase E (temporadas)**: depende de C y D.
+8. **Fusión con master**: solo cuando el propietario lo pida, idealmente tras su prueba.
+
+Orden recomendado: 1 → 2 y 3 en la misma tanda → decisiones de la fase C.
