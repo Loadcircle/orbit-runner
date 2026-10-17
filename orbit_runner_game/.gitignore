@@ -1,0 +1,13 @@
+# Godot imports, editor cache, and generated metadata.
+.godot/
+
+# User-specific export setup may contain local signing paths or credentials.
+export.cfg
+export_presets.cfg
+
+# Generated build output.
+/build/
+/dist/
+*.apk
+*.aab
+android/build/
