@@ -189,6 +189,46 @@ func world_completed(world_index: int) -> bool:
 	return true
 
 
+# ------------------------------------------------------------------ daily challenge & tower (minimal, WIP)
+
+func daily_record(key: String) -> Dictionary:
+	if typeof(_data.get("daily")) != TYPE_DICTIONARY:
+		_data["daily"] = {}
+	if typeof(_data["daily"].get(key)) != TYPE_DICTIONARY:
+		_data["daily"][key] = {"completed": false, "best_time": 0.0, "gems": [false, false, false], "medal": 0}
+	return _data["daily"][key]
+
+
+func submit_daily(key: String, info: LevelInfo, run: Dictionary) -> Dictionary:
+	var rec := daily_record(key)
+	var time := float(run["time"])
+	var best := float(rec["best_time"])
+	var medal := medal_for_time(info, time)
+	var summary := {"first_clear": not bool(rec["completed"]), "new_best": best <= 0.0 or time < best,
+			"previous_best": best, "medal": medal, "sparks_earned": int(run["sparks"]), "achievements": [],
+			"cosmetics": [], "new_gems": 0}
+	rec["completed"] = true
+	if summary["new_best"]:
+		rec["best_time"] = time
+	rec["medal"] = maxi(int(rec["medal"]), medal)
+	add_sparks(int(run["sparks"]))
+	add_stat(&"daily_finished", 1)
+	return summary
+
+
+func submit_tower(week: String, floors: int, time: float) -> Dictionary:
+	if typeof(_data.get("tower")) != TYPE_DICTIONARY:
+		_data["tower"] = {}
+	var rec: Dictionary = _data["tower"].get(week, {"best_floor": 0, "best_time": 0.0})
+	var summary := {"floors": floors, "new_best": floors > int(rec["best_floor"]), "previous_best": rec["best_floor"]}
+	if summary["new_best"]:
+		rec["best_floor"] = floors
+		rec["best_time"] = time
+	_data["tower"][week] = rec
+	add_stat(&"tower_floors", floors)
+	return summary
+
+
 # ------------------------------------------------------------------ economy & cosmetics
 
 func sparks() -> int:

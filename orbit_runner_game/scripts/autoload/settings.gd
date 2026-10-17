@@ -19,6 +19,7 @@ const DEFAULTS := {
 	"camera_sensitivity": 1.0,
 	"screen_shake": true,
 	"show_timer": true,
+	"show_ghost": true,
 }
 const LANGUAGES := ["es", "en"]
 const FPS_OPTIONS := [30, 60, 120]

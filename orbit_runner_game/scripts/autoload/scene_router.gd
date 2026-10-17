@@ -5,12 +5,15 @@ extends Node
 const TITLE := "res://scenes/ui/title_screen.tscn"
 const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT := "res://scenes/ui/level_select.tscn"
+const CHALLENGES := "res://scenes/ui/challenges_screen.tscn"
 const FADE_TIME := 0.25
 
 ## Index in Progress.levels() of the level being loaded or played.
 var current_level_index := 0
 ## Optional data handed to the next screen (for example the world tab to open).
 var payload: Dictionary = {}
+## Spec of the generated level being played (daily, tower); null in the campaign.
+var current_spec: LevelSpec
 
 var _layer: CanvasLayer
 var _fade: ColorRect
@@ -32,6 +35,17 @@ func _ready() -> void:
 
 
 func go_to(path: String, data: Dictionary = {}) -> void:
+	await _change(func() -> Error: return get_tree().change_scene_to_file(path), path, data)
+
+
+## Builds a level on the device (behind the fade) and plays it.
+func play_generated(spec: LevelSpec, key: String) -> void:
+	current_spec = spec
+	await _change(func() -> Error: return get_tree().change_scene_to_node(GeneratedRun.build(spec, key)),
+			"generated %s" % spec.key(), {})
+
+
+func _change(change: Callable, label: String, data: Dictionary) -> void:
 	if _busy:
 		return
 	_busy = true
@@ -41,9 +55,9 @@ func go_to(path: String, data: Dictionary = {}) -> void:
 	tween.tween_property(_fade, "color:a", 1.0, FADE_TIME)
 	await tween.finished
 	get_tree().paused = false
-	var err := get_tree().change_scene_to_file(path)
+	var err: Error = change.call()
 	if err != OK:
-		push_error("SceneRouter: cannot load %s (%s)" % [path, err])
+		push_error("SceneRouter: cannot load %s (%s)" % [label, err])
 	await get_tree().process_frame
 	await get_tree().process_frame
 	tween = create_tween()
@@ -57,6 +71,7 @@ func play_level(index: int) -> void:
 	var levels := Progress.levels()
 	index = clampi(index, 0, levels.size() - 1)
 	current_level_index = index
+	current_spec = null
 	go_to(levels[index].scene_path)
 
 

@@ -21,6 +21,8 @@ extends Node3D
 
 var target: Player
 var target_yaw := 0.0
+## Replays force the yaw the player saw on each tick (NAN = follow normally).
+var forced_yaw := NAN
 
 var _yaw := 0.0
 var _manual := 0.0
@@ -41,7 +43,7 @@ func _ready() -> void:
 
 
 func get_yaw() -> float:
-	return _yaw
+	return _yaw if is_nan(forced_yaw) else forced_yaw
 
 
 ## Places the camera behind the target immediately (spawn / respawn).

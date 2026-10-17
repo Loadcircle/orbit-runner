@@ -22,6 +22,16 @@ static var current: Level
 @export var kill_height := -12.0
 
 var info: LevelInfo
+## Campaign scene, or a level generated on the device (daily, tower).
+var mode := LevelSpec.Mode.CAMPAIGN
+var spec: LevelSpec
+## Key of the run for saves and replays (level id, "daily_<date>", ...).
+var run_key := ""
+var tower: TowerMode
+var recorder: RunRecorder
+var ghost: GhostRunner
+## Deaths per generated motif (local telemetry for difficulty calibration).
+var deaths_by_motif: Dictionary = {}
 var player: Player
 var camera_rig: FollowCamera
 var hud: Hud
@@ -55,7 +65,13 @@ func _exit_tree() -> void:
 
 
 func _ready() -> void:
-	info = _resolve_info()
+	if has_meta("generated") and SceneRouter.current_spec:
+		spec = SceneRouter.current_spec
+		mode = spec.mode
+		info = GeneratedRun.info_for(self, spec)
+	else:
+		info = _resolve_info()
+	run_key = String(info.id) if info else name
 	if biome == null and info:
 		biome = info.biome
 	LevelEnvironment.build(self, biome, kill_height)
@@ -84,6 +100,12 @@ func _ready() -> void:
 	camera_rig.snap(_respawn_yaw)
 	_apply_cosmetics()
 	Progress.equipment_changed.connect(_apply_cosmetics)
+	recorder = RunRecorder.new()
+	recorder.level = self
+	recorder.replay.key = run_key
+	recorder.replay.route_hash = _route_hash()
+	add_child(recorder)
+	_spawn_ghost()
 
 	hud = HUD_SCENE.instantiate()
 	add_child(hud)
@@ -163,12 +185,42 @@ func resume() -> void:
 
 func restart() -> void:
 	get_tree().paused = false
-	SceneRouter.play_level(SceneRouter.current_level_index)
+	if mode == LevelSpec.Mode.TOWER:
+		_submit_tower()
+	if spec:
+		SceneRouter.play_generated(spec, get_meta("run_key", ""))
+	else:
+		SceneRouter.play_level(SceneRouter.current_level_index)
 
 
 func quit_to_menu() -> void:
 	get_tree().paused = false
-	SceneRouter.go_to(SceneRouter.LEVEL_SELECT, {"world": info.world_index if info else 0})
+	if mode == LevelSpec.Mode.TOWER:
+		end_tower_run()
+	elif spec:
+		SceneRouter.go_to(SceneRouter.CHALLENGES)
+	else:
+		SceneRouter.go_to(SceneRouter.LEVEL_SELECT, {"world": info.world_index if info else 0})
+
+
+## Tower: the climb ends when the player leaves; floors reached are the score.
+func end_tower_run() -> void:
+	if finished:
+		return
+	finished = true
+	timer_running = false
+	player.input_enabled = false
+	hud.on_finished()
+	var summary := _submit_tower()
+	AudioDirector.play_music(&"victory", true)
+	_results.open(self, summary)
+
+
+func _submit_tower() -> Dictionary:
+	if tower == null or get_meta("tower_submitted", false):
+		return {}
+	set_meta("tower_submitted", true)
+	return Progress.submit_tower(get_meta("run_key", ""), tower.floor_reached, elapsed)
 
 
 func finish() -> void:
@@ -183,9 +235,13 @@ func finish() -> void:
 	AudioDirector.play_music(&"victory", true)
 	Settings.vibrate(60)
 	var summary := {}
-	if info:
-		summary = Progress.submit_run(info, {"time": elapsed, "gems": gems, "sparks": sparks,
-				"sparks_total": sparks_total, "respawns": respawns})
+	var run := {"time": elapsed, "gems": gems, "sparks": sparks, "sparks_total": sparks_total, "respawns": respawns,
+			"deaths_by_motif": deaths_by_motif}
+	if mode == LevelSpec.Mode.DAILY:
+		summary = Progress.submit_daily(get_meta("run_key", ""), info, run)
+	elif info:
+		summary = Progress.submit_run(info, run)
+	summary["new_ghost"] = ReplayStore.save_if_best(recorder.finish(elapsed, respawns))
 	await get_tree().create_timer(1.4).timeout
 	_results.open(self, summary)
 
@@ -195,6 +251,8 @@ func finish() -> void:
 func on_checkpoint(checkpoint: Checkpoint) -> void:
 	_respawn_xform = checkpoint.spawn_transform()
 	_respawn_yaw = camera_rig.target_yaw
+	if tower:
+		tower.on_checkpoint()
 	hud.flash_message(tr("HUD_CHECKPOINT"))
 
 
@@ -209,9 +267,9 @@ func on_spark() -> void:
 
 
 func gem_already_owned(index: int) -> bool:
-	if info == null:
+	if info == null or mode == LevelSpec.Mode.TOWER:
 		return false
-	var owned: Array = Progress.record(info.id)["gems"]
+	var owned: Array = Progress.daily_record(get_meta("run_key", ""))["gems"] if mode == LevelSpec.Mode.DAILY 		else Progress.record(info.id)["gems"]
 	return index < owned.size() and bool(owned[index])
 
 
@@ -252,6 +310,26 @@ func route_progress() -> float:
 	return clampf(best / _route_cumulative[_route_cumulative.size() - 1], 0.0, 1.0)
 
 
+## Index of the route piece nearest to the player (-1 before the first).
+func route_index() -> int:
+	var p := player.global_position
+	var best := -1
+	var best_dist := INF
+	for i in range(1, _route_points.size() - 1):
+		var d := p.distance_squared_to(_route_points[i])
+		if d < best_dist:
+			best_dist = d
+			best = i - 1
+	return best
+
+
+## Tower: the route grows while playing.
+func refresh_route() -> void:
+	_build_route()
+	sparks_total = find_children("*", "Spark", true, false).size()
+	sparks_changed.emit(sparks, sparks_total)
+
+
 func _build_route() -> void:
 	_route_points = PackedVector3Array([_start_pos])
 	if has_meta("route"):
@@ -265,6 +343,11 @@ func _build_route() -> void:
 
 func _on_player_died() -> void:
 	respawns += 1
+	var route: Array = get_meta("route", [])
+	var piece := route_index()
+	if piece >= 0 and piece < route.size() and route[piece].has("motif"):
+		var motif := int(route[piece]["motif"])
+		deaths_by_motif[motif] = int(deaths_by_motif.get(motif, 0)) + 1
 	camera_rig.shake(0.6)
 	AudioDirector.play_sfx(&"fail")
 	Settings.vibrate(80)
@@ -281,6 +364,22 @@ func _apply_cosmetics() -> void:
 	var yoyo_item := Progress.equipped(CosmeticInfo.Kind.YOYO)
 	player.visual.apply_cosmetics(outfit, yoyo_item)
 	player.yoyo.apply_cosmetic(yoyo_item)
+
+
+func _spawn_ghost() -> void:
+	if mode == LevelSpec.Mode.TOWER or not bool(Settings.get_value("show_ghost")):
+		return
+	var best := ReplayStore.load_best(run_key)
+	if best == null or best.route_hash != _route_hash():
+		return
+	ghost = GhostRunner.new()
+	ghost.level = self
+	ghost.replay = best
+	add_child(ghost)
+
+
+func _route_hash() -> String:
+	return LevelGenerator.route_hash(get_meta("route", []))
 
 
 ## Decoration dithers out when the camera gets close so it never hides the

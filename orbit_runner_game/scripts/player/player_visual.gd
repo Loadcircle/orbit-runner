@@ -102,6 +102,11 @@ func play(anim_name: String, speed_scale := 1.0) -> void:
 		_anim.play(anim_name, BLEND)
 
 
+## Animation being played (recorded by RunRecorder for ghosts).
+func current_animation() -> String:
+	return _current
+
+
 func set_holster_visible(value: bool) -> void:
 	if _hip_yoyo:
 		_hip_yoyo.visible = value
