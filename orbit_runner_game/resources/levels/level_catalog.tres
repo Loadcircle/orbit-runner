@@ -12,8 +12,8 @@ id = &"tutorial"
 title_key = "LEVEL_TUTORIAL"
 scene_path = "res://scenes/levels/tutorial.tscn"
 biome = ExtResource("2_fmcb6")
-gold_time = 20.5
-silver_time = 33.5
+gold_time = 21.5
+silver_time = 35.0
 is_tutorial = true
 hint_key = "LEVEL_TUTORIAL_HINT"
 
@@ -23,8 +23,8 @@ id = &"w1_l1"
 title_key = "LEVEL_W1_L1"
 scene_path = "res://scenes/levels/w1_l1.tscn"
 biome = ExtResource("2_fmcb6")
-gold_time = 25.5
-silver_time = 40.5
+gold_time = 26.5
+silver_time = 42.0
 hint_key = "LEVEL_W1_L1_HINT"
 
 [sub_resource type="Resource" id="Resource_16780"]
@@ -33,8 +33,8 @@ id = &"w1_l2"
 title_key = "LEVEL_W1_L2"
 scene_path = "res://scenes/levels/w1_l2.tscn"
 biome = ExtResource("2_fmcb6")
-gold_time = 28.5
-silver_time = 44.5
+gold_time = 32.0
+silver_time = 49.5
 hint_key = "LEVEL_W1_L2_HINT"
 
 [sub_resource type="Resource" id="Resource_rneyl"]
@@ -43,8 +43,8 @@ id = &"w1_l3"
 title_key = "LEVEL_W1_L3"
 scene_path = "res://scenes/levels/w1_l3.tscn"
 biome = ExtResource("2_fmcb6")
-gold_time = 25.5
-silver_time = 40.5
+gold_time = 26.5
+silver_time = 42.0
 hint_key = "LEVEL_W1_L3_HINT"
 
 [sub_resource type="Resource" id="Resource_lhqfs"]
@@ -53,8 +53,8 @@ id = &"w1_l4"
 title_key = "LEVEL_W1_L4"
 scene_path = "res://scenes/levels/w1_l4.tscn"
 biome = ExtResource("2_fmcb6")
-gold_time = 30.0
-silver_time = 46.5
+gold_time = 32.0
+silver_time = 49.0
 hint_key = "LEVEL_W1_L4_HINT"
 
 [sub_resource type="Resource" id="Resource_17j1v"]
@@ -64,8 +64,8 @@ title_key = "LEVEL_W2_L1"
 world_index = 1
 scene_path = "res://scenes/levels/w2_l1.tscn"
 biome = ExtResource("3_16780")
-gold_time = 29.0
-silver_time = 45.5
+gold_time = 32.0
+silver_time = 49.5
 hint_key = "LEVEL_W2_L1_HINT"
 
 [sub_resource type="Resource" id="Resource_mywho"]
@@ -75,8 +75,8 @@ title_key = "LEVEL_W2_L2"
 world_index = 1
 scene_path = "res://scenes/levels/w2_l2.tscn"
 biome = ExtResource("3_16780")
-gold_time = 34.5
-silver_time = 52.5
+gold_time = 38.5
+silver_time = 58.5
 hint_key = "LEVEL_W2_L2_HINT"
 
 [sub_resource type="Resource" id="Resource_4foqd"]
@@ -86,8 +86,8 @@ title_key = "LEVEL_W2_L3"
 world_index = 1
 scene_path = "res://scenes/levels/w2_l3.tscn"
 biome = ExtResource("3_16780")
-gold_time = 38.5
-silver_time = 58.0
+gold_time = 41.0
+silver_time = 61.5
 hint_key = "LEVEL_W2_L3_HINT"
 
 [sub_resource type="Resource" id="Resource_w7v7w"]
@@ -97,8 +97,8 @@ title_key = "LEVEL_W3_L1"
 world_index = 2
 scene_path = "res://scenes/levels/w3_l1.tscn"
 biome = ExtResource("4_rneyl")
-gold_time = 30.5
-silver_time = 47.0
+gold_time = 32.0
+silver_time = 49.0
 hint_key = "LEVEL_W3_L1_HINT"
 
 [sub_resource type="Resource" id="Resource_0w2lp"]
@@ -108,8 +108,8 @@ title_key = "LEVEL_W3_L2"
 world_index = 2
 scene_path = "res://scenes/levels/w3_l2.tscn"
 biome = ExtResource("4_rneyl")
-gold_time = 34.5
-silver_time = 52.5
+gold_time = 36.5
+silver_time = 55.0
 hint_key = "LEVEL_W3_L2_HINT"
 
 [sub_resource type="Resource" id="Resource_djmny"]
@@ -119,8 +119,8 @@ title_key = "LEVEL_W3_L3"
 world_index = 2
 scene_path = "res://scenes/levels/w3_l3.tscn"
 biome = ExtResource("4_rneyl")
-gold_time = 49.0
-silver_time = 72.0
+gold_time = 52.0
+silver_time = 76.0
 hint_key = "LEVEL_W3_L3_HINT"
 
 [resource]

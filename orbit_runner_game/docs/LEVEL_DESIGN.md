@@ -30,16 +30,16 @@ Reglas que salieron de las pruebas (ver `DESIGN_DECISIONS.md` D10): ningún peli
 | # | Nivel | Mundo | Enseña / combina | Oro | Plata |
 |---|---|---|---|---|---|
 | T | Primer vuelo | Brisa | Mover, saltar, deslizar bajo láser, yo-yo en suelo y aire, impulso, trampolín, salto largo, viento (con indicaciones) | — | — |
-| 1 | Islas de la Brisa | Brisa | Saltos y escalones, primer trampolín, giro de cámara, pinchos sencillos | 25,5 s | 40,5 s |
-| 2 | Saltos del Viento | Brisa | Corrientes de viento, plataformas móviles (adelante, lateral, ascensor), hueco de yo-yo | 28,5 s | 44,5 s |
-| 3 | Puentes de Cristal | Brisa | Losas que se rompen, salto largo, pinchos | 25,5 s | 40,5 s |
-| 4 | Cumbre de las Nubes | Brisa | Escalada vertical: trampolines, viento, ascensor, yo-yo, varios giros | 30 s | 46,5 s |
-| 5 | Taller de Juguetes | Juguetes | Aspas giratorias, placas de impulso, ritmo de plataformas temporales | 29 s | 45,5 s |
-| 6 | Engranajes Locos | Juguetes | Robots patrulla, láseres (fijos y parpadeantes), móviles encadenadas | 34,5 s | 52,5 s |
-| 7 | Fábrica de Rebotes | Juguetes | Trampolines en cadena, ritmo rápido, impulsos aéreos, aspas | 38,5 s | 58 s |
-| 8 | Ruinas del Alba | Ruinas | Precisión: salto largo tras láser, losas, robots, láseres en serie | 30,5 s | 47 s |
-| 9 | Templo del Viento Solar | Ruinas | Torres de viento, yo-yo, temporales, aspas en altura | 34,5 s | 52,5 s |
-| 10 | Corazón del Sol | Ruinas | Desafío final con todo lo anterior, 4 puntos de control | 49 s | 72 s |
+| 1 | Islas de la Brisa | Brisa | Saltos y escalones, primer trampolín, giro de cámara, pinchos sencillos | 26,5 s | 42 s |
+| 2 | Saltos del Viento | Brisa | Corrientes de viento, plataformas móviles (adelante, lateral, ascensor), hueco de yo-yo | 32 s | 49,5 s |
+| 3 | Puentes de Cristal | Brisa | Losas que se rompen, salto largo, pinchos | 26,5 s | 42 s |
+| 4 | Cumbre de las Nubes | Brisa | Escalada vertical: trampolines, viento, ascensor, yo-yo, varios giros | 32 s | 49 s |
+| 5 | Taller de Juguetes | Juguetes | Aspas giratorias, placas de impulso, ritmo de plataformas temporales | 32 s | 49,5 s |
+| 6 | Engranajes Locos | Juguetes | Robots patrulla, láseres (fijos y parpadeantes), móviles encadenadas | 38,5 s | 58,5 s |
+| 7 | Fábrica de Rebotes | Juguetes | Trampolines en cadena, ritmo rápido, impulsos aéreos, aspas | 41 s | 61,5 s |
+| 8 | Ruinas del Alba | Ruinas | Precisión: salto largo tras láser, losas, robots, láseres en serie | 32 s | 49 s |
+| 9 | Templo del Viento Solar | Ruinas | Torres de viento, yo-yo, temporales, aspas en altura | 36,5 s | 55 s |
+| 10 | Corazón del Sol | Ruinas | Desafío final con todo lo anterior, 4 puntos de control | 52 s | 76 s |
 
 Las primeras partidas duran bastante más que el oro (exploración, reapariciones). El piloto automático, sin errores, tarda entre 15 s (tutorial) y ~65 s (nivel final).
 

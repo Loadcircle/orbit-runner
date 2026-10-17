@@ -61,7 +61,7 @@ func _write_catalog() -> void:
 		info.is_tutorial = r["tutorial"]
 		# Gold assumes a confident run at ~7 m/s plus unavoidable waits;
 		# silver leaves room for a few mistakes. Rounded to half seconds.
-		var gold: float = r["length"] / 7.0 + r["wait"] + 3.0
+		var gold: float = r["length"] / 7.0 + r["wait"] * 1.6 + 4.0
 		info.gold_time = snappedf(gold, 0.5)
 		info.silver_time = snappedf(gold * 1.35 + 6.0, 0.5)
 		levels.append(info)

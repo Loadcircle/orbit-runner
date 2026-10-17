@@ -40,7 +40,7 @@ Decisiones particulares o difíciles de revertir tomadas durante el desarrollo a
 - **Impacto:** precios de 120 a 400 chispas; una campaña completa (~550 chispas) + logros (~2 000) permiten comprarlo todo con algo de rejuego.
 
 ## D7. Medallas calculadas a partir de la longitud de la ruta
-- **Decisión:** oro = longitud/7 m·s⁻¹ + esperas inevitables + 3 s; plata = oro × 1,35 + 6 s; bronce = terminar.
+- **Decisión:** oro = longitud/7 m·s⁻¹ + 1,6 × esperas inevitables (móviles/temporales) + 4 s; plata = oro × 1,35 + 6 s; bronce = terminar.
 - **Motivo:** objetivos coherentes entre niveles; el piloto automático (sin errores) bate el oro por ~20 %, así que es exigente pero alcanzable.
 - **Impacto:** los tiempos están en `level_catalog.tres` y se pueden ajustar a mano tras pruebas reales.
 
