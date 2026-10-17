@@ -29,6 +29,8 @@ Se cambió antes de existir materiales o shaders dependientes del renderizador, 
 
 Materiales: `StandardMaterial3D` con `DIFFUSE_TOON` + `SPECULAR_TOON` + rim (convertidos automáticamente al importar, ver §5). Único shader propio: `resources/shaders/wind_column.gdshader` (aditivo, compatible con todos los renderizadores). El contorno del protagonista usa `material_overlay` con `grow` y `cull_front`.
 
+**Precarga de shaders:** Compatibility compila cada shader la primera vez que se dibuja, lo que provocaba tirones en el S25. `scripts/level/shader_warmup.gd` dibuja una vez, en miniatura y bajo el fundido de carga, cada combinación malla/material del nivel (incluidos el disco del yo-yo, la cuerda y las partículas).
+
 **Niveles de calidad** (Ajustes → Juego): *Baja* (sin sombras, sin escenario lejano, escala 3D 75 %), *Media* (sombras 30 m) y *Alta* (sombras 45 m, MSAA 2×, glow). Por defecto: *Alta* en PC y *Media* en móvil.
 
 ### Dispositivos y modos de prueba
