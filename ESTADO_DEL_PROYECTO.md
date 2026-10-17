@@ -17,12 +17,13 @@ Actualizado: 2026-10-17 (pase visual v2). Punto de entrada para retomar el traba
 - **Idioma:** sigue al dispositivo; si no es ES/EN arranca en inglés; selector en Ajustes → Juego.
 - **Pase visual v2 (2026-10-17):** shader toon propio (`resources/shaders/toon*.gdshader*`, sombras de color por bioma, rim, contornos), cielo por shader, tonemap lineal y niebla por profundidad (`scripts/level/level_environment.gd` + `resources/biomes/*.tres`). Los 49 assets se regeneraron en Blender por script con color de vértice; protagonista nuevo (cara expresiva, parpadeo, animaciones nuevas). Polvo al aterrizar y estallidos al recoger. Icono y retrato renderizados en Godot (`tools/render_ui_images.tscn`).
 - APK de depuración del pase v2 **instalado en el S25** el 2026-10-17 (arranca sin errores en logcat). El puerto de la depuración inalámbrica cambia: usar `adb mdns services` y conectar al puerto más reciente (último: `192.168.1.39:32883`).
+- **Estilo gráfico v2 aprobado por el propietario (2026-10-17)** tras probarlo en el S25. Es la referencia para assets futuros.
 - Comentario del propietario sobre la v1 en el S25: "se ve muy bien, va fluido, algún tirón".
 - Git local en la raíz, sin remoto. Commits por hito.
 
 ## Pendientes inmediatos (en orden)
 1. Con el APK v2 ya instalado en el S25, medir rendimiento del shader nuevo; confirmar que no hay tirones; recorrer los 10 niveles (sobre todo *Engranajes Locos*, *Fábrica de Rebotes* y *Corazón del Sol*, que el piloto automático no completa por su heurística).
-2. Recoger la opinión del propietario sobre el arte v2 y ajustar. Efectos pendientes: anillo al desplegar el disco, estela del yo-yo, confeti en la meta. UI/fuente/logotipo se mantienen por decisión del propietario.
+2. Arte v2 aprobado. Efectos pendientes: anillo al desplegar el disco, estela del yo-yo, confeti en la meta. UI/fuente/logotipo se mantienen por decisión del propietario.
 3. **Monetización**: el propietario debe elegir modelo (propuestas en la página enlazada; recomendación: gratis + desbloqueo completo y modelo como servicio por fases). No integrar nada sin autorización.
 4. Publicación: identificador del paquete (`com.orbitrunner.game` es provisional), keystore de publicación, AAB con plantilla Gradle, ficha de tienda, pruebas cerradas.
 
