@@ -15,6 +15,8 @@ const DATA_VERSION := 1
 const SAVE_DELAY := 0.4
 
 var data: Dictionary = {}
+## False while validation tools play levels: progress stays in memory only.
+var persist := true
 var _dirty := false
 var _timer: Timer
 
@@ -47,6 +49,8 @@ func section(name: String) -> Dictionary:
 
 ## Schedules a save shortly; several requests in a row produce one write.
 func request_save() -> void:
+	if not persist:
+		return
 	_dirty = true
 	if _timer.is_stopped():
 		_timer.start()
@@ -54,6 +58,8 @@ func request_save() -> void:
 
 func save_now() -> void:
 	_timer.stop()
+	if not persist:
+		return
 	data["version"] = DATA_VERSION
 	data["saved_at"] = Time.get_unix_time_from_system()
 	var text := JSON.stringify(data, "\t")

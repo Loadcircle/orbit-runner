@@ -282,7 +282,12 @@ func _update_facing(delta: float) -> void:
 	if is_sliding:
 		h = _slide_dir
 	if h.length() > 0.6:
-		facing = facing.slerp(h.normalized(), clampf(tuning.rotation_speed * delta, 0.0, 1.0)).normalized()
+		var target := h.normalized()
+		# Nearly aligned vectors make slerp build a degenerate rotation axis.
+		if facing.dot(target) > 0.9995:
+			facing = target
+		else:
+			facing = facing.slerp(target, clampf(tuning.rotation_speed * delta, 0.0, 1.0)).normalized()
 	if facing.length() < 0.5:
 		facing = Vector3.FORWARD
 	visual.global_rotation.y = atan2(-facing.x, -facing.z)

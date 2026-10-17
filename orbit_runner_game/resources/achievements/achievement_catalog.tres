@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/data/achievement_info.gd" id="1_pqk0k"]
 [ext_resource type="Script" path="res://scripts/data/achievement_catalog.gd" id="2_r1i8a"]
 
-[sub_resource type="Resource" id="Resource_a3ocf"]
+[sub_resource type="Resource" id="Resource_pqk0k"]
 script = ExtResource("1_pqk0k")
 id = &"first_steps"
 title_key = "ACH_FIRST_STEPS"
@@ -11,7 +11,7 @@ description_key = "ACH_FIRST_STEPS_DESC"
 condition = 8
 reward_sparks = 30
 
-[sub_resource type="Resource" id="Resource_mrqqr"]
+[sub_resource type="Resource" id="Resource_r1i8a"]
 script = ExtResource("1_pqk0k")
 id = &"isles_done"
 title_key = "ACH_ISLES_DONE"
@@ -20,7 +20,7 @@ condition = 2
 target = 0
 reward_sparks = 60
 
-[sub_resource type="Resource" id="Resource_f4y2k"]
+[sub_resource type="Resource" id="Resource_a3ocf"]
 script = ExtResource("1_pqk0k")
 id = &"toyworks_done"
 title_key = "ACH_TOYWORKS_DONE"
@@ -28,7 +28,7 @@ description_key = "ACH_TOYWORKS_DONE_DESC"
 condition = 2
 reward_sparks = 80
 
-[sub_resource type="Resource" id="Resource_amd2o"]
+[sub_resource type="Resource" id="Resource_mrqqr"]
 script = ExtResource("1_pqk0k")
 id = &"campaign_complete"
 title_key = "ACH_CAMPAIGN_COMPLETE"
@@ -37,7 +37,7 @@ condition = 2
 target = 2
 reward_sparks = 150
 
-[sub_resource type="Resource" id="Resource_uwh4k"]
+[sub_resource type="Resource" id="Resource_f4y2k"]
 script = ExtResource("1_pqk0k")
 id = &"gems_10"
 title_key = "ACH_GEMS_10"
@@ -46,7 +46,7 @@ condition = 3
 target = 10
 reward_sparks = 50
 
-[sub_resource type="Resource" id="Resource_p0v06"]
+[sub_resource type="Resource" id="Resource_amd2o"]
 script = ExtResource("1_pqk0k")
 id = &"gems_all"
 title_key = "ACH_GEMS_ALL"
@@ -55,7 +55,7 @@ condition = 3
 target = 30
 reward_sparks = 200
 
-[sub_resource type="Resource" id="Resource_eax25"]
+[sub_resource type="Resource" id="Resource_uwh4k"]
 script = ExtResource("1_pqk0k")
 id = &"first_gold"
 title_key = "ACH_FIRST_GOLD"
@@ -63,7 +63,7 @@ description_key = "ACH_FIRST_GOLD_DESC"
 condition = 4
 reward_sparks = 40
 
-[sub_resource type="Resource" id="Resource_gj663"]
+[sub_resource type="Resource" id="Resource_p0v06"]
 script = ExtResource("1_pqk0k")
 id = &"gold_5"
 title_key = "ACH_GOLD_5"
@@ -72,7 +72,7 @@ condition = 4
 target = 5
 reward_sparks = 100
 
-[sub_resource type="Resource" id="Resource_eqqxc"]
+[sub_resource type="Resource" id="Resource_eax25"]
 script = ExtResource("1_pqk0k")
 id = &"gold_all"
 title_key = "ACH_GOLD_ALL"
@@ -81,7 +81,7 @@ condition = 4
 target = 10
 reward_sparks = 300
 
-[sub_resource type="Resource" id="Resource_l2ytk"]
+[sub_resource type="Resource" id="Resource_gj663"]
 script = ExtResource("1_pqk0k")
 id = &"flawless"
 title_key = "ACH_FLAWLESS"
@@ -89,7 +89,7 @@ description_key = "ACH_FLAWLESS_DESC"
 condition = 5
 reward_sparks = 50
 
-[sub_resource type="Resource" id="Resource_glxpx"]
+[sub_resource type="Resource" id="Resource_eqqxc"]
 script = ExtResource("1_pqk0k")
 id = &"flawless_5"
 title_key = "ACH_FLAWLESS_5"
@@ -98,7 +98,7 @@ condition = 5
 target = 5
 reward_sparks = 120
 
-[sub_resource type="Resource" id="Resource_retqw"]
+[sub_resource type="Resource" id="Resource_l2ytk"]
 script = ExtResource("1_pqk0k")
 id = &"collector"
 title_key = "ACH_COLLECTOR"
@@ -106,7 +106,7 @@ description_key = "ACH_COLLECTOR_DESC"
 condition = 6
 reward_sparks = 40
 
-[sub_resource type="Resource" id="Resource_0x04y"]
+[sub_resource type="Resource" id="Resource_glxpx"]
 script = ExtResource("1_pqk0k")
 id = &"collector_5"
 title_key = "ACH_COLLECTOR_5"
@@ -115,7 +115,7 @@ condition = 6
 target = 5
 reward_sparks = 120
 
-[sub_resource type="Resource" id="Resource_ebevp"]
+[sub_resource type="Resource" id="Resource_retqw"]
 script = ExtResource("1_pqk0k")
 id = &"jumper"
 title_key = "ACH_JUMPER"
@@ -124,7 +124,7 @@ stat = &"jumps"
 target = 500
 reward_sparks = 40
 
-[sub_resource type="Resource" id="Resource_bu7q8"]
+[sub_resource type="Resource" id="Resource_0x04y"]
 script = ExtResource("1_pqk0k")
 id = &"yoyo_master"
 title_key = "ACH_YOYO_MASTER"
@@ -133,7 +133,7 @@ stat = &"yoyo_bounces"
 target = 100
 reward_sparks = 80
 
-[sub_resource type="Resource" id="Resource_fv8ym"]
+[sub_resource type="Resource" id="Resource_ebevp"]
 script = ExtResource("1_pqk0k")
 id = &"air_ace"
 title_key = "ACH_AIR_ACE"
@@ -142,7 +142,7 @@ stat = &"dashes"
 target = 150
 reward_sparks = 60
 
-[sub_resource type="Resource" id="Resource_8fduf"]
+[sub_resource type="Resource" id="Resource_bu7q8"]
 script = ExtResource("1_pqk0k")
 id = &"slider"
 title_key = "ACH_SLIDER"
@@ -151,7 +151,7 @@ stat = &"slides"
 target = 100
 reward_sparks = 40
 
-[sub_resource type="Resource" id="Resource_jy6tj"]
+[sub_resource type="Resource" id="Resource_fv8ym"]
 script = ExtResource("1_pqk0k")
 id = &"long_jumper"
 title_key = "ACH_LONG_JUMPER"
@@ -160,7 +160,7 @@ stat = &"long_jumps"
 target = 50
 reward_sparks = 50
 
-[sub_resource type="Resource" id="Resource_0wajq"]
+[sub_resource type="Resource" id="Resource_8fduf"]
 script = ExtResource("1_pqk0k")
 id = &"trampoline_fan"
 title_key = "ACH_TRAMPOLINE_FAN"
@@ -169,7 +169,7 @@ stat = &"trampolines"
 target = 60
 reward_sparks = 40
 
-[sub_resource type="Resource" id="Resource_c0c0c"]
+[sub_resource type="Resource" id="Resource_jy6tj"]
 script = ExtResource("1_pqk0k")
 id = &"booster"
 title_key = "ACH_BOOSTER"
@@ -178,7 +178,7 @@ stat = &"boosts"
 target = 40
 reward_sparks = 30
 
-[sub_resource type="Resource" id="Resource_wgooc"]
+[sub_resource type="Resource" id="Resource_0wajq"]
 script = ExtResource("1_pqk0k")
 id = &"wealthy"
 title_key = "ACH_WEALTHY"
@@ -187,7 +187,7 @@ stat = &"sparks_total"
 target = 1500
 reward_sparks = 100
 
-[sub_resource type="Resource" id="Resource_2j67w"]
+[sub_resource type="Resource" id="Resource_c0c0c"]
 script = ExtResource("1_pqk0k")
 id = &"fashion"
 title_key = "ACH_FASHION"
@@ -195,7 +195,7 @@ description_key = "ACH_FASHION_DESC"
 condition = 7
 reward_sparks = 20
 
-[sub_resource type="Resource" id="Resource_5xjmh"]
+[sub_resource type="Resource" id="Resource_wgooc"]
 script = ExtResource("1_pqk0k")
 id = &"persistent"
 title_key = "ACH_PERSISTENT"
@@ -206,4 +206,4 @@ reward_sparks = 30
 
 [resource]
 script = ExtResource("2_r1i8a")
-achievements = Array[ExtResource("1_pqk0k")]([SubResource("Resource_a3ocf"), SubResource("Resource_mrqqr"), SubResource("Resource_f4y2k"), SubResource("Resource_amd2o"), SubResource("Resource_uwh4k"), SubResource("Resource_p0v06"), SubResource("Resource_eax25"), SubResource("Resource_gj663"), SubResource("Resource_eqqxc"), SubResource("Resource_l2ytk"), SubResource("Resource_glxpx"), SubResource("Resource_retqw"), SubResource("Resource_0x04y"), SubResource("Resource_ebevp"), SubResource("Resource_bu7q8"), SubResource("Resource_fv8ym"), SubResource("Resource_8fduf"), SubResource("Resource_jy6tj"), SubResource("Resource_0wajq"), SubResource("Resource_c0c0c"), SubResource("Resource_wgooc"), SubResource("Resource_2j67w"), SubResource("Resource_5xjmh")])
+achievements = Array[ExtResource("1_pqk0k")]([SubResource("Resource_pqk0k"), SubResource("Resource_r1i8a"), SubResource("Resource_a3ocf"), SubResource("Resource_mrqqr"), SubResource("Resource_f4y2k"), SubResource("Resource_amd2o"), SubResource("Resource_uwh4k"), SubResource("Resource_p0v06"), SubResource("Resource_eax25"), SubResource("Resource_gj663"), SubResource("Resource_eqqxc"), SubResource("Resource_l2ytk"), SubResource("Resource_glxpx"), SubResource("Resource_retqw"), SubResource("Resource_0x04y"), SubResource("Resource_ebevp"), SubResource("Resource_bu7q8"), SubResource("Resource_fv8ym"), SubResource("Resource_8fduf"), SubResource("Resource_jy6tj"), SubResource("Resource_0wajq"), SubResource("Resource_c0c0c"), SubResource("Resource_wgooc")])

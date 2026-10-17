@@ -1,6 +1,7 @@
 class_name LevelBuilder
 extends RefCounted
-## Small layout DSL used by tools/build_levels.gd to author levels.
+## Small layout DSL used by tools/build_levels.gd (campaign) and by
+## LevelGenerator (generated levels, also at runtime on the phone).
 ##
 ## A "cursor" walks along the route: plat() places the next platform `gap`
 ## metres after the previous far edge (along the current heading), `rise`
@@ -367,21 +368,53 @@ func _record(kind: String, node: Node, pos: Vector3, length: float, gap: float, 
 			"node": root.get_path_to(node)})
 
 
+## Adds data to the last route piece, for example the technique that reaches
+## it ("tech") or the motif it belongs to. The bot and the HUD read these keys.
+func tag(values: Dictionary) -> void:
+	if not _route.is_empty():
+		_route[-1].merge(values, true)
+
+
+func route() -> Array:
+	return _route
+
+
+## Finishes the level without saving it: returns the Level node ready to be
+## added to the tree (generated levels on the phone).
+func finish_in_memory() -> Level:
+	root.kill_height = min_y - 9.0
+	root.set_meta("route", _route)
+	var level := root
+	return level
+
+
 func finish_level(path: String) -> Dictionary:
 	root.kill_height = min_y - 9.0
 	root.set_meta("route", _route)
-	_set_owner(root, root)
-	var packed := PackedScene.new()
-	var err := packed.pack(root)
-	if err == OK:
-		err = ResourceSaver.save(packed, path)
+	var err := save_scene(root, path)
 	var sparks := root.find_children("*", "Spark", true, false).size()
 	var result := {"path": path, "length": path_length, "wait": wait_time, "sparks": sparks, "error": error_string(err)}
 	root.free()
 	return result
 
 
-func _set_owner(node: Node, owner_node: Node) -> void:
+## Packs a built level (not in the tree) and saves it as a scene.
+static func save_scene(level: Node, path: String) -> Error:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
+	set_owners(level)
+	var packed := PackedScene.new()
+	var err := packed.pack(level)
+	if err == OK:
+		err = ResourceSaver.save(packed, path)
+	return err
+
+
+## Gives every built node the level as owner so PackedScene.pack keeps it.
+static func set_owners(level: Node) -> void:
+	_set_owner(level, level)
+
+
+static func _set_owner(node: Node, owner_node: Node) -> void:
 	for child in node.get_children():
 		child.owner = owner_node
 		if child.scene_file_path == "":

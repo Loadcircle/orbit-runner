@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/data/cosmetic_info.gd" id="1_udigy"]
 [ext_resource type="Script" path="res://scripts/data/cosmetic_catalog.gd" id="2_on83q"]
 
-[sub_resource type="Resource" id="Resource_bw5ju"]
+[sub_resource type="Resource" id="Resource_udigy"]
 script = ExtResource("1_udigy")
 id = &"outfit_explorer"
 title_key = "COS_OUTFIT_EXPLORER"
@@ -15,7 +15,7 @@ colors = {
 "M_Teal": Color(0.15294118, 0.7176471, 0.76862746, 1)
 }
 
-[sub_resource type="Resource" id="Resource_drmmw"]
+[sub_resource type="Resource" id="Resource_on83q"]
 script = ExtResource("1_udigy")
 id = &"outfit_sunset"
 title_key = "COS_OUTFIT_SUNSET"
@@ -29,7 +29,7 @@ colors = {
 "M_Teal": Color(1, 0.56078434, 0.69411767, 1)
 }
 
-[sub_resource type="Resource" id="Resource_wh8k6"]
+[sub_resource type="Resource" id="Resource_bw5ju"]
 script = ExtResource("1_udigy")
 id = &"outfit_forest"
 title_key = "COS_OUTFIT_FOREST"
@@ -43,7 +43,7 @@ colors = {
 "M_Teal": Color(0.60784316, 0.88235295, 0.3647059, 1)
 }
 
-[sub_resource type="Resource" id="Resource_vt354"]
+[sub_resource type="Resource" id="Resource_drmmw"]
 script = ExtResource("1_udigy")
 id = &"outfit_midnight"
 title_key = "COS_OUTFIT_MIDNIGHT"
@@ -57,7 +57,7 @@ colors = {
 "M_Teal": Color(0.47843137, 0.36078432, 1, 1)
 }
 
-[sub_resource type="Resource" id="Resource_6i1bg"]
+[sub_resource type="Resource" id="Resource_wh8k6"]
 script = ExtResource("1_udigy")
 id = &"outfit_polar"
 title_key = "COS_OUTFIT_POLAR"
@@ -71,7 +71,7 @@ colors = {
 "M_Teal": Color(0.56078434, 0.8901961, 1, 1)
 }
 
-[sub_resource type="Resource" id="Resource_svio7"]
+[sub_resource type="Resource" id="Resource_vt354"]
 script = ExtResource("1_udigy")
 id = &"outfit_coral"
 title_key = "COS_OUTFIT_CORAL"
@@ -85,7 +85,7 @@ colors = {
 "M_Teal": Color(0.18039216, 0.76862746, 0.7137255, 1)
 }
 
-[sub_resource type="Resource" id="Resource_1djd1"]
+[sub_resource type="Resource" id="Resource_6i1bg"]
 script = ExtResource("1_udigy")
 id = &"outfit_solar"
 title_key = "COS_OUTFIT_SOLAR"
@@ -99,7 +99,7 @@ colors = {
 "M_Teal": Color(1, 0.94509804, 0.65882355, 1)
 }
 
-[sub_resource type="Resource" id="Resource_g0qwo"]
+[sub_resource type="Resource" id="Resource_svio7"]
 script = ExtResource("1_udigy")
 id = &"outfit_shadow"
 title_key = "COS_OUTFIT_SHADOW"
@@ -113,7 +113,7 @@ colors = {
 "M_Teal": Color(0.13333334, 0.827451, 0.93333334, 1)
 }
 
-[sub_resource type="Resource" id="Resource_wh7qp"]
+[sub_resource type="Resource" id="Resource_1djd1"]
 script = ExtResource("1_udigy")
 id = &"yoyo_classic"
 kind = 1
@@ -125,7 +125,7 @@ colors = {
 }
 trail_color = Color(0.13333334, 0.827451, 0.93333334, 1)
 
-[sub_resource type="Resource" id="Resource_xh0vh"]
+[sub_resource type="Resource" id="Resource_g0qwo"]
 script = ExtResource("1_udigy")
 id = &"yoyo_ember"
 kind = 1
@@ -139,7 +139,7 @@ colors = {
 }
 trail_color = Color(1, 0.5411765, 0.22745098, 1)
 
-[sub_resource type="Resource" id="Resource_qoqbm"]
+[sub_resource type="Resource" id="Resource_wh7qp"]
 script = ExtResource("1_udigy")
 id = &"yoyo_lime"
 kind = 1
@@ -153,7 +153,7 @@ colors = {
 }
 trail_color = Color(0.60784316, 1, 0.41568628, 1)
 
-[sub_resource type="Resource" id="Resource_a0h4p"]
+[sub_resource type="Resource" id="Resource_xh0vh"]
 script = ExtResource("1_udigy")
 id = &"yoyo_storm"
 kind = 1
@@ -167,7 +167,7 @@ colors = {
 }
 trail_color = Color(0.56078434, 0.6509804, 1, 1)
 
-[sub_resource type="Resource" id="Resource_f1u75"]
+[sub_resource type="Resource" id="Resource_qoqbm"]
 script = ExtResource("1_udigy")
 id = &"yoyo_violet"
 kind = 1
@@ -181,7 +181,7 @@ colors = {
 }
 trail_color = Color(0.7529412, 0.60784316, 1, 1)
 
-[sub_resource type="Resource" id="Resource_cvj7e"]
+[sub_resource type="Resource" id="Resource_a0h4p"]
 script = ExtResource("1_udigy")
 id = &"yoyo_gold"
 kind = 1
@@ -195,7 +195,7 @@ colors = {
 }
 trail_color = Color(1, 0.8862745, 0.47843137, 1)
 
-[sub_resource type="Resource" id="Resource_2nkrr"]
+[sub_resource type="Resource" id="Resource_f1u75"]
 script = ExtResource("1_udigy")
 id = &"yoyo_prism"
 kind = 1
@@ -211,4 +211,4 @@ trail_color = Color(1, 0.62352943, 0.9411765, 1)
 
 [resource]
 script = ExtResource("2_on83q")
-items = Array[ExtResource("1_udigy")]([SubResource("Resource_bw5ju"), SubResource("Resource_drmmw"), SubResource("Resource_wh8k6"), SubResource("Resource_vt354"), SubResource("Resource_6i1bg"), SubResource("Resource_svio7"), SubResource("Resource_1djd1"), SubResource("Resource_g0qwo"), SubResource("Resource_wh7qp"), SubResource("Resource_xh0vh"), SubResource("Resource_qoqbm"), SubResource("Resource_a0h4p"), SubResource("Resource_f1u75"), SubResource("Resource_cvj7e"), SubResource("Resource_2nkrr")])
+items = Array[ExtResource("1_udigy")]([SubResource("Resource_udigy"), SubResource("Resource_on83q"), SubResource("Resource_bw5ju"), SubResource("Resource_drmmw"), SubResource("Resource_wh8k6"), SubResource("Resource_vt354"), SubResource("Resource_6i1bg"), SubResource("Resource_svio7"), SubResource("Resource_1djd1"), SubResource("Resource_g0qwo"), SubResource("Resource_wh7qp"), SubResource("Resource_xh0vh"), SubResource("Resource_qoqbm"), SubResource("Resource_a0h4p"), SubResource("Resource_f1u75")])

@@ -1,5 +1,6 @@
 extends Node
-## Bootstrap generator for the cosmetic and achievement catalogs.
+## Bootstrap generator for the cosmetic and achievement catalogs and the
+## level generator's difficulty table.
 ##   godot --headless --path . res://tools/build_data.tscn
 ## The generated .tres files are the editable source afterwards; re-running
 ## this script overwrites them.
@@ -11,6 +12,7 @@ const YOYO_KEYS := ["M_Yoyo", "M_YoyoAccent", "M_DiscCyan"]
 func _ready() -> void:
 	_build_cosmetics()
 	_build_achievements()
+	_build_difficulty_table()
 	print("build_data: done")
 	get_tree().quit()
 
@@ -112,6 +114,55 @@ func _build_achievements() -> void:
 	]
 	catalog.achievements = list
 	_save(catalog, "res://resources/achievements/achievement_catalog.tres")
+
+
+func _difficulty(d: int, gap: Vector2, sizes: Array, rise: float, hazards: Vector2, techs: Vector2i, combo: int,
+		timed: Vector2, spinner: float, patrol: float, no_rest: int, checkpoint: int, landing: float, crumble: Vector2i,
+		index: Vector2, expert: Vector2, casual: Vector2, novice: Vector2) -> DifficultyProfile:
+	var p := DifficultyProfile.new()
+	p.difficulty = d
+	p.gap_fraction = gap
+	p.platform_sizes = PackedStringArray(sizes)
+	p.max_rise = rise
+	p.hazards_per_100m = hazards
+	p.techniques = techs
+	p.combo_pieces = combo
+	p.timed_on_time = timed.x
+	p.timed_off_time = timed.y
+	p.spinner_speed = spinner
+	p.patrol_speed = patrol
+	p.motifs_without_rest = no_rest
+	p.checkpoint_every = checkpoint
+	p.landing_after_long_gap = landing
+	p.crumble_chain = crumble
+	p.index_range = index
+	p.expert_success = expert
+	p.casual_success = casual
+	p.novice_success = novice
+	return p
+
+
+## Starting values from the service plan ("Parámetros por dificultad").
+func _build_difficulty_table() -> void:
+	var D := LevelSpec.Difficulty
+	var table := DifficultyTable.new()
+	var profiles: Array[DifficultyProfile] = [
+		_difficulty(D.EASY, Vector2(0.35, 0.55), ["L", "XL", "Wide"], 1.0, Vector2(0, 1), Vector2i(1, 2), 0,
+				Vector2(2.6, 1.6), 50.0, 2.5, 2, 2, 8.0, Vector2i(3, 3),
+				Vector2(0, 25), Vector2(0, 1), Vector2(0.9, 1), Vector2(0.6, 1)),
+		_difficulty(D.MEDIUM, Vector2(0.55, 0.70), ["M", "L"], 1.5, Vector2(2, 3), Vector2i(2, 3), 2,
+				Vector2(2.2, 1.4), 70.0, 3.0, 3, 3, 6.0, Vector2i(3, 4),
+				Vector2(25, 50), Vector2(0, 1), Vector2(0.6, 0.9), Vector2(0, 1)),
+		_difficulty(D.HARD, Vector2(0.70, 0.85), ["S", "M", "Strip"], 2.0, Vector2(4, 5), Vector2i(3, 4), 3,
+				Vector2(1.7, 1.1), 95.0, 3.5, 4, 4, 4.0, Vector2i(4, 5),
+				Vector2(50, 75), Vector2(0.8, 1), Vector2(0, 0.6), Vector2(0, 1)),
+		_difficulty(D.EXTREME, Vector2(0.85, 0.95), ["S", "Strip"], 2.3, Vector2(6, 8), Vector2i(4, 6), 4,
+				Vector2(1.3, 1.0), 120.0, 4.0, 6, 5, 3.0, Vector2i(5, 6),
+				Vector2(75, 100.01), Vector2(0.4, 0.8), Vector2(0, 1), Vector2(0, 1)),
+	]
+	table.profiles = profiles
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://resources/generator"))
+	_save(table, "res://resources/generator/difficulty_profiles.tres")
 
 
 func _save(resource: Resource, path: String) -> void:
