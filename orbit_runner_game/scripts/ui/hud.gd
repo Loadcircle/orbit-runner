@@ -133,7 +133,7 @@ func _on_sparks_changed(collected: int, total: int) -> void:
 
 func _build() -> void:
 	_root = Control.new()
-	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_root)
 	UiKit.apply_safe_area(_root, 14.0)
@@ -226,6 +226,6 @@ func _build() -> void:
 
 	_flash = ColorRect.new()
 	_flash.color = Color(1, 1, 1, 0)
-	_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_flash)

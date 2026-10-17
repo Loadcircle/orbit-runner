@@ -9,21 +9,21 @@ size = Vector3(3, 0.4, 3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_j15ht"]
 size = Vector3(2.8, 0.5, 2.8)
 
-[node name="CrumblePlatform" type="StaticBody3D" unique_id=1402179930]
+[node name="CrumblePlatform" type="StaticBody3D" unique_id=2056608273]
 collision_mask = 0
 script = ExtResource("1_ttobc")
 
 [node name="Model" type="Node3D" parent="." unique_id=868348965 instance=ExtResource("2_ge61s")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=426831201]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882162131]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 shape = SubResource("BoxShape3D_gc4c8")
 
-[node name="Sensor" type="Area3D" parent="." unique_id=1997462778]
+[node name="Sensor" type="Area3D" parent="." unique_id=315675131]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Sensor" unique_id=1130441092]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sensor" unique_id=329538482]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_j15ht")

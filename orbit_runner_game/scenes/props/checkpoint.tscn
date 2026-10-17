@@ -23,7 +23,7 @@ size = Vector2(0.2, 0.2)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="Checkpoint" type="Area3D" unique_id=2058586824]
+[node name="Checkpoint" type="Area3D" unique_id=142026955]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
@@ -32,14 +32,14 @@ script = ExtResource("1_wh4no")
 [node name="Model" type="Node3D" parent="." unique_id=250771606 instance=ExtResource("2_l2lju")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=521746422]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1576129008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_8llkt")
 
-[node name="Spawn" type="Marker3D" parent="." unique_id=354977009]
+[node name="Spawn" type="Marker3D" parent="." unique_id=1301906691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
-[node name="Burst" type="CPUParticles3D" parent="." unique_id=1321113129]
+[node name="Burst" type="CPUParticles3D" parent="." unique_id=1502048265]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 2.4, 0)
 emitting = false
 amount = 20

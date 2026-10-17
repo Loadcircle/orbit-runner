@@ -7,7 +7,7 @@ var _overlay: Control
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
 	UiKit.apply_safe_area(margin, 28.0)
 	var layout := UiKit.hbox(0)

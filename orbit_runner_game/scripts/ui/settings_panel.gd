@@ -10,11 +10,11 @@ var _pages: Array[Control] = []
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(UiKit.dim_background())
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
 	UiKit.apply_safe_area(margin, 24.0)
 	var panel := UiKit.panel()
@@ -27,6 +27,7 @@ func _ready() -> void:
 	header.add_child(UiKit.label(tr("SETTINGS_TITLE"), 40))
 	_tabs = TabBar.new()
 	_tabs.add_theme_font_size_override("font_size", 26)
+	_tabs.clip_tabs = false
 	for key in ["SETTINGS_TAB_AUDIO", "SETTINGS_TAB_CONTROLS", "SETTINGS_TAB_GAME"]:
 		_tabs.add_tab(tr(key))
 	_tabs.tab_changed.connect(_show_page)

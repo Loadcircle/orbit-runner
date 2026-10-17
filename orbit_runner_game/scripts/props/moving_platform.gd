@@ -6,7 +6,7 @@ extends AnimatableBody3D
 @export var travel := Vector3(0, 0, -6)
 @export var period := 4.0
 @export_range(0.0, 1.0) var phase := 0.0
-@export_range(0.0, 0.45) var pause_fraction := 0.12
+@export_range(0.0, 0.45) var pause_fraction := 0.25
 
 var _start: Vector3
 var _time := 0.0

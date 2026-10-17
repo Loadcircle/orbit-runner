@@ -14,11 +14,11 @@ func _ready() -> void:
 	layer = 20
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_root = Control.new()
-	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_root)
 	_root.add_child(UiKit.dim_background())
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.add_child(center)
 	var panel := UiKit.panel()
 	center.add_child(panel)

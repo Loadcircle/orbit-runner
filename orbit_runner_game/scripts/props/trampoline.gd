@@ -2,7 +2,7 @@ class_name Trampoline
 extends Node3D
 ## Fixed impulse prop: launches the player upwards on contact from above.
 
-@export var strength := 18.0
+@export var strength := 20.0
 
 var _pad: Node3D
 

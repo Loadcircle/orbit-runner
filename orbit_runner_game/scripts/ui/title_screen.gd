@@ -8,7 +8,7 @@ var _leaving := false
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
 	UiKit.apply_safe_area(margin, 24.0)
 	var box := UiKit.vbox(6)

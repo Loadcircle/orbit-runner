@@ -6,7 +6,7 @@
 [ext_resource type="Resource" path="res://resources/biomes/toyworks.tres" id="3_16780"]
 [ext_resource type="Resource" path="res://resources/biomes/ruins.tres" id="4_rneyl"]
 
-[sub_resource type="Resource" id="Resource_lhqfs"]
+[sub_resource type="Resource" id="Resource_smafw"]
 script = ExtResource("1_smafw")
 id = &"tutorial"
 title_key = "LEVEL_TUTORIAL"
@@ -17,7 +17,7 @@ silver_time = 33.5
 is_tutorial = true
 hint_key = "LEVEL_TUTORIAL_HINT"
 
-[sub_resource type="Resource" id="Resource_17j1v"]
+[sub_resource type="Resource" id="Resource_fmcb6"]
 script = ExtResource("1_smafw")
 id = &"w1_l1"
 title_key = "LEVEL_W1_L1"
@@ -27,7 +27,7 @@ gold_time = 25.5
 silver_time = 40.5
 hint_key = "LEVEL_W1_L1_HINT"
 
-[sub_resource type="Resource" id="Resource_mywho"]
+[sub_resource type="Resource" id="Resource_16780"]
 script = ExtResource("1_smafw")
 id = &"w1_l2"
 title_key = "LEVEL_W1_L2"
@@ -37,7 +37,7 @@ gold_time = 28.5
 silver_time = 44.5
 hint_key = "LEVEL_W1_L2_HINT"
 
-[sub_resource type="Resource" id="Resource_4foqd"]
+[sub_resource type="Resource" id="Resource_rneyl"]
 script = ExtResource("1_smafw")
 id = &"w1_l3"
 title_key = "LEVEL_W1_L3"
@@ -47,7 +47,7 @@ gold_time = 25.5
 silver_time = 40.5
 hint_key = "LEVEL_W1_L3_HINT"
 
-[sub_resource type="Resource" id="Resource_w7v7w"]
+[sub_resource type="Resource" id="Resource_lhqfs"]
 script = ExtResource("1_smafw")
 id = &"w1_l4"
 title_key = "LEVEL_W1_L4"
@@ -57,7 +57,7 @@ gold_time = 30.0
 silver_time = 46.5
 hint_key = "LEVEL_W1_L4_HINT"
 
-[sub_resource type="Resource" id="Resource_0w2lp"]
+[sub_resource type="Resource" id="Resource_17j1v"]
 script = ExtResource("1_smafw")
 id = &"w2_l1"
 title_key = "LEVEL_W2_L1"
@@ -68,29 +68,29 @@ gold_time = 29.0
 silver_time = 45.5
 hint_key = "LEVEL_W2_L1_HINT"
 
-[sub_resource type="Resource" id="Resource_djmny"]
+[sub_resource type="Resource" id="Resource_mywho"]
 script = ExtResource("1_smafw")
 id = &"w2_l2"
 title_key = "LEVEL_W2_L2"
 world_index = 1
 scene_path = "res://scenes/levels/w2_l2.tscn"
 biome = ExtResource("3_16780")
-gold_time = 33.0
-silver_time = 50.5
+gold_time = 34.5
+silver_time = 52.5
 hint_key = "LEVEL_W2_L2_HINT"
 
-[sub_resource type="Resource" id="Resource_ojacd"]
+[sub_resource type="Resource" id="Resource_4foqd"]
 script = ExtResource("1_smafw")
 id = &"w2_l3"
 title_key = "LEVEL_W2_L3"
 world_index = 1
 scene_path = "res://scenes/levels/w2_l3.tscn"
 biome = ExtResource("3_16780")
-gold_time = 35.0
-silver_time = 53.5
+gold_time = 38.5
+silver_time = 58.0
 hint_key = "LEVEL_W2_L3_HINT"
 
-[sub_resource type="Resource" id="Resource_j3iva"]
+[sub_resource type="Resource" id="Resource_w7v7w"]
 script = ExtResource("1_smafw")
 id = &"w3_l1"
 title_key = "LEVEL_W3_L1"
@@ -101,29 +101,29 @@ gold_time = 30.5
 silver_time = 47.0
 hint_key = "LEVEL_W3_L1_HINT"
 
-[sub_resource type="Resource" id="Resource_b4eds"]
+[sub_resource type="Resource" id="Resource_0w2lp"]
 script = ExtResource("1_smafw")
 id = &"w3_l2"
 title_key = "LEVEL_W3_L2"
 world_index = 2
 scene_path = "res://scenes/levels/w3_l2.tscn"
 biome = ExtResource("4_rneyl")
-gold_time = 32.5
-silver_time = 50.0
+gold_time = 34.5
+silver_time = 52.5
 hint_key = "LEVEL_W3_L2_HINT"
 
-[sub_resource type="Resource" id="Resource_13jm6"]
+[sub_resource type="Resource" id="Resource_djmny"]
 script = ExtResource("1_smafw")
 id = &"w3_l3"
 title_key = "LEVEL_W3_L3"
 world_index = 2
 scene_path = "res://scenes/levels/w3_l3.tscn"
 biome = ExtResource("4_rneyl")
-gold_time = 48.0
-silver_time = 71.0
+gold_time = 49.0
+silver_time = 72.0
 hint_key = "LEVEL_W3_L3_HINT"
 
 [resource]
 script = ExtResource("1_cat")
-levels = Array[ExtResource("1_smafw")]([SubResource("Resource_lhqfs"), SubResource("Resource_17j1v"), SubResource("Resource_mywho"), SubResource("Resource_4foqd"), SubResource("Resource_w7v7w"), SubResource("Resource_0w2lp"), SubResource("Resource_djmny"), SubResource("Resource_ojacd"), SubResource("Resource_j3iva"), SubResource("Resource_b4eds"), SubResource("Resource_13jm6")])
+levels = Array[ExtResource("1_smafw")]([SubResource("Resource_smafw"), SubResource("Resource_fmcb6"), SubResource("Resource_16780"), SubResource("Resource_rneyl"), SubResource("Resource_lhqfs"), SubResource("Resource_17j1v"), SubResource("Resource_mywho"), SubResource("Resource_4foqd"), SubResource("Resource_w7v7w"), SubResource("Resource_0w2lp"), SubResource("Resource_djmny")])
 world_title_keys = PackedStringArray("WORLD_1", "WORLD_2", "WORLD_3")

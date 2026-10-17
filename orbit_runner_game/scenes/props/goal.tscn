@@ -12,7 +12,7 @@ size = Vector3(0.7, 4, 0.7)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hs6oo"]
 size = Vector3(0.7, 4, 0.7)
 
-[node name="Goal" type="Area3D" unique_id=563289449]
+[node name="Goal" type="Area3D" unique_id=969505247]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
@@ -20,17 +20,17 @@ script = ExtResource("1_ub4hd")
 
 [node name="Model" type="Node3D" parent="." unique_id=1516596920 instance=ExtResource("2_n6pa6")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=743225319]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=159369956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_rwyj0")
 
-[node name="Pillars" type="StaticBody3D" parent="." unique_id=2095505080]
+[node name="Pillars" type="StaticBody3D" parent="." unique_id=1529780617]
 collision_mask = 0
 
-[node name="LeftPillar" type="CollisionShape3D" parent="Pillars" unique_id=1790643840]
+[node name="LeftPillar" type="CollisionShape3D" parent="Pillars" unique_id=1397639916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 2, 0)
 shape = SubResource("BoxShape3D_2e18n")
 
-[node name="RightPillar" type="CollisionShape3D" parent="Pillars" unique_id=1508571365]
+[node name="RightPillar" type="CollisionShape3D" parent="Pillars" unique_id=509498019]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 2, 0)
 shape = SubResource("BoxShape3D_hs6oo")

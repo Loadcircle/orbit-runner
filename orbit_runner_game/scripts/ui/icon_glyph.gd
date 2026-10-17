@@ -92,9 +92,9 @@ func _draw() -> void:
 			draw_circle(Vector2(c.x, c.y + s * 0.12), s * 0.06, outline)
 		Icon.GEAR:
 			var pts := PackedVector2Array()
-			for i in 16:
-				var r := s * (0.42 if (i / 2) % 2 == 0 else 0.3)
-				var a := i * TAU / 16.0
+			for i in 24:
+				var r := s * (0.44 if i % 4 < 2 else 0.31)
+				var a := (i - 0.5) * TAU / 24.0
 				pts.append(c + Vector2(cos(a), sin(a)) * r)
 			_poly(pts, w)
 			draw_circle(c, s * 0.12, outline)

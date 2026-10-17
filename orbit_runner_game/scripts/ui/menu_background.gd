@@ -43,7 +43,7 @@ func _ready() -> void:
 	_add(ROCK, Vector3(1.9, 0, 2.6), 0.7)
 	_add(TRAMPOLINE, Vector3(-2.0, 0, 1.6), 0.0)
 	_character = CHARACTER.instantiate() as Node3D
-	_character.rotation.y = deg_to_rad(20)
+	_character.rotation.y = deg_to_rad(200)
 	add_child(_character)
 	var anim := _character.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if anim and anim.has_animation("Idle"):

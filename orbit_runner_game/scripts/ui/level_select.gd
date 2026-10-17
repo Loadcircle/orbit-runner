@@ -11,11 +11,11 @@ func _ready() -> void:
 	_world = int(SceneRouter.payload.get("world", _default_world()))
 	var bg := ColorRect.new()
 	bg.color = Color(0.03, 0.07, 0.17, 0.45)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
 	UiKit.apply_safe_area(margin, 24.0)
 	var box := UiKit.vbox(14)
@@ -94,7 +94,7 @@ func _card(index: int, info: LevelInfo) -> Button:
 		AudioDirector.play_sfx(&"ui_confirm")
 		SceneRouter.play_level(index))
 	var inner := UiKit.vbox(6)
-	inner.set_anchors_preset(Control.PRESET_FULL_RECT)
+	inner.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	inner.offset_left = 18
 	inner.offset_top = 14
 	inner.offset_right = -18

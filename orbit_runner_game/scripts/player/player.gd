@@ -44,6 +44,9 @@ var _boost := 0.0
 var _was_on_floor := true
 var _fall_speed := 0.0
 var _wind_frames := 0
+## Brief protection after respawning so stale trigger overlaps (hazards,
+## trampolines) from the previous position cannot act on the new one.
+var _spawn_grace := 0.0
 
 @onready var _stand_shape: CollisionShape3D = $StandShape
 @onready var _slide_shape: CollisionShape3D = $SlideShape
@@ -63,6 +66,7 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		velocity = Vector3.ZERO
 		return
+	_spawn_grace = maxf(_spawn_grace - delta, 0.0)
 	var on_floor := is_on_floor()
 	_update_timers(delta, on_floor)
 	if on_floor and not _was_on_floor:
@@ -114,7 +118,8 @@ func _update_timers(delta: float, on_floor: bool) -> void:
 	_slide_cooldown -= delta
 	throw_timer -= delta
 	bounce_timer = maxf(bounce_timer - delta, 0.0) if velocity.y > 0.0 else 0.0
-	_boost = move_toward(_boost, 0.0, tuning.boost_decay * delta)
+	# Boosts persist in the air (long boost jumps) but fade fast on the ground.
+	_boost = move_toward(_boost, 0.0, tuning.boost_decay * (2.5 if on_floor else 1.0) * delta)
 	if _wind_frames > 0:
 		_wind_frames -= 1
 
@@ -287,7 +292,7 @@ func _update_facing(delta: float) -> void:
 
 ## Vertical launch from trampolines and the yo-yo disc. Restores air actions.
 func bounce(vertical_speed: float, source: StringName) -> void:
-	if is_dead:
+	if is_dead or is_spawn_protected():
 		return
 	_end_slide()
 	is_dashing = false
@@ -317,13 +322,21 @@ func apply_boost(direction: Vector3, speed: float) -> void:
 func apply_wind(lift: float, max_up_speed: float, delta: float) -> void:
 	_wind_frames = 2
 	dash_available = true
+	# Air drag inside the current keeps the player in the column (forgiving).
+	var drag := clampf(1.0 - 2.8 * delta, 0.0, 1.0)
+	velocity.x *= drag
+	velocity.z *= drag
 	if velocity.y < max_up_speed:
 		velocity.y = minf(velocity.y + lift * delta, max_up_speed)
 	_jump_held_cut = false
 
 
+func is_spawn_protected() -> bool:
+	return _spawn_grace > 0.0
+
+
 func hurt() -> void:
-	if is_dead:
+	if is_dead or is_spawn_protected():
 		return
 	is_dead = true
 	_end_slide()
@@ -347,6 +360,7 @@ func respawn_at(xform: Transform3D) -> void:
 	_boost = 0.0
 	_buffer = 0.0
 	_was_on_floor = true
+	_spawn_grace = 0.35
 	reset_physics_interpolation()
 	if yoyo:
 		yoyo.recall_instant()

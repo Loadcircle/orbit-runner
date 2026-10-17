@@ -4,6 +4,8 @@ extends StaticBody3D
 
 @export var on_time := 2.2
 @export var off_time := 1.4
+## Delay as a fraction of the cycle: a chain with phases 0, 0.3, 0.6 appears
+## one after another, so a player who keeps moving rides the wave.
 @export_range(0.0, 1.0) var phase := 0.0
 @export var warning := 0.6
 
@@ -15,7 +17,7 @@ var _solid := true
 
 
 func _ready() -> void:
-	_time = phase * (on_time + off_time)
+	_time = fposmod(-phase * (on_time + off_time), on_time + off_time)
 
 
 func _physics_process(delta: float) -> void:

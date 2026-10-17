@@ -36,6 +36,8 @@ var auto_sparks := true
 
 var _groups: Dictionary = {}
 var _last_zone: CameraZone
+## Ordered route pieces saved as metadata: used by the HUD progress bar.
+var _route: Array = []
 var _scene_cache: Dictionary = {}
 
 
@@ -55,6 +57,7 @@ func begin(level_name: String, prefix: String, biome: BiomeTheme, seed_value: in
 	root.add_child(start)
 	cursor = Vector3.ZERO
 	yaw = 0.0
+	_route = []
 	path_length = 0.0
 	wait_time = 0.0
 	min_y = 0.0
@@ -126,6 +129,7 @@ func start(size_key := "L") -> Node3D:
 	(root.get_node("PlayerStart") as Marker3D).position = cursor + Vector3.UP * 0.1
 	last = _place_platform(size_key, center)
 	cursor = center + fwd() * size.y * 0.5
+	_record("plat", last, center, size.y, 0.0, 0.0, size.x)
 	return last
 
 
@@ -138,6 +142,7 @@ func plat(size_key: String, gap: float, rise := 0.0, side := 0.0) -> Node3D:
 	last = _place_platform(size_key, center)
 	cursor = center + fwd() * size.y * 0.5
 	path_length += gap + size.y + absf(rise) * 0.5
+	_record("plat", last, center, size.y, gap, rise, size.x)
 	return last
 
 
@@ -190,6 +195,7 @@ func mover(gap: float, travel: float, axis := "fwd", period := 4.0, rise := 0.0,
 	node.phase = phase
 	_add("Elements", node, start_pos)
 	_gap_sparks(cursor, start_pos - fwd() * 1.5, gap)
+	_record("mover", node, start_pos, 3.0, gap, rise)
 	last = node
 	last_size = Vector2(3, 3)
 	var end_pos := start_pos + travel_vec
@@ -205,6 +211,7 @@ func crumble(gap: float, rise := 0.0, side := 0.0) -> Node3D:
 	_gap_sparks(cursor, center - fwd() * 1.5, gap)
 	var node := _instance(PROPS % "crumble_platform")
 	_add("Elements", node, center)
+	_record("crumble", node, center, 3.0, gap, rise)
 	last = node
 	last_size = Vector2(3, 3)
 	last_center = center
@@ -221,6 +228,7 @@ func timed(gap: float, rise := 0.0, phase := 0.0, on_time := 2.2, off_time := 1.
 	node.on_time = on_time
 	node.off_time = off_time
 	_add("Elements", node, center)
+	_record("timed", node, center, 3.2, gap, rise)
 	last = node
 	last_size = Vector2(3.2, 3.2)
 	last_center = center
@@ -237,6 +245,7 @@ func wind(gap: float, height: float, rise := -1.0) -> Node3D:
 	var node := _instance(PROPS % "wind_column") as WindColumn
 	node.height = height
 	_add("Elements", node, base)
+	_record("wind", node, base, 3.0, gap, rise)
 	for i in 4:
 		spark(base + Vector3.UP * (1.5 + i * height / 4.0))
 	last_center = base + Vector3.UP * height
@@ -248,13 +257,13 @@ func wind(gap: float, height: float, rise := -1.0) -> Node3D:
 
 # ------------------------------------------------------------------ elements on the last platform
 
-func trampoline(lx := 0.0, lz := 0.0, strength := 18.0) -> Node3D:
+func trampoline(lx := 0.0, lz := 0.0, strength := 20.0) -> Node3D:
 	var node := _instance(PROPS % "trampoline") as Trampoline
 	node.strength = strength
 	return _add("Elements", node, local(lx, lz))
 
 
-func trampoline_at(pos: Vector3, strength := 18.0) -> Node3D:
+func trampoline_at(pos: Vector3, strength := 20.0) -> Node3D:
 	var node := _instance(PROPS % "trampoline") as Trampoline
 	node.strength = strength
 	return _add("Elements", node, pos)
@@ -353,8 +362,14 @@ func deco(model_name: String, pos: Vector3, scale := 1.0, yaw_deg := 0.0) -> Nod
 	return _add("Decor", model, pos, yaw_deg)
 
 
+func _record(kind: String, node: Node, pos: Vector3, length: float, gap: float, rise: float, width := 3.0) -> void:
+	_route.append({"kind": kind, "pos": pos, "yaw": yaw, "len": length, "wid": width, "gap": gap, "rise": rise,
+			"node": root.get_path_to(node)})
+
+
 func finish_level(path: String) -> Dictionary:
 	root.kill_height = min_y - 9.0
+	root.set_meta("route", _route)
 	_set_owner(root, root)
 	var packed := PackedScene.new()
 	var err := packed.pack(root)

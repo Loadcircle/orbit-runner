@@ -26,11 +26,11 @@ func _build(summary: Dictionary) -> void:
 	if _root:
 		_root.queue_free()
 	_root = Control.new()
-	_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_root)
 	_root.add_child(UiKit.dim_background())
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_root.add_child(center)
 	var panel := UiKit.panel()
 	panel.custom_minimum_size = Vector2(760, 0)

@@ -55,7 +55,7 @@ static func icon_button(icon: IconGlyph.Icon, on_press: Callable, size_px := 76.
 	b.focus_mode = Control.FOCUS_ALL
 	var glyph := IconGlyph.new()
 	glyph.icon = icon
-	glyph.set_anchors_preset(Control.PRESET_FULL_RECT)
+	glyph.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	glyph.offset_left = 14
 	glyph.offset_top = 14
 	glyph.offset_right = -14
@@ -103,7 +103,7 @@ static func spacer(min_size := Vector2(0, 0), expand := true) -> Control:
 static func dim_background() -> ColorRect:
 	var r := ColorRect.new()
 	r.color = Color(0.03, 0.06, 0.15, 0.6)
-	r.set_anchors_preset(Control.PRESET_FULL_RECT)
+	r.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	r.mouse_filter = Control.MOUSE_FILTER_STOP
 	return r
 

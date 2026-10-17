@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_etejb"]
 height = 8.0
-radius = 1.45
+radius = 1.65
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kg5nc"]
 render_priority = 0
@@ -18,29 +18,29 @@ shader_parameter/strength = null
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_5hlru"]
 material = SubResource("ShaderMaterial_kg5nc")
-top_radius = 1.3
-bottom_radius = 1.3
+top_radius = 1.45
+bottom_radius = 1.45
 height = 8.0
 radial_segments = 20
 rings = 1
 cap_top = false
 cap_bottom = false
 
-[node name="WindColumn" type="Node3D" unique_id=586834602]
+[node name="WindColumn" type="Node3D" unique_id=1953540393]
 script = ExtResource("1_wavi7")
 
 [node name="Model" type="Node3D" parent="." unique_id=598071450 instance=ExtResource("2_qx7yf")]
 
-[node name="Area" type="Area3D" parent="." unique_id=2039453192]
+[node name="Area" type="Area3D" parent="." unique_id=1236010880]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area" unique_id=793274109]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area" unique_id=1996180756]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("CylinderShape3D_etejb")
 
-[node name="Column" type="MeshInstance3D" parent="." unique_id=1097028398]
+[node name="Column" type="MeshInstance3D" parent="." unique_id=254301981]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5hlru")

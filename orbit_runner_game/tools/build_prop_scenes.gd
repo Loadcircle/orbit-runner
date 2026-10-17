@@ -203,8 +203,9 @@ func _trampoline() -> void:
 	base.collision_mask = 0
 	root.add_child(base)
 	_cylinder_shape(base, 1.15, 0.36, Vector3(0, 0.18, 0))
+	# Wider than the base so running into the side also launches the player.
 	var pad := _area(root, "PadArea", LAYER_TRIGGER)
-	_cylinder_shape(pad, 1.0, 0.7, Vector3(0, 0.65, 0))
+	_cylinder_shape(pad, 1.35, 1.0, Vector3(0, 0.5, 0))
 	_save(root, "trampoline")
 
 
@@ -214,12 +215,12 @@ func _wind_column() -> void:
 	root.set_script(load("res://scripts/props/wind_column.gd"))
 	_model("PROP_WindRing", root)
 	var area := _area(root, "Area", LAYER_TRIGGER)
-	_cylinder_shape(area, 1.45, 8.0, Vector3(0, 4.0, 0))
+	_cylinder_shape(area, 1.65, 8.0, Vector3(0, 4.0, 0))
 	var column := MeshInstance3D.new()
 	column.name = "Column"
 	var mesh := CylinderMesh.new()
-	mesh.top_radius = 1.3
-	mesh.bottom_radius = 1.3
+	mesh.top_radius = 1.45
+	mesh.bottom_radius = 1.45
 	mesh.height = 8.0
 	mesh.radial_segments = 20
 	mesh.rings = 1

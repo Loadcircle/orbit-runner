@@ -40,6 +40,9 @@ var _results: ResultsScreen
 var _prompt_owner: TutorialPrompt
 var _start_pos := Vector3.ZERO
 var _goal_pos := Vector3.ZERO
+## Route polyline (piece centres) and cumulative lengths for progress.
+var _route_points: PackedVector3Array = []
+var _route_cumulative: PackedFloat32Array = []
 
 
 func _enter_tree() -> void:
@@ -63,6 +66,7 @@ func _ready() -> void:
 	var goal := find_child("Goal", true, false) as Node3D
 	_goal_pos = goal.global_position if goal else _start_pos + Vector3.FORWARD * 100.0
 	_respawn_xform = start.global_transform
+	_build_route()
 	_respawn_yaw = deg_to_rad(start_yaw_degrees)
 
 	player = PLAYER_SCENE.instantiate()
@@ -227,13 +231,34 @@ func hide_prompt(prompt: TutorialPrompt) -> void:
 		hud.hide_prompt()
 
 
-## 0..1 progress from the start to the goal along the straight line.
+## 0..1 progress along the route polyline (start -> pieces -> goal).
 func route_progress() -> float:
-	var total := _start_pos.distance_to(_goal_pos)
-	if total < 0.1:
+	if _route_points.size() < 2:
 		return 0.0
-	var dir := (_goal_pos - _start_pos) / total
-	return clampf((player.global_position - _start_pos).dot(dir) / total, 0.0, 1.0)
+	var p := player.global_position
+	var best_dist := INF
+	var best := 0.0
+	for i in _route_points.size() - 1:
+		var a := _route_points[i]
+		var b := _route_points[i + 1]
+		var ab := b - a
+		var t := clampf((p - a).dot(ab) / maxf(ab.length_squared(), 0.001), 0.0, 1.0)
+		var d := p.distance_squared_to(a + ab * t)
+		if d < best_dist:
+			best_dist = d
+			best = _route_cumulative[i] + ab.length() * t
+	return clampf(best / _route_cumulative[_route_cumulative.size() - 1], 0.0, 1.0)
+
+
+func _build_route() -> void:
+	_route_points = PackedVector3Array([_start_pos])
+	if has_meta("route"):
+		for piece in get_meta("route"):
+			_route_points.append(to_global(piece["pos"]))
+	_route_points.append(_goal_pos)
+	_route_cumulative = PackedFloat32Array([0.0])
+	for i in range(1, _route_points.size()):
+		_route_cumulative.append(_route_cumulative[i - 1] + _route_points[i - 1].distance_to(_route_points[i]))
 
 
 func _on_player_died() -> void:

@@ -14,10 +14,10 @@ var _tabs: TabBar
 func _ready() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0.03, 0.07, 0.17, 0.5)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
 	UiKit.apply_safe_area(margin, 24.0)
 	var box := UiKit.vbox(12)
@@ -28,6 +28,7 @@ func _ready() -> void:
 	header.add_child(UiKit.label(tr("MENU_ACHIEVEMENTS"), 42))
 	_tabs = TabBar.new()
 	_tabs.add_theme_font_size_override("font_size", 26)
+	_tabs.clip_tabs = false
 	_tabs.add_tab(tr("ACH_TAB_LIST"))
 	_tabs.add_tab(tr("ACH_TAB_PROGRESS"))
 	_tabs.tab_changed.connect(_show)
