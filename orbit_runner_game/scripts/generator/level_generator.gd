@@ -132,6 +132,7 @@ func gap_for(tech: String, rise := 0.0, cap := INF) -> float:
 	var gap := top * fraction()
 	if WEAKER.has(tech):
 		gap = maxf(gap, reach.max_gap(WEAKER[tech], rise) + 0.3)
+	gap *= float(_adjustment().get("gap", 1.0))
 	return clampf(minf(gap, cap), 1.5, top * 0.95)
 
 
@@ -172,6 +173,9 @@ func pick_tech(options: Array) -> String:
 
 ## Places a platform on the route and annotates the technique that reaches it.
 func place_plat(size: String, tech: String, gap: float, rise := 0.0, side := 0.0) -> Node3D:
+	var steps := int(_adjustment().get("size", 0))
+	if steps != 0:
+		size = SIZE_ORDER[clampi(SIZE_ORDER.find(size) + steps, 0, SIZE_ORDER.size() - 1)]
 	var node := b.plat(size, gap, rise, side)
 	tag_piece(tech)
 	last_clean = true
@@ -344,7 +348,7 @@ func _pick_motif() -> String:
 			w *= 3.0
 		if info["hazard"]:
 			if density < _hazard_target:
-				w *= 3.0
+				w *= 3.0 + 2.0 * _hazard_target
 			elif density > profile.hazards_per_100m.y:
 				w *= 0.05
 		weights.append(w)
@@ -366,6 +370,13 @@ func _tower_profile() -> void:
 			_ramp = clampf(float(floor_number - 1 - band[0]) / maxf(span, 1.0), 0.0, 1.0)
 			_hazard_target = lerpf(profile.hazards_per_100m.x, profile.hazards_per_100m.y, _ramp)
 			return
+
+
+## Repair applied by the bot pipeline to the motif being built (LevelSpec.adjustments).
+func _adjustment() -> Dictionary:
+	if spec == null or spec.adjustments.is_empty():
+		return {}
+	return spec.adjustments.get(motifs.size() - 1, {})
 
 
 func _shuffle(list: Array) -> void:

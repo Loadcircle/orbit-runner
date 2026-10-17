@@ -59,6 +59,11 @@ var _holds: Dictionary = {}
 var _was_floor := true
 var _spot_deaths: Dictionary = {}
 var _wait_since := -1.0
+## Side chosen to pass each spike (kept so the bot does not zigzag into it).
+var _dodge: Dictionary = {}
+var _piece_time: Dictionary = {}
+## Route index the bot has decided to jump to without re-checking its timing.
+var _go_for := -1
 var _trace_lines: Array[String] = []
 
 
@@ -83,7 +88,7 @@ func setup(level_node: Level, skill_profile: Dictionary, seed_value: int, time_l
 func result(finished: bool, reason: String) -> Dictionary:
 	return {"finished": finished, "reason": reason, "time": level.elapsed, "deaths": deaths,
 			"deaths_by_motif": deaths_by_motif, "exposure": exposure, "landing_margins": landing_margins,
-			"jumps": jumps, "sim_time": time, "piece": index, "route_size": route.size()}
+			"jumps": jumps, "sim_time": time, "slowest_piece": _slowest_piece(), "piece": index, "route_size": route.size()}
 
 
 # ------------------------------------------------------------------ main loop
@@ -108,6 +113,11 @@ func _physics_process(delta: float) -> void:
 		takeoff_index = index
 	_was_floor = on_floor
 	_update_index(pos, on_floor)
+	_piece_time[index] = float(_piece_time.get(index, 0.0)) + delta
+	if trace and absf(float(_piece_time[index]) - 12.0) < delta * 0.5:
+		for line in _trace_lines:
+			print("    ", line)
+		print("  STALL piece=%d" % index)
 	_measure_exposure(pos, delta)
 	var sigma := float(skill.get("direction", 0.0))
 	_dir_noise = lerpf(_dir_noise, rng.randfn(0.0, sigma * 1.6), 0.08) if sigma > 0.0 else 0.0
@@ -125,6 +135,14 @@ func _physics_process(delta: float) -> void:
 				index, takeoff_index, pos.x, pos.y, pos.z, v.x, v.y, v.z, on_floor, keys, _committed_until, extra])
 		if _trace_lines.size() > 40:
 			_trace_lines.pop_front()
+
+
+func _slowest_piece() -> Array:
+	var best := -1
+	for i in _piece_time:
+		if best < 0 or _piece_time[i] > _piece_time[best]:
+			best = i
+	return [best, snappedf(float(_piece_time.get(best, 0.0)), 0.1)]
 
 
 func _end(finished: bool, reason: String) -> void:
@@ -330,6 +348,7 @@ func _new_plan(nxt: int) -> void:
 	_rescue_roll = rng.randf()
 	_air_action_done = false
 	_go_time = -1.0
+	_go_for = -1
 
 
 func _drive(pos: Vector3, on_floor: bool) -> void:
@@ -397,10 +416,14 @@ func _ground_jump(pos: Vector3, nxt: int, tech: String, to_edge: float, speed: f
 			takeoff = 0.45
 	# Waiting pieces: only go when the platform will be there on arrival.
 	var wait_ok := true
-	if next_piece["kind"] == "timed":
-		wait_ok = _timed_ready(nxt, reach.airtime("jump", rise) * 0.85)
+	# Arrival = run to the take-off point (from standing if needed) + flight.
+	var run_time := maxf(to_edge - takeoff, 0.0) / maxf(speed, 5.0) + (0.15 if speed < 2.0 else 0.0)
+	if _go_for == nxt:
+		wait_ok = true
+	elif next_piece["kind"] == "timed":
+		wait_ok = _timed_ready(nxt, run_time + reach.airtime("jump", rise) * 0.85)
 	elif next_piece["kind"] == "mover":
-		wait_ok = _mover_ready(nxt, reach.airtime("jump", rise) * 0.8)
+		wait_ok = _mover_ready(nxt, run_time + reach.airtime("jump", rise) * 0.8)
 	if not wait_ok:
 		var can_wait: bool = cur["kind"] in ["plat", "mover"] or (cur["kind"] == "timed" and _timed_remaining(index, 0.0) > 0.5)
 		if can_wait:
@@ -410,9 +433,12 @@ func _ground_jump(pos: Vector3, nxt: int, tech: String, to_edge: float, speed: f
 				_steer(Vector3.ZERO, false)
 			_go_time = -1.0
 			return
-	elif next_piece["kind"] in ["timed", "mover"] and cur["kind"] != "timed" and _reaction_pending():
-		_steer(Vector3.ZERO, false)
-		return
+	elif next_piece["kind"] in ["timed", "mover"] and cur["kind"] != "timed" and _go_for != nxt:
+		if _reaction_pending():
+			_steer(Vector3.ZERO, false)
+			return
+		# Decided: run and jump without second thoughts (a person commits too).
+		_go_for = nxt
 	_steer_with_avoidance(pos, _aim_point(nxt), nxt)
 	# Never take off into a laser beam that is still between us and the edge.
 	if _laser_ahead(pos, maxf(to_edge, 0.0) + 0.3):
@@ -563,15 +589,18 @@ func _steer_with_avoidance(pos: Vector3, target: Vector3, nxt: int) -> void:
 			continue
 		var ahead := rel.dot(f)
 		var side := rel.dot(right)
-		if ahead > -0.6 and ahead < 3.6 and absf(side) < 1.7:
+		if ahead > -0.6 and ahead < 5.0 and absf(side) < 2.0:
 			var cur := _piece(index)
 			var c2 := _piece_pos(index)
 			var half_w := float(cur.get("wid", 3.0)) * 0.5 - 0.45
 			var lat_now := (pos - c2).dot(right)
-			var away := -signf(side) if absf(side) > 0.05 else (1.0 if lat_now < 0.0 else -1.0)
-			var wanted := lat_now + away * (1.75 - absf(side))
-			if absf(wanted) > half_w:
-				wanted = lat_now - away * (1.75 + absf(side))
+			var spike_lat := lat_now + side
+			if not _dodge.has(sp):
+				# Pass on the side with more room on the platform.
+				_dodge[sp] = 1.0 if spike_lat < 0.0 or (absf(spike_lat) < 0.05 and rng.randf() < 0.5) else -1.0
+				if absf(spike_lat + float(_dodge[sp]) * 2.0) > half_w:
+					_dodge[sp] = -float(_dodge[sp])
+			var wanted := spike_lat + float(_dodge[sp]) * 2.0
 			dir = f * 2.5 + right * (wanted - lat_now)
 	_steer(dir, true)
 
@@ -582,7 +611,7 @@ func _steer_with_avoidance(pos: Vector3, target: Vector3, nxt: int) -> void:
 ## predicted path to the next safe spot is clear. Returns true while waiting.
 func _hazard_gate(pos: Vector3, nxt: int, to_edge: float) -> bool:
 	if _committed_until >= 0:
-		if index > _committed_until or (index == _committed_until and not _in_danger(pos)):
+		if index > _committed_until or (index == _committed_until and _past_danger(pos, _committed_until)):
 			_committed_until = -1
 		else:
 			_emergency_hop(pos)
@@ -691,6 +720,23 @@ func _distance_to_danger(pos: Vector3, nxt: int, to_edge: float) -> float:
 		# Danger starts on a later piece: decide before the take-off.
 		best = to_edge - _jump_takeoff(nxt, player.tuning.run_speed)
 	return best
+
+
+## Beyond every moving hazard of piece i (a commitment ends there).
+func _past_danger(pos: Vector3, i: int) -> bool:
+	var f := _fwd(i + 1)
+	for s in _spinners:
+		if int(s["piece"]) == i and ((s["node"] as Node3D).global_position - pos).dot(f) > -(ARM_LENGTH + 0.5):
+			return false
+	for p in _patrols:
+		if int(p["piece"]) != i:
+			continue
+		if _patrol_along_route(p, f):
+			if (_near_edge(i) - pos).dot(f) > -2.5 and _in_danger(pos):
+				return false
+		elif (_patrol_center(p) - pos).dot(f) > -PATROL_CLEAR:
+			return false
+	return true
 
 
 func _in_danger(pos: Vector3) -> bool:

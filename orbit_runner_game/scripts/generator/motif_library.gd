@@ -187,7 +187,7 @@ static func _spike_corridor(g: LevelGenerator) -> void:
 	g.place_plat(size, "jump", g.gap_for("jump", 0.0), 0.0)
 	var length := g.b.last_size.y
 	var width := g.b.last_size.x
-	var count := g.rng.randi_range(1, 2) + g.difficulty()
+	var count := 1 if g.difficulty() == D.EASY else g.rng.randi_range(1, 2) + g.difficulty()
 	var z := -length * 0.5 + 4.0
 	var side := 1.0 if g.rng.randf() < 0.5 else -1.0
 	var placed := 0

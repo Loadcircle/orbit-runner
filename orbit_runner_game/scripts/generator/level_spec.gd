@@ -20,6 +20,9 @@ const DIFFICULTY_KEYS := ["DIFF_EASY", "DIFF_MEDIUM", "DIFF_HARD", "DIFF_EXTREME
 @export var target_seconds: float = 45.0
 @export var mechanics := PackedStringArray(ALL_MECHANICS)
 @export var mode: Mode = Mode.CAMPAIGN
+## Repairs made by the bot pipeline: motif index -> {"gap": scale, "size": steps}.
+## Part of the spec so the repaired level can be rebuilt on any device.
+@export var adjustments: Dictionary = {}
 
 
 static func create(seed_value: int, difficulty: Difficulty, biome := &"isles", mode := Mode.CAMPAIGN,
@@ -41,7 +44,7 @@ func key() -> String:
 func to_dict() -> Dictionary:
 	return {"seed": seed_value, "generator_version": generator_version, "biome": String(biome),
 			"difficulty": difficulty, "target_seconds": target_seconds, "mechanics": Array(mechanics),
-			"mode": mode}
+			"mode": mode, "adjustments": adjustments}
 
 
 static func from_dict(data: Dictionary) -> LevelSpec:
@@ -53,6 +56,9 @@ static func from_dict(data: Dictionary) -> LevelSpec:
 	spec.target_seconds = float(data.get("target_seconds", 45.0))
 	spec.mechanics = PackedStringArray(data.get("mechanics", ALL_MECHANICS))
 	spec.mode = clampi(int(data.get("mode", 0)), 0, 2) as Mode
+	var adjust: Dictionary = data.get("adjustments", {})
+	for key in adjust:
+		spec.adjustments[int(key)] = adjust[key]
 	return spec
 
 
