@@ -76,13 +76,14 @@ func handle_back() -> void:
 
 func _process(delta: float) -> void:
 	if _preview_root:
-		_preview_root.rotate_y(0.6 * delta)
+		_preview_root.rotation.y = sin(Time.get_ticks_msec() * 0.0008) * 0.9
 
 
 func _build_preview(viewport: SubViewport) -> void:
 	_preview_root = Node3D.new()
 	viewport.add_child(_preview_root)
 	_preview_character = CHARACTER.instantiate()
+	_preview_character.rotation.y = PI  # face the preview camera
 	_preview_root.add_child(_preview_character)
 	var anim := _preview_character.find_child("AnimationPlayer", true, false) as AnimationPlayer
 	if anim and anim.has_animation("Idle"):

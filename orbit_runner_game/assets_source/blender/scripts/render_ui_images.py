@@ -1,7 +1,8 @@
 """Renders UI images from CHR_Adventurer.blend: the app icon and the HUD portrait.
 
   blender --background --factory-startup --python render_ui_images.py
-Outputs art/ui/icon.png (512, sky background) and art/ui/portrait.png (256, transparent).
+Outputs art/ui/icon.png (512, sky background), art/ui/portrait.png (256, transparent)
+and art/ui/icon_foreground.png (432, transparent, inside the adaptive-icon safe zone).
 """
 import math
 import os
@@ -67,3 +68,4 @@ def shoot(path, size, loc, target, lens, transparent):
 
 shoot(os.path.join(OUT_DIR, "icon.png"), 512, (0.7, 2.0, 1.55), (0.0, 0.0, 1.18), 50, False)
 shoot(os.path.join(OUT_DIR, "portrait.png"), 256, (0.35, 1.5, 1.4), (0.0, 0.0, 1.36), 55, True)
+shoot(os.path.join(OUT_DIR, "icon_foreground.png"), 432, (0.95, 2.75, 1.55), (0.0, 0.0, 1.12), 50, True)

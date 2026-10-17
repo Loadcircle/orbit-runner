@@ -94,8 +94,5 @@ func _set_bus(bus_name: String, linear: float) -> void:
 
 
 func _detect_quality() -> int:
-	# Compatibility (OpenGL fallback) usually means an older GPU.
-	var method := str(ProjectSettings.get_setting("rendering/renderer/rendering_method"))
-	if RenderingServer.get_current_rendering_method() == "gl_compatibility" or method == "gl_compatibility":
-		return Quality.LOW
+	# Mobile starts at Medium (battery/thermals); players can raise it.
 	return Quality.HIGH if not OS.has_feature("mobile") else Quality.MEDIUM
