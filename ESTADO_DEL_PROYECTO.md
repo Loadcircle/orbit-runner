@@ -10,6 +10,7 @@ Actualizado: 2026-10-17 (pase visual v2). Punto de entrada para retomar el traba
 5. `orbit_runner_game/docs/LEVEL_DESIGN.md`: alcances del movimiento y campaña.
 6. Lista de pendientes (página privada del propietario): https://claude.ai/artifact/XUxuVfSV74yRTPuQtvt79i
 7. Propuestas de monetización (incluye juego como servicio): https://claude.ai/artifact/P6KmeR5NhsNt5SHxbsEkRy
+8. **Plan de desarrollo del juego como servicio** (generador de niveles por dificultad + bot validador, backlog A1–E5): https://claude.ai/code/artifact/18e9caa8-6864-4739-933d-74cb5a013861
 
 ## Estado actual (v1.0.0 jugable + pase visual v2)
 - Godot 4.7.2-stable, GDScript, **renderizador Compatibility** en Android y PC (Mobile/Vulkan se descartó porque abortaba en Android sin fallback; ver TECHNICAL_DECISIONS §2).
