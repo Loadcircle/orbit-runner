@@ -64,6 +64,13 @@ Salida del lote: `<out>/reports/<semilla>.json` (índice, componentes, tasas por
 
 Primera calibración contra el bot (2026-10-17, lotes de 24 niveles): el índice medido ocupa ~5–65, no 0–100, y los niveles salían un escalón por debajo de lo pedido. Se ajustaron los rangos del índice (Fácil 0–18, Medio 18–38, Difícil 38–58, Extremo 58+) y se generan más exigentes Medio, Difícil y Extremo. Son valores provisionales: la calibración con personas (A12) y la telemetría de muertes por motivo (ya registrada en `Level.deaths_by_motif`) deben ajustarlos.
 
+| Lote (24 niveles, 8 intentos por perfil, 12 procesos) | Aceptados | Reclasificados | Descartados |
+|---|---|---|---|
+| 1 — valores iniciales del plan | 6 | 9 | 9 |
+| 2 — tras la calibración | 18 | 2 | 4 |
+
+En el lote 2, Fácil, Medio y Difícil salen en su categoría casi siempre (índices ~6–10, ~18–27 y ~40–46). **Extremo sigue corto**: el índice ya cae en su franja, pero el perfil experto lo supera casi siempre (el plan pide un 40–80 %), así que solo 1 de 6 se aceptó. Próximo ajuste: endurecer más los motivos combinados y las ventanas de tiempo de Extremo, o revisar si el perfil experto es demasiado preciso.
+
 ## Modos en el juego
 
 - **Desafíos** (menú principal): desafío diario, Torre del Viento y misiones (`scripts/ui/challenges_screen.gd`).
@@ -73,6 +80,10 @@ Primera calibración contra el bot (2026-10-17, lotes de 24 niveles): el índice
 - **Fantasma**: la mejor repetición de cada nivel (campaña y diario) se dibuja translúcida siguiendo el cronómetro.
 - **Maestría**: cuatro estrellas por nivel (oro, 3 gemas, todas las chispas en una carrera, sin caídas), visibles en la selección de niveles y en resultados. Dominar un mundo entero desbloquea su traje (*Maestro de la Brisa*, *Maestro Juguetero*, *Maestro Solar*).
 - **Misiones** (`MissionBoard`): 3 diarias y 7 semanales elegidas por fecha (iguales para todos), progreso por estadísticas, premio en chispas al cobrarlas.
+
+### Desafíos diarios validados
+
+`resources/generator/daily_seeds.tres` contiene los días 2026-10-17 a 2026-10-29 (13 de 14 aceptados; el 30 de octubre no superó ninguna de las 4 variantes de semilla y usará la semilla local). Hay que regenerarla antes de que se agote (`dailies=N`), hasta que el servidor publique las semillas oficiales (C7).
 
 ## Diferencias con el plan
 

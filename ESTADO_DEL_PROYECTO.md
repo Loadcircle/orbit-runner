@@ -1,6 +1,6 @@
 # Estado del proyecto — Orbit Runner
 
-Actualizado: 2026-10-17 (pase visual v2). Punto de entrada para retomar el trabajo en una nueva sesión.
+Actualizado: 2026-10-17 (juego como servicio, fases A y B, rama `feature/juego-como-servicio`). Punto de entrada para retomar el trabajo en una nueva sesión.
 
 ## Leer primero
 1. `AGENTS.md`: reglas del proyecto.
@@ -10,7 +10,8 @@ Actualizado: 2026-10-17 (pase visual v2). Punto de entrada para retomar el traba
 5. `orbit_runner_game/docs/LEVEL_DESIGN.md`: alcances del movimiento y campaña.
 6. Lista de pendientes (página privada del propietario): https://claude.ai/artifact/XUxuVfSV74yRTPuQtvt79i
 7. Propuestas de monetización (incluye juego como servicio): https://claude.ai/artifact/P6KmeR5NhsNt5SHxbsEkRy
-8. **Plan de desarrollo del juego como servicio** (generador de niveles por dificultad + bot validador, backlog A1–E5): https://claude.ai/code/artifact/18e9caa8-6864-4739-933d-74cb5a013861
+8. `orbit_runner_game/docs/LIVE_SERVICE.md`: lo implementado del juego como servicio (generador, bot, diario, torre, repeticiones, maestría, misiones), cómo usarlo y lo pendiente.
+9. **Plan de desarrollo del juego como servicio** (generador de niveles por dificultad + bot validador, backlog A1–E5): https://claude.ai/code/artifact/18e9caa8-6864-4739-933d-74cb5a013861
 
 ## Estado actual (v1.0.0 jugable + pase visual v2)
 - Godot 4.7.2-stable, GDScript, **renderizador Compatibility** en Android y PC (Mobile/Vulkan se descartó porque abortaba en Android sin fallback; ver TECHNICAL_DECISIONS §2).
@@ -21,6 +22,12 @@ Actualizado: 2026-10-17 (pase visual v2). Punto de entrada para retomar el traba
 - **Estilo gráfico v2 aprobado por el propietario (2026-10-17)** tras probarlo en el S25. Es la referencia para assets futuros.
 - Comentario del propietario sobre la v1 en el S25: "se ve muy bien, va fluido, algún tirón".
 - Git local en la raíz, sin remoto. Commits por hito.
+
+## Juego como servicio (rama `feature/juego-como-servicio`, sin fusionar)
+- Fase A completa salvo A12 (calibración con personas): generador por dificultad, validador, bot v2 (termina los 11 niveles de campaña), índice de dificultad y lotes en paralelo.
+- Fase B completa: desafío diario, Torre del Viento, repeticiones exactas y fantasma, maestría (4 estrellas y 3 trajes), misiones locales; nueva pantalla "Desafíos" en el menú.
+- APK de depuración con todo esto exportado el 2026-10-17 (`build/android/orbit_runner_debug.apk`); **sin probar aún en el S25**.
+- Fases C, D y E esperan decisiones del propietario (público, servidor, precios). Ver `docs/LIVE_SERVICE.md`.
 
 ## Pendientes inmediatos (en orden)
 1. Con el APK v2 ya instalado en el S25, medir rendimiento del shader nuevo; confirmar que no hay tirones; recorrer los 10 niveles (sobre todo *Engranajes Locos*, *Fábrica de Rebotes* y *Corazón del Sol*, que el piloto automático no completa por su heurística).

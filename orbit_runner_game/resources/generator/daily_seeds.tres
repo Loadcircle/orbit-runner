@@ -1,0 +1,162 @@
+[gd_resource type="Resource" script_class="DailySeedTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/generator/daily_seed_table.gd" id="1_4n2k0"]
+
+[resource]
+script = ExtResource("1_4n2k0")
+entries = {
+"2026-10-17": {
+"adjustments": {},
+"biome": "ruins",
+"difficulty": 2,
+"gold": 54.0,
+"index": 39.7,
+"route_hash": "b39d06a2b634af3b",
+"seed": 20261017,
+"silver": 80.0
+},
+"2026-10-18": {
+"adjustments": {},
+"biome": "ruins",
+"difficulty": 3,
+"gold": 69.0,
+"index": 63.6,
+"route_hash": "99b1e1490989fd7d",
+"seed": 22261024,
+"silver": 101.5
+},
+"2026-10-19": {
+"adjustments": {},
+"biome": "isles",
+"difficulty": 1,
+"gold": 42.5,
+"index": 27.1,
+"route_hash": "12aecfb8fd39ae36",
+"seed": 20261019,
+"silver": 62.5
+},
+"2026-10-20": {
+"adjustments": {},
+"biome": "isles",
+"difficulty": 2,
+"gold": 48.0,
+"index": 47.3,
+"route_hash": "c644574da66a2dff",
+"seed": 20261020,
+"silver": 70.5
+},
+"2026-10-21": {
+"adjustments": {
+"1": {
+"gap": 0.9,
+"size": 1.0
+}
+},
+"biome": "isles",
+"difficulty": 3,
+"gold": 58.0,
+"index": 60.7,
+"route_hash": "569b3213fef21142",
+"seed": 20261021,
+"silver": 85.5
+},
+"2026-10-22": {
+"adjustments": {},
+"biome": "toyworks",
+"difficulty": 1,
+"gold": 52.0,
+"index": 23.4,
+"route_hash": "94e18364370a1ef5",
+"seed": 20261022,
+"silver": 77.0
+},
+"2026-10-23": {
+"adjustments": {},
+"biome": "toyworks",
+"difficulty": 2,
+"gold": 55.0,
+"index": 50.9,
+"route_hash": "7d6f2a1be5f5672d",
+"seed": 21261026,
+"silver": 81.5
+},
+"2026-10-24": {
+"adjustments": {
+"1": {
+"gap": 0.9,
+"size": 1.0
+},
+"2": {
+"gap": 0.9,
+"size": 1.0
+}
+},
+"biome": "toyworks",
+"difficulty": 3,
+"gold": 41.0,
+"index": 58.3,
+"route_hash": "598a2932f91b1c47",
+"seed": 21261027,
+"silver": 61.0
+},
+"2026-10-25": {
+"adjustments": {
+"2": {
+"gap": 0.9,
+"size": 1.0
+}
+},
+"biome": "ruins",
+"difficulty": 1,
+"gold": 50.5,
+"index": 26.7,
+"route_hash": "b5b55118ca34469b",
+"seed": 20261025,
+"silver": 74.5
+},
+"2026-10-26": {
+"adjustments": {},
+"biome": "ruins",
+"difficulty": 2,
+"gold": 47.0,
+"index": 39.5,
+"route_hash": "70853a9c34f087e4",
+"seed": 20261026,
+"silver": 69.0
+},
+"2026-10-27": {
+"adjustments": {
+"1": {
+"gap": 0.9,
+"size": 1.0
+}
+},
+"biome": "ruins",
+"difficulty": 3,
+"gold": 39.0,
+"index": 63.6,
+"route_hash": "4dd5d216ebd22cac",
+"seed": 20261027,
+"silver": 57.5
+},
+"2026-10-28": {
+"adjustments": {},
+"biome": "isles",
+"difficulty": 1,
+"gold": 45.5,
+"index": 22.5,
+"route_hash": "4f5d72d0108ff068",
+"seed": 20261028,
+"silver": 67.5
+},
+"2026-10-29": {
+"adjustments": {},
+"biome": "isles",
+"difficulty": 2,
+"gold": 42.5,
+"index": 42.6,
+"route_hash": "c7a030ee2c8c0073",
+"seed": 20261029,
+"silver": 63.0
+}
+}
