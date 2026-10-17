@@ -1,11 +1,12 @@
 @tool
 extends EditorScenePostImport
-## Converts imported glTF materials to Godot's built-in toon shading so every
-## Blender asset shares the cel-shaded look without custom shaders.
+## Converts imported glTF materials to the shared Orbit Runner toon shader
+## (resources/shaders/toon.gdshader) so every Blender asset gets the same
+## cel-shaded look, coloured shadows and rim. Materials named M_Outline* become
+## flat ink for the inverted-hull outline shells.
 ## Registered as the default scene import script in project.godot.
 
-const RIM_AMOUNT := 0.22
-const RIM_TINT := 0.6
+const ToonMaterialsScript := preload("res://scripts/rendering/toon_materials.gd")
 
 
 func _post_import(scene: Node) -> Object:
@@ -22,6 +23,8 @@ func _convert(node: Node, converted: Dictionary) -> void:
 				var material := mesh.get_surface_material(i)
 				if material is StandardMaterial3D:
 					mesh.set_surface_material(i, _toon(material, converted))
+			if _is_outline_only(mesh):
+				node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	elif node is MeshInstance3D and node.mesh:
 		for i in node.mesh.get_surface_count():
 			var material: Material = node.mesh.surface_get_material(i)
@@ -31,17 +34,15 @@ func _convert(node: Node, converted: Dictionary) -> void:
 		_convert(child, converted)
 
 
-func _toon(material: StandardMaterial3D, converted: Dictionary) -> StandardMaterial3D:
-	if converted.has(material):
-		return converted[material]
-	material.diffuse_mode = BaseMaterial3D.DIFFUSE_TOON
-	material.specular_mode = BaseMaterial3D.SPECULAR_TOON
-	if material.metallic < 0.5:
-		material.metallic = 0.0
-		material.metallic_specular = 0.25
-	material.roughness = maxf(material.roughness, 0.55)
-	material.rim_enabled = true
-	material.rim = RIM_AMOUNT
-	material.rim_tint = RIM_TINT
-	converted[material] = material
-	return material
+func _toon(material: StandardMaterial3D, converted: Dictionary) -> Material:
+	if not converted.has(material):
+		converted[material] = ToonMaterialsScript.from_standard(material)
+	return converted[material]
+
+
+func _is_outline_only(mesh: ImporterMesh) -> bool:
+	for i in mesh.get_surface_count():
+		var material := mesh.get_surface_material(i)
+		if material == null or not material.resource_name.begins_with(ToonMaterialsScript.OUTLINE_PREFIX):
+			return false
+	return mesh.get_surface_count() > 0

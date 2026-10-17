@@ -11,23 +11,23 @@ radius = 1.15
 height = 1.0
 radius = 1.35
 
-[node name="Trampoline" type="Node3D" unique_id=1661241419]
+[node name="Trampoline" type="Node3D" unique_id=920614280]
 script = ExtResource("1_vea21")
 
-[node name="Model" type="Node3D" parent="." unique_id=762187672 instance=ExtResource("2_nmxk6")]
+[node name="Model" type="Node3D" parent="." unique_id=1693624731 instance=ExtResource("2_nmxk6")]
 
-[node name="Base" type="StaticBody3D" parent="." unique_id=904141260]
+[node name="Base" type="StaticBody3D" parent="." unique_id=721379000]
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Base" unique_id=475009680]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Base" unique_id=1397002392]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
 shape = SubResource("CylinderShape3D_ajyio")
 
-[node name="PadArea" type="Area3D" parent="." unique_id=1431098500]
+[node name="PadArea" type="Area3D" parent="." unique_id=421345213]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PadArea" unique_id=1557498843]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PadArea" unique_id=1021372791]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_y8lh3")

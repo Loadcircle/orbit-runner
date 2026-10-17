@@ -104,7 +104,7 @@ pointing/emulate_mouse_from_touch=true
 [internationalization]
 
 locale/translations=PackedStringArray("res://localization/strings.es.translation", "res://localization/strings.en.translation")
-locale/fallback="es"
+locale/fallback="en"
 
 [layer_names]
 
@@ -118,6 +118,21 @@ locale/fallback="es"
 3d/physics_engine="Jolt Physics"
 common/physics_ticks_per_second=60
 common/physics_interpolation=true
+
+[shader_globals]
+
+toon_shadow_color={
+"type": "color",
+"value": Color(0.36, 0.42, 0.8, 1)
+}
+toon_rim_color={
+"type": "color",
+"value": Color(1, 0.98, 0.9, 1)
+}
+toon_band_softness={
+"type": "float",
+"value": 0.035
+}
 
 [rendering]
 

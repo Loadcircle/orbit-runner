@@ -7,19 +7,19 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_22udg"]
 radius = 0.75
 
-[node name="PatrolBot" type="Node3D" unique_id=1155091305]
+[node name="PatrolBot" type="Node3D" unique_id=1933513917]
 script = ExtResource("1_ub7co")
 
-[node name="Body" type="Node3D" parent="." unique_id=1080896764]
+[node name="Body" type="Node3D" parent="." unique_id=187715566]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
-[node name="Model" type="Node3D" parent="Body" unique_id=1667296839 instance=ExtResource("2_ju6br")]
+[node name="Model" type="Node3D" parent="Body" unique_id=1038119498 instance=ExtResource("2_ju6br")]
 
-[node name="Hazard" type="Area3D" parent="Body" unique_id=1697039575]
+[node name="Hazard" type="Area3D" parent="Body" unique_id=1554598910]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_cimne")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Body/Hazard" unique_id=677370279]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body/Hazard" unique_id=117429889]
 shape = SubResource("SphereShape3D_22udg")

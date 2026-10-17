@@ -6,14 +6,45 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_r0b71"]
 radius = 0.6
 
-[node name="Spark" type="Area3D" unique_id=1378803059]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vcl6g"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.86, 0.3, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_juagr"]
+material = SubResource("StandardMaterial3D_vcl6g")
+size = Vector2(0.2, 0.2)
+
+[sub_resource type="Curve" id="Curve_vms5o"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Spark" type="Area3D" unique_id=675900563]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 script = ExtResource("1_8ri7b")
 
-[node name="Model" type="Node3D" parent="." unique_id=749670980 instance=ExtResource("2_541ub")]
+[node name="Model" type="Node3D" parent="." unique_id=72012823 instance=ExtResource("2_541ub")]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=817403682]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=324158582]
 shape = SubResource("SphereShape3D_r0b71")
+
+[node name="Burst" type="CPUParticles3D" parent="." unique_id=753795480]
+emitting = false
+amount = 10
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("QuadMesh_juagr")
+direction = Vector3(0, 1, 0)
+spread = 70.0
+gravity = Vector3(0, -9, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_amount_curve = SubResource("Curve_vms5o")

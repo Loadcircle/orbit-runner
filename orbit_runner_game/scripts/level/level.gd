@@ -289,20 +289,7 @@ func _fade_decor_near_camera() -> void:
 	var decor := get_node_or_null("Decor")
 	if decor == null:
 		return
-	var faded := {}
-	for node in decor.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := node as MeshInstance3D
-		for i in mesh_instance.mesh.get_surface_count():
-			var base := mesh_instance.mesh.surface_get_material(i) as StandardMaterial3D
-			if base == null:
-				continue
-			if not faded.has(base):
-				var mat := base.duplicate() as StandardMaterial3D
-				mat.distance_fade_mode = BaseMaterial3D.DISTANCE_FADE_PIXEL_DITHER
-				mat.distance_fade_min_distance = 3.0
-				mat.distance_fade_max_distance = 7.5
-				faded[base] = mat
-			mesh_instance.set_surface_override_material(i, faded[base])
+	ToonMaterials.apply_variant(decor, ToonMaterials.FADE)
 
 
 func _resolve_info() -> LevelInfo:

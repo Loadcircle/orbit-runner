@@ -56,7 +56,8 @@ func language() -> String:
 	var lang: String = get_value("language")
 	if lang.is_empty():
 		lang = OS.get_locale_language()
-	return lang if lang in LANGUAGES else "es"
+	# Unsupported device languages fall back to English.
+	return lang if lang in LANGUAGES else "en"
 
 
 func apply() -> void:

@@ -27,7 +27,7 @@ Inicialización del contenedor: 2026-09-28 · Desarrollo del juego: 2026-10-16/1
 
 Se cambió antes de existir materiales o shaders dependientes del renderizador, así que no hubo que rehacer contenido. Si en el S25 se quisiera más calidad, cambiar a *Mobile* solo en Android es posible (`rendering_method.mobile`) tras medirlo en el dispositivo.
 
-Materiales: `StandardMaterial3D` con `DIFFUSE_TOON` + `SPECULAR_TOON` + rim (convertidos automáticamente al importar, ver §5). Único shader propio: `resources/shaders/wind_column.gdshader` (aditivo, compatible con todos los renderizadores). El contorno del protagonista usa `material_overlay` con `grow` y `cull_front`.
+Materiales (v2, 2026-10-17): **shader toon propio** compatible con Compatibility (`resources/shaders/toon_core.gdshaderinc` + variantes `toon.gdshader`, `toon_fade.gdshader` para decoración con tramado cerca de la cámara, `toon_ghost.gdshader` para gemas ya conseguidas y `toon_outline.gdshader` para contornos). Usa `light()` propio: dos bandas con borde suave, banda de brillo, **sombras de color** (tinte por bioma en lugar de gris), borde de luz (rim) y brillo especular toon para plástico/metal/gemas. El albedo se multiplica por el color de vértice `Col` que pintan los scripts de Blender (degradados, estratos, variación por cara) sin texturas. Los valores compartidos (tinte de sombra, color de rim, suavidad de banda) son **uniformes globales** (`[shader_globals]` en `project.godot`) que fija `LevelEnvironment.apply_toon_globals()` según el `BiomeTheme`. La piel tiene sombra cálida propia (`ToonMaterials.WARM_SHADOW`). Contornos: cascarón invertido horneado en los GLB (materiales `M_Outline*`, sin pasada extra) en coleccionables y peligros; el protagonista mantiene el contorno por `material_overlay` (`grow`). Cielo: `resources/shaders/sky.gdshader` (degradado de tres tonos, sol con halo). Mapeo de tono lineal (el filmic desaturaba), ambiente de color plano y niebla por profundidad (zona de juego nítida, perspectiva aérea solo en el fondo). Shader propio previo: `resources/shaders/wind_column.gdshader` (aditivo). Al compartir todos los materiales un único shader, el número de variantes que compilar (y la precarga) es menor que con `StandardMaterial3D`.
 
 **Precarga de shaders:** Compatibility compila cada shader la primera vez que se dibuja, lo que provocaba tirones en el S25. `scripts/level/shader_warmup.gd` dibuja una vez, en miniatura y bajo el fundido de carga, cada combinación malla/material del nivel (incluidos el disco del yo-yo, la cuerda y las partículas).
 
@@ -70,8 +70,11 @@ Materiales: `StandardMaterial3D` con `DIFFUSE_TOON` + `SPECULAR_TOON` + rim (con
   Ejecución: `blender --background --factory-startup --python <script> -- [ASSET|ALL]` (en esta máquina, a través de `blender-launcher.exe` de WindowsApps).
 - Convenciones: 1 u = 1 m; Z arriba en Blender → Y arriba en Godot; frente del asset +Y en Blender (= -Z en Godot); escala aplicada; modificadores no destructivos en el `.blend` aplicados al exportar (`export_apply`). **Excepción documentada:** las plataformas tienen el origen en el centro de la **superficie superior caminable** (el diseño de niveles trabaja con la altura de pisada).
 - `.blend` editables en `assets_source/blender/`; GLB en `art/models/`. `assets_source/` lleva `.gdignore` para que Godot no intente importar los `.blend` directamente.
-- Importación: `[importer_defaults] scene` aplica `scripts/tools/toon_post_import.gd` a todos los GLB (convierte materiales a toon + rim). Las colisiones, áreas y lógica se crean en Godot.
-- Protagonista: malla rígida pesada al 100 % por hueso (siluetas nítidas y coste mínimo), 4 272 triángulos; animaciones Idle, Run, Jump, Fall, Slide, Dash, Throw, Bounce, Land, Victory y Hurt.
+- Importación: `[importer_defaults] scene` aplica `scripts/tools/toon_post_import.gd` a todos los GLB: convierte cada material glTF en un `ShaderMaterial` del shader toon (`scripts/rendering/toon_materials.gd`), conservando el nombre del material (los cosméticos recolorean por nombre). Las colisiones, áreas y lógica se crean en Godot.
+- **Color de vértice (v2):** todos los GLB llevan el atributo `Col` (`COLOR_0`, exportado con `export_vertex_color="ACTIVE"`); `or_common.paint()` lo escribe y `ensure_colors()` pone blanco donde no se pinta (también antes de unir mallas, porque Blender rellena con negro). Los materiales de escenario son blancos con `vcol=True`: el color lo lleva el vértice y la mayoría de assets dibujan con 1–2 superficies.
+- Para forzar la reimportación de los GLB tras cambiar el script de importación hay que borrar `.godot/imported/*.glb-*.scn` (borrar solo los `.md5` no basta).
+- Imágenes de UI (icono, icono adaptativo, retrato del HUD): `tools/render_ui_images.tscn` las renderiza **en Godot** con el sombreado del juego (necesita ventana; no funciona con `--headless`). `assets_source/blender/scripts/render_ui_images.py` queda como alternativa en Blender.
+- Protagonista (v2): proporciones chibi-heroicas (cabeza grande, manos y zapatillas grandes), cara modelada (ojos por capas con brillos, cejas, boca abierta con dientes y lengua, rubor), mechones curvados, gafas sobre la frente. Malla rígida pesada al 100 % por hueso (como una figura de juguete), ~16 700 triángulos; hueso `eyes` para parpadear (escala). Animaciones Idle (con parpadeo), Run, Jump, Fall, Slide, Dash, Throw (con anticipación y seguimiento), Bounce, Land (aplastamiento y rebote), Victory y Hurt.
 
 ## 6. Guardado
 
@@ -84,7 +87,7 @@ Música y efectos **originales generados por procedimiento** (`assets_source/aud
 
 ## 8. Localización
 
-Español (por defecto) e inglés. Fuente: `localization/make_strings.py` → `strings.csv` (Godot genera `strings.es/en.translation`). 211 claves. Las indicaciones con variante `_TOUCH` se muestran en pantallas táctiles.
+Español e inglés. Por defecto el juego sigue el idioma del dispositivo (`OS.get_locale_language()`, opción "Auto (dispositivo)" en Ajustes → Juego) y, si no es un idioma soportado, usa **inglés** (`Settings.language()` y `locale/fallback="en"`). El jugador puede fijar Español o English en Ajustes. Fuente: `localization/make_strings.py` → `strings.csv` (Godot genera `strings.es/en.translation`). 211 claves. Las indicaciones con variante `_TOUCH` se muestran en pantallas táctiles.
 
 ## 9. Validación realizada
 
@@ -117,7 +120,7 @@ orbit_runner_game/
   docs/
 ```
 
-Diferencias respecto a la guía: `art/materials` y `art/textures` no se usan (materiales planos dentro de los GLB; sin texturas). `scripts/tools/` contiene el script de importación del editor.
+Diferencias respecto a la guía: `art/materials` y `art/textures` no se usan (materiales planos dentro de los GLB + color de vértice; sin texturas). `scripts/tools/` contiene el script de importación del editor y `scripts/rendering/` la utilidad de materiales toon.
 
 ## 12. Limitaciones conocidas
 

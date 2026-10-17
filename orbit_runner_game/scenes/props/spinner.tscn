@@ -11,26 +11,26 @@ radius = 0.6
 [sub_resource type="BoxShape3D" id="BoxShape3D_m0vqk"]
 size = Vector3(6.6, 0.5, 0.5)
 
-[node name="Spinner" type="Node3D" unique_id=1385718361]
+[node name="Spinner" type="Node3D" unique_id=1536280864]
 script = ExtResource("1_4ubjr")
 
-[node name="Model" type="Node3D" parent="." unique_id=1559488143 instance=ExtResource("2_vqxvq")]
+[node name="Model" type="Node3D" parent="." unique_id=1532678636 instance=ExtResource("2_vqxvq")]
 
-[node name="Hub" type="StaticBody3D" parent="." unique_id=632599792]
+[node name="Hub" type="StaticBody3D" parent="." unique_id=1470433430]
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hub" unique_id=1869024617]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hub" unique_id=346794690]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CylinderShape3D_ag60y")
 
-[node name="Arm" type="Node3D" parent="." unique_id=2076105045]
+[node name="Arm" type="Node3D" parent="." unique_id=1419769633]
 
-[node name="Hazard" type="Area3D" parent="Arm" unique_id=1935103333]
+[node name="Hazard" type="Area3D" parent="Arm" unique_id=80331089]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_vnt7n")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arm/Hazard" unique_id=1515639814]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arm/Hazard" unique_id=1340248284]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 shape = SubResource("BoxShape3D_m0vqk")

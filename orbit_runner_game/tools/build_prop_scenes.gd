@@ -358,6 +358,9 @@ func _gem() -> void:
 	var model := _model("PROP_Gem", area)
 	model.position.y = 1.0
 	_sphere_shape(area, 0.9, Vector3(0, 1.0, 0))
+	var burst := _burst(area, Color(0.45, 0.95, 1.0))
+	burst.position.y = 1.0
+	burst.amount = 26
 	_save(area, "gem")
 
 
@@ -371,6 +374,11 @@ func _spark() -> void:
 	var model := _model("PROP_Spark", area)
 	model.scale = Vector3.ONE * 1.1
 	_sphere_shape(area, 0.6, Vector3.ZERO)
+	var burst := _burst(area, Color(1.0, 0.86, 0.3))
+	burst.amount = 10
+	burst.lifetime = 0.4
+	burst.initial_velocity_min = 2.0
+	burst.initial_velocity_max = 4.0
 	_save(area, "spark")
 
 

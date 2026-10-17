@@ -39,6 +39,11 @@ var _sheet: Array[Image] = []
 
 
 func _grab() -> void:
+	# Focus loss pauses the level; dev captures ignore it.
+	var level := get_child(0)
+	if level.has_method("resume") and get_tree().paused:
+		level.resume()
+		await _frames(20)
 	var img := get_viewport().get_texture().get_image()
 	img.resize(640, 360)
 	_sheet.append(img)
@@ -65,7 +70,7 @@ func _tour(level: Level, out_dir: String, count: int) -> void:
 		level.player.respawn_at(xf)
 		level.camera_rig.snap(p.rotation.y)
 		await _frames(45)
-		_grab()
+		await _grab()
 		shot += 1
 		i += step
 	# Final shot at the goal
@@ -74,7 +79,7 @@ func _tour(level: Level, out_dir: String, count: int) -> void:
 		level.player.respawn_at(Transform3D(Basis(Vector3.UP, goal.rotation.y), goal.global_position + goal.global_basis.z * 6.0))
 		level.camera_rig.snap(goal.rotation.y)
 		await _frames(45)
-		_grab()
+		await _grab()
 	_write_sheet("%s/sheet.png" % out_dir)
 
 

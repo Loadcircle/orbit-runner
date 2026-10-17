@@ -6,16 +6,16 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_2s2vs"]
 size = Vector3(1.8, 0.5, 1.8)
 
-[node name="Spikes" type="Node3D" unique_id=202774233]
+[node name="Spikes" type="Node3D" unique_id=1723708437]
 
-[node name="Model" type="Node3D" parent="." unique_id=886797986 instance=ExtResource("1_lfwqm")]
+[node name="Model" type="Node3D" parent="." unique_id=2119762447 instance=ExtResource("1_lfwqm")]
 
-[node name="Hazard" type="Area3D" parent="." unique_id=629928378]
+[node name="Hazard" type="Area3D" parent="." unique_id=680241471]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 script = ExtResource("2_v1itu")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hazard" unique_id=1359074493]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hazard" unique_id=1350935611]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("BoxShape3D_2s2vs")

@@ -5,11 +5,11 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_7rnd5"]
 size = Vector3(6, 1, 6)
 
-[node name="PlatformToyWide" type="StaticBody3D" unique_id=1671393613]
+[node name="PlatformToyWide" type="StaticBody3D" unique_id=1715798869]
 collision_mask = 0
 
-[node name="Model" type="Node3D" parent="." unique_id=1452195686 instance=ExtResource("1_jpcq6")]
+[node name="Model" type="Node3D" parent="." unique_id=197161762 instance=ExtResource("1_jpcq6")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1348442582]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2081522088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_7rnd5")

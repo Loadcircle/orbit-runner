@@ -5,11 +5,11 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_yow51"]
 size = Vector3(4, 1, 6)
 
-[node name="PlatformIsleM" type="StaticBody3D" unique_id=600864623]
+[node name="PlatformIsleM" type="StaticBody3D" unique_id=1251018067]
 collision_mask = 0
 
-[node name="Model" type="Node3D" parent="." unique_id=28636704 instance=ExtResource("1_rrsyn")]
+[node name="Model" type="Node3D" parent="." unique_id=420267535 instance=ExtResource("1_rrsyn")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1658944875]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=475399677]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_yow51")

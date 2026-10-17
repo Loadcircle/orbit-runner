@@ -15,8 +15,7 @@ func _ready() -> void:
 	_base_y = _model.position.y
 	if Level.current and Level.current.gem_already_owned(index):
 		# Found in an earlier run: drawn as a ghost but still collectable.
-		for mesh in _model.find_children("*", "MeshInstance3D", true, false):
-			(mesh as MeshInstance3D).transparency = 0.55
+		ToonMaterials.apply_variant(_model, ToonMaterials.GHOST)
 
 
 func _process(delta: float) -> void:
@@ -32,6 +31,7 @@ func _on_body_entered(body: Node) -> void:
 	Settings.vibrate(20)
 	if Level.current:
 		Level.current.on_gem(index)
+	PickupBurst.release(get_node_or_null(^"Burst") as CPUParticles3D)
 	var tween := create_tween()
 	tween.tween_property(_model, "scale", Vector3.ONE * 1.6, 0.12)
 	tween.tween_property(_model, "scale", Vector3.ZERO, 0.18)

@@ -7,12 +7,12 @@
 height = 0.6
 radius = 1.55
 
-[node name="TimedPlatform" type="StaticBody3D" unique_id=1832609803]
+[node name="TimedPlatform" type="StaticBody3D" unique_id=684964044]
 collision_mask = 0
 script = ExtResource("1_s6max")
 
-[node name="Model" type="Node3D" parent="." unique_id=1593910829 instance=ExtResource("2_22i6k")]
+[node name="Model" type="Node3D" parent="." unique_id=499612680 instance=ExtResource("2_22i6k")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1270867969]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=182700736]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
 shape = SubResource("CylinderShape3D_eywg0")

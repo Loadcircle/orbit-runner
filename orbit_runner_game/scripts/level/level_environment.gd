@@ -11,39 +11,53 @@ const DISTANT := {
 }
 
 
+const SKY_SHADER := preload("res://resources/shaders/sky.gdshader")
+
+
 static func build(level: Node3D, biome: BiomeTheme, kill_height: float) -> void:
 	if biome == null:
 		biome = BiomeTheme.new()
 	var quality := Settings.quality()
+	apply_toon_globals(biome)
 	var env := Environment.new()
-	var sky_mat := ProceduralSkyMaterial.new()
-	sky_mat.sky_top_color = biome.sky_top
-	sky_mat.sky_horizon_color = biome.sky_horizon
-	sky_mat.ground_horizon_color = biome.sky_horizon
-	sky_mat.ground_bottom_color = biome.ground_bottom
-	sky_mat.sun_angle_max = 20.0
-	sky_mat.sky_curve = 0.12
+	var sky_mat := ShaderMaterial.new()
+	sky_mat.shader = SKY_SHADER
+	sky_mat.set_shader_parameter("top_color", biome.sky_top)
+	sky_mat.set_shader_parameter("mid_color", biome.sky_mid)
+	sky_mat.set_shader_parameter("horizon_color", biome.sky_horizon)
+	sky_mat.set_shader_parameter("bottom_color", biome.ground_bottom)
+	sky_mat.set_shader_parameter("sun_color", biome.sun_color)
 	var sky := Sky.new()
 	sky.sky_material = sky_mat
-	sky.radiance_size = Sky.RADIANCE_SIZE_64
+	sky.radiance_size = Sky.RADIANCE_SIZE_32
+	sky.process_mode = Sky.PROCESS_MODE_QUALITY
 	env.background_mode = Environment.BG_SKY
 	env.sky = sky
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+	# Flat coloured ambient: shadows keep the biome tint instead of washing out.
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	env.ambient_light_color = biome.ambient_color
 	env.ambient_light_energy = biome.ambient_energy
 	env.reflected_light_source = Environment.REFLECTION_SOURCE_DISABLED
-	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.tonemap_white = 6.0
+	# Linear tonemapping keeps saturated albedos vivid (filmic desaturates them).
+	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	env.tonemap_exposure = 1.0
 	env.fog_enabled = true
+	env.fog_mode = Environment.FOG_MODE_DEPTH
 	env.fog_light_color = biome.fog_color
-	env.fog_density = biome.fog_density
+	env.fog_density = biome.fog_max
+	env.fog_depth_begin = biome.fog_begin
+	env.fog_depth_end = biome.fog_end
+	env.fog_depth_curve = 1.6
 	env.fog_sky_affect = 0.0
-	env.fog_aerial_perspective = 0.15
 	env.glow_enabled = quality == Settings.Quality.HIGH
-	env.glow_intensity = 0.5
-	env.glow_hdr_threshold = 1.1
+	env.glow_intensity = 0.6
+	env.glow_strength = 0.9
+	env.glow_bloom = 0.0
+	env.glow_hdr_threshold = 1.15
+	env.glow_blend_mode = Environment.GLOW_BLEND_MODE_SCREEN
 	env.adjustment_enabled = true
-	env.adjustment_saturation = 1.22
-	env.adjustment_contrast = 1.06
+	env.adjustment_saturation = 1.04
+	env.adjustment_contrast = 1.08
 	var world_env := WorldEnvironment.new()
 	world_env.name = "WorldEnvironment"
 	world_env.environment = env
@@ -57,14 +71,21 @@ static func build(level: Node3D, biome: BiomeTheme, kill_height: float) -> void:
 	sun.shadow_enabled = quality != Settings.Quality.LOW
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
 	sun.directional_shadow_max_distance = 45.0 if quality == Settings.Quality.HIGH else 30.0
-	sun.shadow_opacity = 0.75
-	sun.shadow_blur = 1.5
+	sun.shadow_opacity = 1.0
+	sun.shadow_blur = 1.0
 	level.add_child(sun)
 
 	var bounds := _level_bounds(level)
 	_cloud_sea(level, biome, kill_height, bounds, quality)
 	if quality != Settings.Quality.LOW:
 		_distant_scenery(level, biome, bounds)
+
+
+## Shading values shared by every toon material (global shader uniforms).
+static func apply_toon_globals(biome: BiomeTheme) -> void:
+	RenderingServer.global_shader_parameter_set(&"toon_shadow_color", biome.shadow_color)
+	RenderingServer.global_shader_parameter_set(&"toon_rim_color", biome.rim_color)
+	RenderingServer.global_shader_parameter_set(&"toon_band_softness", biome.band_softness)
 
 
 static func _level_bounds(level: Node3D) -> AABB:
@@ -85,8 +106,9 @@ static func _cloud_sea(level: Node3D, biome: BiomeTheme, kill_height: float, bou
 	plane.size = Vector2(900, 900)
 	var mat := StandardMaterial3D.new()
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.albedo_color = biome.cloud_color.lerp(biome.sky_horizon, 0.35)
+	mat.albedo_color = biome.cloud_shadow.lerp(biome.sky_horizon, 0.45)
 	mat.disable_receive_shadows = true
+	mat.disable_fog = false
 	plane.material = mat
 	sea.mesh = plane
 	sea.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

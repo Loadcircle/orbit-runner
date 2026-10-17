@@ -32,4 +32,5 @@ func _on_body_entered(body: Node) -> void:
 	AudioDirector.play_sfx(&"spark", -6.0, 1.0, 0.08)
 	if Level.current:
 		Level.current.on_spark()
+	PickupBurst.release(get_node_or_null(^"Burst") as CPUParticles3D)
 	queue_free()

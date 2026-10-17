@@ -15,27 +15,27 @@ size = Vector3(3.7, 0.12, 0.12)
 [sub_resource type="BoxShape3D" id="BoxShape3D_4mloe"]
 size = Vector3(3.7, 0.32, 0.4)
 
-[node name="LaserGate" type="Node3D" unique_id=1291179562]
+[node name="LaserGate" type="Node3D" unique_id=672688862]
 script = ExtResource("1_qs6tl")
 
-[node name="LeftPost" type="Node3D" parent="." unique_id=421601574 instance=ExtResource("2_qeqj3")]
+[node name="LeftPost" type="Node3D" parent="." unique_id=1052867752 instance=ExtResource("2_qeqj3")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, 0)
 
-[node name="RightPost" type="Node3D" parent="." unique_id=2042834918 instance=ExtResource("2_qeqj3")]
+[node name="RightPost" type="Node3D" parent="." unique_id=2089786579 instance=ExtResource("2_qeqj3")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2, 0, 0)
 
-[node name="Beam" type="Node3D" parent="." unique_id=551978314]
+[node name="Beam" type="Node3D" parent="." unique_id=319092624]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
 
-[node name="Mesh" type="MeshInstance3D" parent="Beam" unique_id=161352654]
+[node name="Mesh" type="MeshInstance3D" parent="Beam" unique_id=183673316]
 cast_shadow = 0
 mesh = SubResource("BoxMesh_jj77f")
 
-[node name="Hazard" type="Area3D" parent="Beam" unique_id=1341015330]
+[node name="Hazard" type="Area3D" parent="Beam" unique_id=246126655]
 collision_layer = 8
 collision_mask = 2
 monitorable = false
 script = ExtResource("3_6g5cj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Beam/Hazard" unique_id=1796488970]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Beam/Hazard" unique_id=1869564479]
 shape = SubResource("BoxShape3D_4mloe")

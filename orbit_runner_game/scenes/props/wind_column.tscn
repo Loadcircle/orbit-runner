@@ -26,21 +26,21 @@ rings = 1
 cap_top = false
 cap_bottom = false
 
-[node name="WindColumn" type="Node3D" unique_id=1953540393]
+[node name="WindColumn" type="Node3D" unique_id=710853269]
 script = ExtResource("1_wavi7")
 
-[node name="Model" type="Node3D" parent="." unique_id=598071450 instance=ExtResource("2_qx7yf")]
+[node name="Model" type="Node3D" parent="." unique_id=492042921 instance=ExtResource("2_qx7yf")]
 
-[node name="Area" type="Area3D" parent="." unique_id=1236010880]
+[node name="Area" type="Area3D" parent="." unique_id=1256603697]
 collision_layer = 4
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area" unique_id=1996180756]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area" unique_id=1928887775]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 shape = SubResource("CylinderShape3D_etejb")
 
-[node name="Column" type="MeshInstance3D" parent="." unique_id=254301981]
+[node name="Column" type="MeshInstance3D" parent="." unique_id=2062209059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_5hlru")

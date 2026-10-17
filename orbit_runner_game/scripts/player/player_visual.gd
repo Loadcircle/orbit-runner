@@ -18,6 +18,7 @@ var _squash := Vector3.ONE
 var _flip := 0.0
 var _hip_yoyo: Node3D
 var _hand: Node3D
+var _dust: CPUParticles3D
 
 # Squash scales from the feet; Flip rotates around the body centre.
 @onready var _squash_node: Node3D = $Squash
@@ -41,6 +42,8 @@ func _ready() -> void:
 		skeleton.add_child(attachment)
 		_hand = attachment
 	_apply_outline(_model)
+	_dust = _make_dust()
+	add_child(_dust)
 	if _player:
 		_player.jumped.connect(func():
 			_squash = Vector3(0.85, 1.2, 0.85)
@@ -128,6 +131,8 @@ func _on_landed(impact: float) -> void:
 	_squash = Vector3(1.0 + k, 1.0 - k, 1.0 + k)
 	if impact > 6.0:
 		AudioDirector.play_sfx(&"land", linear_to_db(clampf(impact / 25.0, 0.2, 1.0)) - 4.0, 1.0, 0.08)
+		_dust.amount = 8 if impact < 14.0 else 14
+		_dust.restart()
 
 
 func _on_bounced(source: StringName) -> void:
@@ -145,14 +150,54 @@ static func recolor(root: Node, colors: Dictionary) -> void:
 		if mesh_instance.mesh == null:
 			continue
 		for i in mesh_instance.mesh.get_surface_count():
-			var base := mesh_instance.mesh.surface_get_material(i) as StandardMaterial3D
+			var base := mesh_instance.mesh.surface_get_material(i)
 			if base == null or not colors.has(base.resource_name):
 				continue
-			var mat := base.duplicate() as StandardMaterial3D
-			mat.albedo_color = colors[base.resource_name]
-			if mat.emission_enabled:
-				mat.emission = colors[base.resource_name]
-			mesh_instance.set_surface_override_material(i, mat)
+			mesh_instance.set_surface_override_material(i, ToonMaterials.recolored(base, colors[base.resource_name]))
+
+
+## Soft puff ring at the feet on hard landings.
+func _make_dust() -> CPUParticles3D:
+	var p := CPUParticles3D.new()
+	p.name = "LandDust"
+	p.emitting = false
+	p.one_shot = true
+	p.amount = 10
+	p.lifetime = 0.45
+	p.explosiveness = 1.0
+	p.local_coords = false
+	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_RING
+	p.emission_ring_axis = Vector3.UP
+	p.emission_ring_radius = 0.35
+	p.emission_ring_inner_radius = 0.25
+	p.emission_ring_height = 0.0
+	p.direction = Vector3(0, 0.3, 0)
+	p.spread = 180.0
+	p.flatness = 0.85
+	p.initial_velocity_min = 1.5
+	p.initial_velocity_max = 2.6
+	p.damping_min = 4.0
+	p.damping_max = 6.0
+	p.gravity = Vector3(0, 0.6, 0)
+	p.position = Vector3(0, 0.08, 0)
+	var curve := Curve.new()
+	curve.add_point(Vector2(0, 0.6))
+	curve.add_point(Vector2(0.3, 1.0))
+	curve.add_point(Vector2(1, 0))
+	p.scale_amount_curve = curve
+	var mesh := SphereMesh.new()
+	mesh.radius = 0.11
+	mesh.height = 0.2
+	mesh.radial_segments = 8
+	mesh.rings = 4
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.albedo_color = Color(1.0, 0.98, 0.92)
+	mat.disable_receive_shadows = true
+	mesh.material = mat
+	p.mesh = mesh
+	p.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return p
 
 
 func _apply_outline(root: Node) -> void:

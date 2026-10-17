@@ -104,7 +104,7 @@ SETTINGS_LEFT_HANDED,Modo zurdo,Left-handed mode
 SETTINGS_CAMERA_SENS,Sensibilidad de cámara,Camera sensitivity
 SETTINGS_KEYS_HELP,Teclado: WASD/flechas mover · Espacio saltar · E yo-yo · Mayús deslizar/impulso · Q/R girar cámara · Esc pausa. Mando: stick izq. mover · A saltar · X/RB yo-yo · B/LB deslizar/impulso · stick der. cámara.,Keyboard: WASD/arrows move · Space jump · E yo-yo · Shift slide/dash · Q/R turn camera · Esc pause. Gamepad: left stick move · A jump · X/RB yo-yo · B/LB slide/dash · right stick camera.
 SETTINGS_LANGUAGE,Idioma,Language
-SETTINGS_LANG_AUTO,Auto,Auto
+SETTINGS_LANG_AUTO,Auto (dispositivo),Auto (device)
 SETTINGS_QUALITY,Calidad gráfica,Graphics quality
 SETTINGS_Q_LOW,Baja,Low
 SETTINGS_Q_MEDIUM,Media,Medium
