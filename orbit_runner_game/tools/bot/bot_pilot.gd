@@ -64,6 +64,7 @@ var _dodge: Dictionary = {}
 var _piece_time: Dictionary = {}
 ## Route index the bot has decided to jump to without re-checking its timing.
 var _go_for := -1
+var _backing_off := false
 var _trace_lines: Array[String] = []
 
 
@@ -107,6 +108,16 @@ func _physics_process(delta: float) -> void:
 	if player.is_dead:
 		_release(MOVES)
 		return
+	# Tower: the route grows while playing.
+	if (level.get_meta("route", []) as Array).size() > route.size():
+		route = _build_route()
+		_spinners.clear()
+		_patrols.clear()
+		_lasers.clear()
+		_spikes.clear()
+		_trampolines.clear()
+		_boosts.clear()
+		_collect_hazards()
 	var pos := player.global_position
 	var on_floor := player.is_on_floor()
 	if _was_floor and not on_floor:
@@ -391,12 +402,17 @@ func _drive(pos: Vector3, on_floor: bool) -> void:
 		"trampoline":
 			_ground_trampoline(pos, nxt)
 		"yoyo_ground":
+			# Missed the throw window: back off for a proper run-up, then try again.
+			var room := minf(6.0, float(cur["len"]) - 1.0)
+			if _backing_off and to_edge < room:
+				_steer(-f, true)
+				return
+			_backing_off = false
 			_steer_with_avoidance(pos, _aim_point(nxt), nxt)
 			if to_edge < 4.6 and to_edge > 3.8 and player.yoyo.is_ready() and player.facing.dot(f) > 0.95:
 				_tap("yoyo", 6)
 			elif to_edge <= 3.8 and player.yoyo.is_ready() and to_edge > 0.6:
-				# Missed the window: back off and try again.
-				_steer(-f, true)
+				_backing_off = true
 		_:
 			_ground_jump(pos, nxt, tech, to_edge, speed)
 	_slide_under_lasers(pos)

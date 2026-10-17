@@ -52,7 +52,7 @@ Las primeras partidas duran bastante más que el oro (exploración, reaparicione
 
 ## Herramienta
 
-`tools/level_builder.gd` (DSL) y `tools/build_levels.gd` (los 11 niveles). Cada pieza de la ruta se guarda en el metadato `route` del nivel, que usa la barra de progreso del HUD. Ejecutar:
+`scripts/level/level_builder.gd` (DSL) y `tools/build_levels.gd` (los 11 niveles). Los niveles generados usan el mismo DSL (`docs/LIVE_SERVICE.md`). Cada pieza de la ruta se guarda en el metadato `route` del nivel, que usa la barra de progreso del HUD. Ejecutar:
 
 ```
 Godot_v4.7.2-stable_win64_console.exe --headless --path . res://tools/build_levels.tscn

@@ -115,6 +115,47 @@ colors = {
 
 [sub_resource type="Resource" id="Resource_1djd1"]
 script = ExtResource("1_udigy")
+id = &"outfit_breeze_master"
+title_key = "COS_OUTFIT_BREEZE_MASTER"
+unlock = 5
+colors = {
+"M_Accent": Color(1, 1, 1, 1),
+"M_Hair": Color(1, 0.8862745, 0.47843137, 1),
+"M_Jacket": Color(0.49803922, 0.8392157, 1, 1),
+"M_Pants": Color(0.22745098, 0.43529412, 0.61960787, 1),
+"M_Teal": Color(0.7254902, 0.9529412, 1, 1)
+}
+
+[sub_resource type="Resource" id="Resource_g0qwo"]
+script = ExtResource("1_udigy")
+id = &"outfit_toy_master"
+title_key = "COS_OUTFIT_TOY_MASTER"
+unlock = 5
+cost = 1
+colors = {
+"M_Accent": Color(1, 0.8235294, 0.24705882, 1),
+"M_Hair": Color(0.24313726, 0.75686276, 1, 1),
+"M_Jacket": Color(1, 0.3647059, 0.4509804, 1),
+"M_Pants": Color(0.23137255, 0.23137255, 0.59607846, 1),
+"M_Teal": Color(1, 0.8235294, 0.24705882, 1)
+}
+
+[sub_resource type="Resource" id="Resource_wh7qp"]
+script = ExtResource("1_udigy")
+id = &"outfit_sun_master"
+title_key = "COS_OUTFIT_SUN_MASTER"
+unlock = 5
+cost = 2
+colors = {
+"M_Accent": Color(1, 0.41960785, 0.20784314, 1),
+"M_Hair": Color(1, 0.9529412, 0.6901961, 1),
+"M_Jacket": Color(1, 0.7137255, 0.15294118, 1),
+"M_Pants": Color(0.41960785, 0.1764706, 0.36078432, 1),
+"M_Teal": Color(1, 0.41960785, 0.20784314, 1)
+}
+
+[sub_resource type="Resource" id="Resource_xh0vh"]
+script = ExtResource("1_udigy")
 id = &"yoyo_classic"
 kind = 1
 title_key = "COS_YOYO_CLASSIC"
@@ -125,7 +166,7 @@ colors = {
 }
 trail_color = Color(0.13333334, 0.827451, 0.93333334, 1)
 
-[sub_resource type="Resource" id="Resource_g0qwo"]
+[sub_resource type="Resource" id="Resource_qoqbm"]
 script = ExtResource("1_udigy")
 id = &"yoyo_ember"
 kind = 1
@@ -139,7 +180,7 @@ colors = {
 }
 trail_color = Color(1, 0.5411765, 0.22745098, 1)
 
-[sub_resource type="Resource" id="Resource_wh7qp"]
+[sub_resource type="Resource" id="Resource_a0h4p"]
 script = ExtResource("1_udigy")
 id = &"yoyo_lime"
 kind = 1
@@ -153,7 +194,7 @@ colors = {
 }
 trail_color = Color(0.60784316, 1, 0.41568628, 1)
 
-[sub_resource type="Resource" id="Resource_xh0vh"]
+[sub_resource type="Resource" id="Resource_f1u75"]
 script = ExtResource("1_udigy")
 id = &"yoyo_storm"
 kind = 1
@@ -167,7 +208,7 @@ colors = {
 }
 trail_color = Color(0.56078434, 0.6509804, 1, 1)
 
-[sub_resource type="Resource" id="Resource_qoqbm"]
+[sub_resource type="Resource" id="Resource_cvj7e"]
 script = ExtResource("1_udigy")
 id = &"yoyo_violet"
 kind = 1
@@ -181,7 +222,7 @@ colors = {
 }
 trail_color = Color(0.7529412, 0.60784316, 1, 1)
 
-[sub_resource type="Resource" id="Resource_a0h4p"]
+[sub_resource type="Resource" id="Resource_2nkrr"]
 script = ExtResource("1_udigy")
 id = &"yoyo_gold"
 kind = 1
@@ -195,7 +236,7 @@ colors = {
 }
 trail_color = Color(1, 0.8862745, 0.47843137, 1)
 
-[sub_resource type="Resource" id="Resource_f1u75"]
+[sub_resource type="Resource" id="Resource_7iwxw"]
 script = ExtResource("1_udigy")
 id = &"yoyo_prism"
 kind = 1
@@ -211,4 +252,4 @@ trail_color = Color(1, 0.62352943, 0.9411765, 1)
 
 [resource]
 script = ExtResource("2_on83q")
-items = Array[ExtResource("1_udigy")]([SubResource("Resource_udigy"), SubResource("Resource_on83q"), SubResource("Resource_bw5ju"), SubResource("Resource_drmmw"), SubResource("Resource_wh8k6"), SubResource("Resource_vt354"), SubResource("Resource_6i1bg"), SubResource("Resource_svio7"), SubResource("Resource_1djd1"), SubResource("Resource_g0qwo"), SubResource("Resource_wh7qp"), SubResource("Resource_xh0vh"), SubResource("Resource_qoqbm"), SubResource("Resource_a0h4p"), SubResource("Resource_f1u75")])
+items = Array[ExtResource("1_udigy")]([SubResource("Resource_udigy"), SubResource("Resource_on83q"), SubResource("Resource_bw5ju"), SubResource("Resource_drmmw"), SubResource("Resource_wh8k6"), SubResource("Resource_vt354"), SubResource("Resource_6i1bg"), SubResource("Resource_svio7"), SubResource("Resource_1djd1"), SubResource("Resource_g0qwo"), SubResource("Resource_wh7qp"), SubResource("Resource_xh0vh"), SubResource("Resource_qoqbm"), SubResource("Resource_a0h4p"), SubResource("Resource_f1u75"), SubResource("Resource_cvj7e"), SubResource("Resource_2nkrr"), SubResource("Resource_7iwxw")])

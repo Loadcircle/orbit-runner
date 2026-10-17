@@ -38,16 +38,27 @@ func _build(summary: Dictionary) -> void:
 	var box := UiKit.vbox(12)
 	panel.add_child(box)
 	var info := _level.info
-	box.add_child(UiKit.title(tr("RESULTS_TITLE"), 48))
+	var tower := _level.mode == LevelSpec.Mode.TOWER
+	var daily := _level.mode == LevelSpec.Mode.DAILY
+	box.add_child(UiKit.title(tr("RESULTS_TOWER_TITLE" if tower else "RESULTS_TITLE"), 48))
 	if info:
-		box.add_child(UiKit.label(tr(info.title_key), 28, UiKit.CYAN, HORIZONTAL_ALIGNMENT_CENTER))
+		var subtitle := tr(info.title_key)
+		if daily:
+			subtitle += "  %s" % _level.get_meta("run_key", "")
+		box.add_child(UiKit.label(subtitle, 28, UiKit.CYAN, HORIZONTAL_ALIGNMENT_CENTER))
 
 	var stats := UiKit.hbox(40)
 	stats.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(stats)
 	# Medal
 	var medal: int = summary.get("medal", 0)
-	if info and not info.is_tutorial:
+	if tower:
+		var floors_box := UiKit.vbox(4)
+		floors_box.add_child(UiKit.glyph(IconGlyph.Icon.TROPHY, UiKit.CYAN, 90))
+		floors_box.add_child(UiKit.label(tr("RESULTS_FLOORS") % int(summary.get("floors", 0)), 30, Color.WHITE,
+				HORIZONTAL_ALIGNMENT_CENTER))
+		stats.add_child(floors_box)
+	elif info and not info.is_tutorial:
 		var medal_box := UiKit.vbox(4)
 		var medal_glyph := UiKit.glyph(IconGlyph.Icon.MEDAL, UiKit.medal_color(medal), 110)
 		medal_box.add_child(medal_glyph)
@@ -65,17 +76,21 @@ func _build(summary: Dictionary) -> void:
 	time_row.add_child(UiKit.glyph(IconGlyph.Icon.CLOCK, UiKit.ORANGE, 34))
 	time_row.add_child(UiKit.label(UiKit.format_time(_level.elapsed), 40))
 	times.add_child(time_row)
-	if summary.get("new_best", false) and not summary.get("first_clear", false):
+	if tower:
+		times.add_child(UiKit.label(tr("HUD_FLOOR_BEST") % int(summary.get("best_ever", 0)), 22,
+				UiKit.GOLD if summary.get("new_best", false) else UiKit.DIM))
+	elif summary.get("new_best", false) and not summary.get("first_clear", false):
 		times.add_child(UiKit.label(tr("RESULTS_NEW_BEST"), 24, UiKit.GOLD))
 	elif info:
-		times.add_child(UiKit.label("%s %s" % [tr("RESULTS_BEST"), UiKit.format_time(Progress.record(info.id)["best_time"])],
-				22, UiKit.DIM))
-	if info and not info.is_tutorial:
+		var best: float = Progress.daily_record(_level.get_meta("run_key", ""))["best_time"] if daily 			else Progress.record(info.id)["best_time"]
+		times.add_child(UiKit.label("%s %s" % [tr("RESULTS_BEST"), UiKit.format_time(best)], 22, UiKit.DIM))
+	if info and not info.is_tutorial and not tower:
 		times.add_child(UiKit.label("%s %s   %s %s" % [tr("MEDAL_GOLD"), UiKit.format_time(info.gold_time),
 				tr("MEDAL_SILVER"), UiKit.format_time(info.silver_time)], 20, UiKit.DIM))
 	# Collectibles
 	var collect := UiKit.vbox(6)
-	stats.add_child(collect)
+	if not tower:
+		stats.add_child(collect)
 	var gem_row := UiKit.hbox(6)
 	for i in 3:
 		var got: bool = _level.gems[i] or _level.gem_already_owned(i)
@@ -89,6 +104,14 @@ func _build(summary: Dictionary) -> void:
 	collect.add_child(spark_row)
 	if _level.respawns == 0:
 		collect.add_child(UiKit.label(tr("RESULTS_FLAWLESS"), 20, UiKit.CYAN))
+	if summary.has("mastery"):
+		var stars := UiKit.hbox(4)
+		stars.add_child(UiKit.label(tr("RESULTS_MASTERY"), 20, UiKit.DIM))
+		for star in summary["mastery"]:
+			var g := UiKit.glyph(IconGlyph.Icon.STAR, UiKit.GOLD if star else Color(1, 1, 1, 0.4), 26)
+			g.filled = star
+			stars.add_child(g)
+		collect.add_child(stars)
 
 	# Rewards
 	var rewards: Array = []
@@ -102,8 +125,10 @@ func _build(summary: Dictionary) -> void:
 	for c in summary.get("cosmetics", []):
 		if c:
 			rewards.append("%s: %s" % [tr("WORD_UNLOCKED"), tr(c.title_key)])
-	if summary.get("first_clear", false) and SceneRouter.has_next_level():
+	if summary.get("first_clear", false) and SceneRouter.has_next_level() and _level.spec == null:
 		rewards.append(tr("RESULTS_NEXT_UNLOCKED"))
+	if daily and summary.get("first_clear", false) and int(summary.get("streak", 0)) > 1:
+		rewards.append(tr("RESULTS_STREAK") % int(summary["streak"]))
 	if not rewards.is_empty():
 		var reward_label := UiKit.label("\n".join(rewards), 22, UiKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 		reward_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -112,10 +137,12 @@ func _build(summary: Dictionary) -> void:
 	var buttons := UiKit.hbox(14)
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(buttons)
-	buttons.add_child(UiKit.button(tr("RESULTS_RETRY"), func(): SceneRouter.play_level(SceneRouter.current_level_index),
-			IconGlyph.Icon.RESTART))
-	buttons.add_child(UiKit.button(tr("RESULTS_LEVELS"), _go_select, IconGlyph.Icon.HOME))
-	if SceneRouter.has_next_level():
+	buttons.add_child(UiKit.button(tr("RESULTS_RETRY"), _level.restart, IconGlyph.Icon.RESTART))
+	buttons.add_child(UiKit.button(tr("RESULTS_CHALLENGES" if _level.spec else "RESULTS_LEVELS"), _go_select,
+			IconGlyph.Icon.HOME))
+	if _level.spec:
+		buttons.get_child(0).grab_focus.call_deferred()
+	elif SceneRouter.has_next_level():
 		var next := UiKit.button(tr("RESULTS_NEXT"), func(): SceneRouter.play_level(SceneRouter.current_level_index + 1),
 				IconGlyph.Icon.PLAY)
 		buttons.add_child(next)
@@ -133,4 +160,7 @@ func _build(summary: Dictionary) -> void:
 
 
 func _go_select() -> void:
-	SceneRouter.go_to(SceneRouter.LEVEL_SELECT, {"world": _level.info.world_index if _level.info else 0})
+	if _level.spec:
+		SceneRouter.go_to(SceneRouter.CHALLENGES)
+	else:
+		SceneRouter.go_to(SceneRouter.LEVEL_SELECT, {"world": _level.info.world_index if _level.info else 0})

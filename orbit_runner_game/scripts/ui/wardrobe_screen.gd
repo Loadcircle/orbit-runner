@@ -173,6 +173,8 @@ func _item_row(item: CosmeticInfo) -> Control:
 				status = tr("WARDROBE_NEED_GEMS") % [p.x, p.y]
 			CosmeticInfo.Unlock.GOLD_MEDALS:
 				status = tr("WARDROBE_NEED_GOLD") % [p.x, p.y]
+			CosmeticInfo.Unlock.MASTERY:
+				status = tr("WARDROBE_NEED_MASTERY") % [tr(Progress.LEVEL_CATALOG.world_title_keys[item.cost]), p.x, p.y]
 			CosmeticInfo.Unlock.ACHIEVEMENT:
 				var a := Progress.ACHIEVEMENT_CATALOG.get_achievement(item.achievement_id)
 				status = tr("WARDROBE_NEED_ACH") % (tr(a.title_key) if a else "?")

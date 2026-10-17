@@ -200,6 +200,56 @@ ACH_FASHION,Con estilo,Stylish
 ACH_FASHION_DESC,Consigue tu primera recompensa cosmética.,Get your first cosmetic reward.
 ACH_PERSISTENT,Nunca te rindas,Never give up
 ACH_PERSISTENT_DESC,Reaparece 100 veces.,Respawn 100 times.
+MENU_CHALLENGES,Desafíos,Challenges
+MODE_DAILY,Desafío Orbital,Orbital Challenge
+MODE_TOWER,Torre del Viento,Wind Tower
+MODE_GENERATED,Nivel generado,Generated level
+DIFF_EASY,Fácil,Easy
+DIFF_MEDIUM,Medio,Medium
+DIFF_HARD,Difícil,Hard
+DIFF_EXTREME,Extremo,Extreme
+CH_DAILY_DESC,"Un nivel nuevo cada día, igual para todos. Intentos ilimitados: cuenta tu mejor tiempo.","A new level every day, the same for everyone. Unlimited tries: your best time counts."
+CH_DAILY_NEXT,Nuevo desafío en %s,New challenge in %s
+CH_BEST,Mejor: %s,Best: %s
+CH_NOT_PLAYED,Aún sin jugar,Not played yet
+CH_STREAK,Racha: %d días,Streak: %d days
+CH_PLAY,Jugar,Play
+CH_TOWER_DESC,Sube piso a piso: cada piso es más difícil. Punto de control cada 10 pisos. Cambia cada semana.,Climb floor by floor: each one is harder. Checkpoint every 10 floors. Changes every week.
+CH_TOWER_WEEK,Récord semanal: piso %d,Weekly record: floor %d
+CH_TOWER_EVER,Récord total: piso %d,All-time record: floor %d
+CH_MISSIONS,Misiones,Missions
+CH_DAILY_MISSIONS,Diarias,Daily
+CH_WEEKLY_MISSIONS,Semanales,Weekly
+CH_CLAIM,Cobrar,Claim
+CH_CLAIMED,Cobrada,Claimed
+MISSION_BOUNCE,Rebota %d veces en el disco del yo-yo,Bounce %d times on the yo-yo disc
+MISSION_JUMPS,Salta %d veces,Jump %d times
+MISSION_SLIDES,Deslízate %d veces,Slide %d times
+MISSION_DASHES,Haz %d impulsos aéreos,Do %d air dashes
+MISSION_TRAMPOLINES,Usa %d trampolines,Use %d trampolines
+MISSION_BOOSTS,Usa %d placas de impulso,Use %d boost pads
+MISSION_LEVELS,Termina %d niveles,Finish %d levels
+MISSION_SPARKS,Recoge %d chispas,Collect %d sparks
+MISSION_DAILY,Completa %d desafíos orbitales,Complete %d Orbital Challenges
+MISSION_TOWER,Sube %d pisos en la Torre del Viento,Climb %d floors in the Wind Tower
+MISSION_LONG_JUMPS,Haz %d saltos largos,Do %d long jumps
+MISSION_FLAWLESS,Termina %d niveles sin caerte,Finish %d levels without falling
+MISSION_GOLD,Consigue %d medallas de oro,Earn %d gold medals
+MISSION_ALL_SPARKS,Recoge todas las chispas en %d niveles,Collect every spark in %d levels
+HUD_FLOOR,Piso %d,Floor %d
+HUD_FLOOR_BEST,Récord: %d,Record: %d
+PAUSE_END_RUN,Terminar la subida,End the climb
+RESULTS_TOWER_TITLE,¡Subida terminada!,Climb over!
+RESULTS_FLOORS,Pisos: %d,Floors: %d
+RESULTS_CHALLENGES,Desafíos,Challenges
+RESULTS_MASTERY,Maestría,Mastery
+RESULTS_STREAK,¡Racha de %d días!,%d-day streak!
+SETTINGS_GHOST,Mostrar fantasma de tu mejor marca,Show your best-run ghost
+WARDROBE_NEED_MASTERY,Maestría en %s: %d/%d niveles,%s mastery: %d/%d levels
+COS_OUTFIT_BREEZE_MASTER,Maestro de la Brisa,Breeze Master
+COS_OUTFIT_TOY_MASTER,Maestro Juguetero,Toy Master
+COS_OUTFIT_SUN_MASTER,Maestro Solar,Sun Master
+MASTERY_HELP,"Estrellas de maestría: oro, 3 gemas, todas las chispas y sin caídas.","Mastery stars: gold, 3 gems, every spark and no falls."
 CREDITS_THANKS,¡Gracias por jugar!,Thanks for playing!
 CREDITS_DESIGN,Diseño y programación,Design and programming
 CREDITS_TEAM,Equipo de Orbit Runner,The Orbit Runner team

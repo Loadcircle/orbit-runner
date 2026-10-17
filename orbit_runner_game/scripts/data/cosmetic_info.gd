@@ -3,13 +3,13 @@ extends Resource
 ## A reward that changes the protagonist or the yo-yo colours.
 
 enum Kind { OUTFIT, YOYO }
-enum Unlock { DEFAULT, SPARKS, GEMS, GOLD_MEDALS, ACHIEVEMENT }
+enum Unlock { DEFAULT, SPARKS, GEMS, GOLD_MEDALS, ACHIEVEMENT, MASTERY }
 
 @export var id: StringName
 @export var kind: Kind = Kind.OUTFIT
 @export var title_key: String
 @export var unlock: Unlock = Unlock.DEFAULT
-## Sparks price, gem count, gold medal count, depending on `unlock`.
+## Sparks price, gem count, gold medal count or world index (MASTERY), depending on `unlock`.
 @export var cost: int = 0
 ## Achievement id when unlock == ACHIEVEMENT.
 @export var achievement_id: StringName

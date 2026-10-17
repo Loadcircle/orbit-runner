@@ -60,6 +60,10 @@ func _build_cosmetics() -> void:
 		_outfit("outfit_coral", U.GEMS, 21, ["#ff6f91", "#2ec4b6", "#3d405b", "#ffd166", "#2ec4b6"]),
 		_outfit("outfit_solar", U.GOLD_MEDALS, 10, ["#f2c14e", "#ffffff", "#8a5a2b", "#ff6b2c", "#fff1a8"]),
 		_outfit("outfit_shadow", U.GEMS, 30, ["#1b1b24", "#e03a9a", "#2b2b38", "#e03a9a", "#22d3ee"]),
+		# Mastery rewards: every level of the world with its four stars (cost = world index).
+		_outfit("outfit_breeze_master", U.MASTERY, 0, ["#7fd6ff", "#ffffff", "#3a6f9e", "#ffe27a", "#b9f3ff"]),
+		_outfit("outfit_toy_master", U.MASTERY, 1, ["#ff5d73", "#ffd23f", "#3b3b98", "#3ec1ff", "#ffd23f"]),
+		_outfit("outfit_sun_master", U.MASTERY, 2, ["#ffb627", "#ff6b35", "#6b2d5c", "#fff3b0", "#ff6b35"]),
 		_yoyo("yoyo_classic", U.DEFAULT, 0, ["#22d3ee", "#ff9a2e", "#22d3ee"], "#22d3ee"),
 		_yoyo("yoyo_ember", U.SPARKS, 120, ["#ff5a36", "#ffd04a", "#ff7b3a"], "#ff8a3a"),
 		_yoyo("yoyo_lime", U.SPARKS, 250, ["#8ef05a", "#2f6fdb", "#9bff6a"], "#9bff6a"),
@@ -142,23 +146,25 @@ func _difficulty(d: int, gap: Vector2, sizes: Array, rise: float, hazards: Vecto
 	return p
 
 
-## Starting values from the service plan ("Parámetros por dificultad").
+## Starting values from the service plan ("Parámetros por dificultad"), with the
+## first calibration against the bot (2026-10-17, batch of 24 levels): index
+## ranges follow the measured spread and Hard/Extreme are generated tighter.
 func _build_difficulty_table() -> void:
 	var D := LevelSpec.Difficulty
 	var table := DifficultyTable.new()
 	var profiles: Array[DifficultyProfile] = [
 		_difficulty(D.EASY, Vector2(0.35, 0.55), ["L", "XL", "Wide"], 1.0, Vector2(0, 1), Vector2i(1, 2), 0,
 				Vector2(2.6, 1.6), 50.0, 2.5, 2, 2, 8.0, Vector2i(3, 3),
-				Vector2(0, 25), Vector2(0, 1), Vector2(0.9, 1), Vector2(0.6, 1)),
-		_difficulty(D.MEDIUM, Vector2(0.55, 0.70), ["M", "L"], 1.5, Vector2(2, 3), Vector2i(2, 3), 2,
+				Vector2(0, 18), Vector2(0, 1), Vector2(0.9, 1), Vector2(0.6, 1)),
+		_difficulty(D.MEDIUM, Vector2(0.58, 0.74), ["M", "L"], 1.5, Vector2(2, 3), Vector2i(2, 3), 2,
 				Vector2(2.2, 1.4), 70.0, 3.0, 3, 3, 6.0, Vector2i(3, 4),
-				Vector2(25, 50), Vector2(0, 1), Vector2(0.6, 0.9), Vector2(0, 1)),
-		_difficulty(D.HARD, Vector2(0.70, 0.85), ["S", "M", "Strip"], 2.0, Vector2(4, 5), Vector2i(3, 4), 3,
-				Vector2(1.7, 1.1), 95.0, 3.5, 4, 4, 4.0, Vector2i(4, 5),
-				Vector2(50, 75), Vector2(0.8, 1), Vector2(0, 0.6), Vector2(0, 1)),
-		_difficulty(D.EXTREME, Vector2(0.85, 0.95), ["S", "Strip"], 2.3, Vector2(6, 8), Vector2i(4, 6), 4,
-				Vector2(1.3, 1.0), 120.0, 4.0, 6, 5, 3.0, Vector2i(5, 6),
-				Vector2(75, 100.01), Vector2(0.4, 0.8), Vector2(0, 1), Vector2(0, 1)),
+				Vector2(18, 38), Vector2(0, 1), Vector2(0.6, 0.9), Vector2(0, 1)),
+		_difficulty(D.HARD, Vector2(0.76, 0.88), ["S", "M", "Strip"], 2.0, Vector2(4, 5.5), Vector2i(3, 4), 3,
+				Vector2(1.6, 1.1), 100.0, 3.5, 4, 4, 4.0, Vector2i(4, 5),
+				Vector2(38, 58), Vector2(0.8, 1), Vector2(0, 0.6), Vector2(0, 1)),
+		_difficulty(D.EXTREME, Vector2(0.88, 0.97), ["S", "Strip"], 2.3, Vector2(7, 9), Vector2i(4, 6), 4,
+				Vector2(1.2, 0.9), 130.0, 4.5, 6, 5, 3.0, Vector2i(5, 6),
+				Vector2(58, 100.01), Vector2(0.4, 0.8), Vector2(0, 1), Vector2(0, 1)),
 	]
 	table.profiles = profiles
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://resources/generator"))

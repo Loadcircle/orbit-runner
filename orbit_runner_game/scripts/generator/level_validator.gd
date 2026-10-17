@@ -6,7 +6,7 @@ extends RefCounted
 ## Works on a level that is not in the scene tree yet (root at the origin).
 
 ## Fraction of the technique's reach a gap may use.
-const REACH_MARGIN := 0.97
+const REACH_MARGIN := 0.975
 ## Minimum clearance between two pieces of geometry.
 const CLEARANCE := 0.5
 ## No hazard closer than this to a landing point.

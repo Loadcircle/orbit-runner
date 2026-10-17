@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/generator/difficulty_profile.gd" id="1_362to"]
 [ext_resource type="Script" path="res://scripts/generator/difficulty_table.gd" id="2_c21du"]
 
-[sub_resource type="Resource" id="Resource_ydq7f"]
+[sub_resource type="Resource" id="Resource_362to"]
 script = ExtResource("1_362to")
 difficulty = 0
 gap_fraction = Vector2(0.35, 0.55)
@@ -20,58 +20,60 @@ motifs_without_rest = 2
 checkpoint_every = 2
 landing_after_long_gap = 8.0
 crumble_chain = Vector2i(3, 3)
-index_range = Vector2(0, 25)
+index_range = Vector2(0, 18)
 casual_success = Vector2(0.9, 1)
 novice_success = Vector2(0.6, 1)
 
-[sub_resource type="Resource" id="Resource_1s64m"]
+[sub_resource type="Resource" id="Resource_c21du"]
 script = ExtResource("1_362to")
+gap_fraction = Vector2(0.58, 0.74)
 platform_sizes = PackedStringArray("M", "L")
 timed_on_time = 2.2
 timed_off_time = 1.4
+index_range = Vector2(18, 38)
 
-[sub_resource type="Resource" id="Resource_il68v"]
+[sub_resource type="Resource" id="Resource_ydq7f"]
 script = ExtResource("1_362to")
 difficulty = 2
-gap_fraction = Vector2(0.7, 0.85)
+gap_fraction = Vector2(0.76, 0.88)
 platform_sizes = PackedStringArray("S", "M", "Strip")
 max_rise = 2.0
-hazards_per_100m = Vector2(4, 5)
+hazards_per_100m = Vector2(4, 5.5)
 techniques = Vector2i(3, 4)
 combo_pieces = 3
-timed_on_time = 1.7
+timed_on_time = 1.6
 timed_off_time = 1.1
-spinner_speed = 95.0
+spinner_speed = 100.0
 patrol_speed = 3.5
 motifs_without_rest = 4
 checkpoint_every = 4
 landing_after_long_gap = 4.0
 crumble_chain = Vector2i(4, 5)
-index_range = Vector2(50, 75)
+index_range = Vector2(38, 58)
 expert_success = Vector2(0.8, 1)
 casual_success = Vector2(0, 0.6)
 
-[sub_resource type="Resource" id="Resource_n41o2"]
+[sub_resource type="Resource" id="Resource_1s64m"]
 script = ExtResource("1_362to")
 difficulty = 3
-gap_fraction = Vector2(0.85, 0.95)
+gap_fraction = Vector2(0.88, 0.97)
 platform_sizes = PackedStringArray("S", "Strip")
 max_rise = 2.3
-hazards_per_100m = Vector2(6, 8)
+hazards_per_100m = Vector2(7, 9)
 techniques = Vector2i(4, 6)
 combo_pieces = 4
-timed_on_time = 1.3
-timed_off_time = 1.0
-spinner_speed = 120.0
-patrol_speed = 4.0
+timed_on_time = 1.2
+timed_off_time = 0.9
+spinner_speed = 130.0
+patrol_speed = 4.5
 motifs_without_rest = 6
 checkpoint_every = 5
 landing_after_long_gap = 3.0
 crumble_chain = Vector2i(5, 6)
-index_range = Vector2(75, 100.01)
+index_range = Vector2(58, 100.01)
 expert_success = Vector2(0.4, 0.8)
 casual_success = Vector2(0, 1)
 
 [resource]
 script = ExtResource("2_c21du")
-profiles = Array[ExtResource("1_362to")]([SubResource("Resource_ydq7f"), SubResource("Resource_1s64m"), SubResource("Resource_il68v"), SubResource("Resource_n41o2")])
+profiles = Array[ExtResource("1_362to")]([SubResource("Resource_362to"), SubResource("Resource_c21du"), SubResource("Resource_ydq7f"), SubResource("Resource_1s64m")])

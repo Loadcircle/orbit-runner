@@ -13,7 +13,7 @@ func _ready() -> void:
 	var layout := UiKit.hbox(0)
 	margin.add_child(layout)
 
-	var left := UiKit.vbox(12)
+	var left := UiKit.vbox(8)
 	left.custom_minimum_size.x = 470
 	left.alignment = BoxContainer.ALIGNMENT_CENTER
 	layout.add_child(left)
@@ -30,6 +30,11 @@ func _ready() -> void:
 	play.add_theme_stylebox_override("normal", _accent_style())
 	left.add_child(play)
 	left.add_child(UiKit.button(tr("MENU_LEVELS"), func(): SceneRouter.go_to(SceneRouter.LEVEL_SELECT), IconGlyph.Icon.STAR, 460))
+	var challenges := UiKit.button(tr("MENU_CHALLENGES"), func(): SceneRouter.go_to(SceneRouter.CHALLENGES),
+			IconGlyph.Icon.CLOCK, 460)
+	if Progress.missions.claimable_count() > 0:
+		challenges.text += "  (%d)" % Progress.missions.claimable_count()
+	left.add_child(challenges)
 	left.add_child(UiKit.button(tr("MENU_REWARDS"), func(): SceneRouter.go_to("res://scenes/ui/wardrobe_screen.tscn"),
 			IconGlyph.Icon.SHIRT, 460))
 	left.add_child(UiKit.button(tr("MENU_ACHIEVEMENTS"), func(): SceneRouter.go_to("res://scenes/ui/achievements_screen.tscn"),

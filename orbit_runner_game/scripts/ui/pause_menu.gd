@@ -28,7 +28,10 @@ func _ready() -> void:
 	box.add_child(UiKit.button(tr("PAUSE_RESUME"), func(): resume_requested.emit(), IconGlyph.Icon.PLAY, 420))
 	box.add_child(UiKit.button(tr("PAUSE_RESTART"), func(): restart_requested.emit(), IconGlyph.Icon.RESTART, 420))
 	box.add_child(UiKit.button(tr("MENU_SETTINGS"), _open_settings, IconGlyph.Icon.GEAR, 420))
-	box.add_child(UiKit.button(tr("PAUSE_QUIT"), func(): quit_requested.emit(), IconGlyph.Icon.HOME, 420))
+	var level := get_parent() as Level
+	var tower := level != null and level.mode == LevelSpec.Mode.TOWER
+	box.add_child(UiKit.button(tr("PAUSE_END_RUN" if tower else "PAUSE_QUIT"), func(): quit_requested.emit(),
+			IconGlyph.Icon.HOME, 420))
 	visible = false
 
 

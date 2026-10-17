@@ -57,9 +57,11 @@ Materiales (v2, 2026-10-17): **shader toon propio** compatible con Compatibility
 - Jugador desacoplado: `player.gd` (movimiento/estado), `player_visual.gd` (animación, squash, cosméticos; no toca gameplay), `follow_camera.gd` (cámara), `kinetic_yoyo.gd` (yo-yo), `blob_shadow.gd` (sombra de aterrizaje).
 - `Level` (`scripts/level/level.gd`) instancia jugador, cámara, yo-yo, HUD, pausa y resultados; `LevelEnvironment` crea cielo, sol, niebla, mar de nubes y escenario lejano a partir del bioma y la calidad.
 - **UI construida en código** dentro de escenas raíz `.tscn` (`scripts/ui/ui_kit.gd` + tema `resources/ui/orbit_theme.tres`). Iconos vectoriales dibujados en código (`icon_glyph.gd`): nítidos a cualquier escala y sin imágenes externas. Diferencia respecto a AGENTS.md (que sugiere composición en `.tscn`): se eligió por robustez y porque las listas (niveles, logros, recompensas) son dinámicas; las escenas siguen existiendo como puntos de entrada editables.
-- Los elementos de nivel (`scenes/props/*.tscn`) se generan con `tools/build_prop_scenes.tscn` a partir de los GLB (colisiones, áreas y scripts). Los niveles se generan con `tools/build_levels.tscn` (DSL en `tools/level_builder.gd`); ver `docs/LEVEL_DESIGN.md`. Ambos se ejecutan como escena para tener los autoloads disponibles:
+- Los elementos de nivel (`scenes/props/*.tscn`) se generan con `tools/build_prop_scenes.tscn` a partir de los GLB (colisiones, áreas y scripts). Los niveles se generan con `tools/build_levels.tscn` (DSL en `scripts/level/level_builder.gd`, que se exporta porque el teléfono también genera niveles); ver `docs/LEVEL_DESIGN.md`. Ambos se ejecutan como escena para tener los autoloads disponibles:
   `Godot_v4.7.2-stable_win64_console.exe --headless --path . res://tools/build_levels.tscn`
   Regenerar **sobrescribe** las escenas generadas; si se editan a mano en el editor, no volver a ejecutar el generador sin trasladar los cambios.
+
+- **Juego como servicio (fases A y B)**: generador de niveles por dificultad (`scripts/generator/`), bot validador y lotes (`tools/bot/`, `tools/generate_levels.tscn`), repeticiones y fantasmas (`scripts/replay/`), desafío diario, Torre del Viento y misiones. Detalle en `docs/LIVE_SERVICE.md`. Sin nuevos autoloads: `Progress` guarda diario, torre, maestría y misiones (`scripts/progress/mission_board.gd`); `SceneRouter.play_generated()` construye el nivel en memoria (`change_scene_to_node`). `SaveService.persist = false` impide que las herramientas escriban el guardado real.
 
 ## 5. Flujo Blender → GLB → Godot
 
@@ -115,7 +117,10 @@ orbit_runner_game/
   art/  models/ (GLB)  ui/ (icono, retrato)
   audio/  music/  sfx/  default_bus_layout.tres
   localization/
-  tools/          generadores (build_data, build_prop_scenes, build_levels, level_builder)
+  scripts/generator/  generador de niveles (spec, perfiles, alcances, motivos, validador, diario)
+  scripts/replay/     repeticiones y fantasma        scripts/progress/  misiones
+  resources/generator/  difficulty_profiles.tres, daily_seeds.tres
+  tools/          generadores (build_data, build_prop_scenes, build_levels, generate_levels) y bot/ (no se exportan)
   assets_source/  blender/ (.blend + scripts)  audio/ (generador)   [.gdignore]
   docs/
 ```

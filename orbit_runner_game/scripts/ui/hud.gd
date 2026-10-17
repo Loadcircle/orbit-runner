@@ -39,7 +39,9 @@ func setup(level: Level) -> void:
 	level.sparks_changed.connect(_on_sparks_changed)
 	_on_sparks_changed(0, level.sparks_total)
 	_on_gems_changed(level.gems)
-	if level.info and not level.info.is_tutorial:
+	if level.mode == LevelSpec.Mode.TOWER:
+		_progress.visible = false
+	elif level.info and not level.info.is_tutorial:
 		_medal_hint.text = "%s %s" % [tr("HUD_GOLD"), UiKit.format_time(level.info.gold_time)]
 
 
@@ -52,7 +54,11 @@ func _process(_delta: float) -> void:
 		return
 	_time_label.text = UiKit.format_time(_level.elapsed) if _level.elapsed > 0.0 else "00:00.00"
 	_progress.value = _level.route_progress() * 100.0
-	if _level.info and not _level.info.is_tutorial:
+	if _level.tower:
+		_medal_hint.text = "%s  ·  %s" % [tr("HUD_FLOOR") % _level.tower.floor_reached,
+				tr("HUD_FLOOR_BEST") % Progress.tower_best_ever()]
+		_medal_hint.modulate = UiKit.CYAN
+	elif _level.info and not _level.info.is_tutorial:
 		_medal_hint.modulate = UiKit.GOLD if _level.elapsed <= _level.info.gold_time else UiKit.DIM
 
 

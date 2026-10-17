@@ -133,7 +133,7 @@ func gap_for(tech: String, rise := 0.0, cap := INF) -> float:
 	if WEAKER.has(tech):
 		gap = maxf(gap, reach.max_gap(WEAKER[tech], rise) + 0.3)
 	gap *= float(_adjustment().get("gap", 1.0))
-	return clampf(minf(gap, cap), 1.5, top * 0.95)
+	return clampf(minf(gap, cap), 1.5, top * maxf(profile.gap_fraction.y, 0.95))
 
 
 func size_key() -> String:

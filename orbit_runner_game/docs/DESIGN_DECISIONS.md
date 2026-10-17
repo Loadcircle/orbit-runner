@@ -87,6 +87,32 @@ El piloto automático (que usa solo las acciones del InputMap) reveló problemas
 - **Motivo:** cero riesgo de licencias y coherencia; reproducible.
 - **Impacto:** estética *chiptune* sencilla; sustituir por música compuesta es una mejora natural de producción.
 
+## D14. Niveles generados por motivos, validados por un bot (juego como servicio)
+- **Decisión:** el contenido renovable (diario, torre, futuras temporadas) sale de un generador que encadena 15 motivos de diseño probado; cada pieza anota la técnica que la resuelve y un bot con cuatro perfiles de habilidad la juega para medir la dificultad.
+- **Motivo:** ritmo de contenido sin diseñar cada nivel a mano, con la garantía de que todo nivel publicado es pasable.
+- **Impacto:** detalle en `docs/LIVE_SERVICE.md`. La calibración actual es contra el bot; falta la calibración con personas.
+
+## D15. El teléfono genera el diario y la torre desde la semilla
+- **Decisión:** el diario usa la fecha UTC como semilla y la torre la semana; el generador corre en el dispositivo. Las semillas validadas por el bot en PC (`daily_seeds.tres`) tienen prioridad.
+- **Motivo:** contenido diario sin descargas y jugable sin conexión; el futuro servidor solo tendrá que publicar semillas y verificar marcas.
+
+## D16. Torre del Viento: subida infinita sin vidas
+- **Decisión:** reintentos ilimitados desde el último punto de control (cada 10 pisos); la puntuación es el piso más alto y la subida termina desde la pausa.
+- **Motivo:** principio del plan "sin energía ni vidas"; el récord semanal da el motivo para volver.
+
+## D17. Repeticiones exactas por entradas
+- **Decisión:** se graban las entradas en bruto de cada tic de física y la guiñada de cámara; el fantasma usa poses cada 0,1 s.
+- **Motivo:** la misma grabación sirve para el fantasma y para verificar marcas en el servidor (la reproducción da el mismo tiempo exacto).
+- **Impacto:** ~18 KB por minuto de partida (más que lo estimado en el plan).
+
+## D18. Maestría con premio visible
+- **Decisión:** 4 estrellas por nivel (oro, 3 gemas, todas las chispas, sin caídas); dominar un mundo da un traje propio.
+- **Motivo:** rejugar la campaña con objetivos claros sin tocar el equilibrio.
+
+## D19. Misiones locales con chispas
+- **Decisión:** 3 misiones diarias y 7 semanales elegidas por fecha, premiadas con chispas.
+- **Motivo:** hábito de vuelta ya en la versión sin conexión; la XP del pase de temporada llegará con la fase D.
+
 ## Pendiente de decisión del propietario
 - Nombre definitivo del juego y del protagonista (sigue siendo *Orbit Runner* provisional).
 - Identificador del paquete Android (`com.orbitrunner.game` es provisional) y keystore de publicación.

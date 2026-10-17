@@ -116,6 +116,14 @@ func _card(index: int, info: LevelInfo) -> Button:
 	var name_label := UiKit.label(tr(info.title_key), 26)
 	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	inner.add_child(name_label)
+	if unlocked and not info.is_tutorial and bool(rec["completed"]):
+		# Mastery: gold, 3 gems, every spark, no falls.
+		var stars := UiKit.hbox(2)
+		for star in Progress.mastery(info):
+			var g := UiKit.glyph(IconGlyph.Icon.STAR, UiKit.GOLD if star else Color(1, 1, 1, 0.35), 22)
+			g.filled = star
+			stars.add_child(g)
+		inner.add_child(stars)
 	inner.add_child(UiKit.spacer())
 	var bottom := UiKit.hbox(6)
 	inner.add_child(bottom)
