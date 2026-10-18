@@ -1,10 +1,25 @@
 extends Control
-## Level select by world: unlocked levels, medals, gems and best times.
+## Level select: every level in one horizontal strip, grouped by world. Drag or
+## swipe to browse; the world tabs and the arrows jump between worlds.
+
+## Pointer travel that turns a press into a drag (a drag never opens a level).
+const DRAG_THRESHOLD := 24.0
+## Fling speed decay per second after a swipe.
+const FLING_DAMPING := 5.0
+const CARD_GAP := 18
+const WORLD_GAP := 64
 
 var _world := 0
-var _grid: GridContainer
-var _world_title: Label
+var _offset := 0.0
+var _velocity := 0.0
+var _press_pos := Vector2.ZERO
+var _pressing := false
+var _dragged := false
+var _tween: Tween
+var _view: Control
+var _strip: HBoxContainer
 var _world_tabs: HBoxContainer
+var _sections: Array[Control] = []
 
 
 func _ready() -> void:
@@ -30,29 +45,36 @@ func _ready() -> void:
 	header.add_child(UiKit.glyph(IconGlyph.Icon.SPARK, UiKit.GOLD, 34))
 	header.add_child(UiKit.label(str(Progress.sparks()), 28))
 
+	var nav := UiKit.hbox(12)
+	box.add_child(nav)
+	nav.add_child(UiKit.icon_button(IconGlyph.Icon.ARROW_LEFT, func(): _select_world(_world - 1), 64))
 	_world_tabs = UiKit.hbox(12)
-	box.add_child(_world_tabs)
+	nav.add_child(_world_tabs)
 	var catalog := Progress.LEVEL_CATALOG
 	for i in catalog.world_title_keys.size():
 		var world_index := i
 		var b := UiKit.button(tr(catalog.world_title_keys[i]), func(): _select_world(world_index))
 		b.toggle_mode = true
-		b.custom_minimum_size = Vector2(260, 64)
+		b.custom_minimum_size = Vector2(240, 64)
 		_world_tabs.add_child(b)
+	nav.add_child(UiKit.icon_button(IconGlyph.Icon.ARROW_RIGHT, func(): _select_world(_world + 1), 64))
 
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	box.add_child(scroll)
-	var center := CenterContainer.new()
-	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(center)
-	_grid = GridContainer.new()
-	_grid.columns = 3
-	_grid.add_theme_constant_override("h_separation", 18)
-	_grid.add_theme_constant_override("v_separation", 18)
-	center.add_child(_grid)
-	_select_world(_world)
+	# Clipped viewport with a strip moved by hand: drags work over the cards too.
+	_view = Control.new()
+	_view.clip_contents = true
+	_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(_view)
+	_strip = UiKit.hbox(WORLD_GAP)
+	_strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_view.add_child(_strip)
+	_build_strip()
+	_view.resized.connect(func(): _set_offset(_offset))
+	_set_offset(0.0)
+	await get_tree().process_frame
+	_set_offset(_world_offset(_world))
+	_update_tabs()
+	UiKit.focus_first(_sections[_world] if _world < _sections.size() else _strip)
 
 
 func handle_back() -> void:
@@ -64,33 +86,156 @@ func _default_world() -> int:
 	return next.world_index
 
 
-func _select_world(index: int) -> void:
-	_world = index
-	for i in _world_tabs.get_child_count():
-		(_world_tabs.get_child(i) as Button).set_pressed_no_signal(i == index)
-	for child in _grid.get_children():
-		child.queue_free()
+func _build_strip() -> void:
 	var levels := Progress.levels()
-	var first: Button
-	for i in levels.size():
-		if levels[i].world_index != index:
-			continue
-		var card := _card(i, levels[i])
-		_grid.add_child(card)
-		if first == null and not card.disabled:
-			first = card
-	if first:
-		UiKit.focus_first(_grid)
+	var catalog := Progress.LEVEL_CATALOG
+	for w in catalog.world_title_keys.size():
+		var section := UiKit.vbox(10)
+		section.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_strip.add_child(section)
+		_sections.append(section)
+		var world_mastery := Progress.world_mastery(w)
+		var title := UiKit.hbox(10)
+		title.alignment = BoxContainer.ALIGNMENT_BEGIN
+		section.add_child(title)
+		title.add_child(UiKit.label(tr(catalog.world_title_keys[w]), 30, UiKit.CYAN))
+		var star := UiKit.glyph(IconGlyph.Icon.STAR, UiKit.GOLD, 26)
+		star.filled = true
+		title.add_child(star)
+		title.add_child(UiKit.label("%d/%d" % [world_mastery.x, world_mastery.y], 24, UiKit.DIM))
+		var row := UiKit.hbox(CARD_GAP)
+		section.add_child(row)
+		for i in levels.size():
+			if levels[i].world_index == w:
+				row.add_child(_card(i, levels[i]))
+
+
+func _select_world(index: int) -> void:
+	_world = clampi(index, 0, _sections.size() - 1)
+	_velocity = 0.0
+	_update_tabs()
+	if _tween:
+		_tween.kill()
+	_tween = create_tween()
+	_tween.tween_method(_set_offset, _offset, _world_offset(_world), 0.35) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+func _update_tabs() -> void:
+	for i in _world_tabs.get_child_count():
+		(_world_tabs.get_child(i) as Button).set_pressed_no_signal(i == _world)
+
+
+## Scroll that puts the start of a world at the left edge.
+func _world_offset(index: int) -> float:
+	if index <= 0 or index >= _sections.size():
+		return 0.0
+	return _sections[index].position.x
+
+
+func _max_offset() -> float:
+	return maxf(_strip.get_combined_minimum_size().x - _view.size.x, 0.0)
+
+
+func _set_offset(value: float) -> void:
+	_offset = clampf(value, 0.0, _max_offset())
+	_strip.position = Vector2(-_offset, 0.0)
+	_strip.size = Vector2(_strip.get_combined_minimum_size().x, _view.size.y)
+
+
+## Highlights the world that fills most of the view after a drag.
+func _sync_world_from_offset() -> void:
+	var centre := _offset + _view.size.x * 0.5
+	for i in _sections.size():
+		var s := _sections[i]
+		if centre >= s.position.x - WORLD_GAP * 0.5 and centre <= s.position.x + s.size.x + WORLD_GAP * 0.5:
+			_world = i
+	if _offset >= _max_offset() - 1.0:
+		_world = _sections.size() - 1
+	elif _offset <= 1.0:
+		_world = 0
+	_update_tabs()
+
+
+func _process(delta: float) -> void:
+	if _pressing or absf(_velocity) < 5.0:
+		return
+	_set_offset(_offset - _velocity * delta)
+	_velocity = move_toward(_velocity, 0.0, absf(_velocity) * FLING_DAMPING * delta + 20.0 * delta)
+	_sync_world_from_offset()
+
+
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+	var pos := Vector2.ZERO
+	var pressed := false
+	var released := false
+	var moved := Vector2.ZERO
+	if event is InputEventScreenTouch and event.index == 0:
+		pos = event.position
+		pressed = event.pressed
+		released = not event.pressed
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		pos = event.position
+		pressed = event.pressed
+		released = not event.pressed
+	elif event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		if _view.get_global_rect().has_point(event.position):
+			_select_world(_world + (1 if event.button_index == MOUSE_BUTTON_WHEEL_DOWN else -1))
+		return
+	elif event is InputEventScreenDrag and event.index == 0:
+		pos = event.position
+		moved = event.relative
+	elif event is InputEventMouseMotion and _pressing and not DisplayServer.is_touchscreen_available():
+		pos = event.position
+		moved = event.relative
+	else:
+		return
+	if pressed:
+		_pressing = _view.get_global_rect().has_point(pos)
+		_press_pos = pos
+		_dragged = false
+		_velocity = 0.0
+		if _pressing and _tween:
+			_tween.kill()
+	elif released:
+		if _pressing and _dragged:
+			_sync_world_from_offset()
+			# Swallow the release so the card under the finger does not open.
+			get_viewport().set_input_as_handled()
+		_pressing = false
+	elif _pressing and moved != Vector2.ZERO:
+		if not _dragged and pos.distance_to(_press_pos) > DRAG_THRESHOLD:
+			_dragged = true
+		if _dragged:
+			_set_offset(_offset - moved.x)
+			var dt := maxf(get_process_delta_time(), 1.0 / 120.0)
+			_velocity = lerpf(_velocity, moved.x / dt, 0.5)
+			_sync_world_from_offset()
+
+
+func _scroll_into_view(control: Control) -> void:
+	var left := control.get_global_rect().position.x - _strip.global_position.x
+	var right := left + control.size.x
+	if left < _offset:
+		_set_offset(left - CARD_GAP)
+	elif right > _offset + _view.size.x:
+		_set_offset(right - _view.size.x + CARD_GAP)
+	_sync_world_from_offset()
 
 
 func _card(index: int, info: LevelInfo) -> Button:
 	var unlocked := Progress.is_unlocked(index)
 	var rec := Progress.record(info.id)
 	var card := Button.new()
-	card.custom_minimum_size = Vector2(340, 200)
+	card.custom_minimum_size = Vector2(320, 210)
 	card.disabled = not unlocked
 	card.focus_mode = Control.FOCUS_ALL
+	card.focus_entered.connect(func(): _scroll_into_view(card))
 	card.pressed.connect(func():
+		if _dragged:
+			return
 		AudioDirector.play_sfx(&"ui_confirm")
 		SceneRouter.play_level(index))
 	var inner := UiKit.vbox(6)

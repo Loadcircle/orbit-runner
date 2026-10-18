@@ -51,6 +51,16 @@ func throw(from: Vector3, to: Vector3) -> void:
 	AudioDirector.play_sfx(&"yoyo_throw", -3.0, 1.0, 0.05)
 
 
+## Falling throw: unfolds right under the owner's feet and bounces at once.
+func deploy_under(feet: Vector3) -> void:
+	_from = feet
+	_to = feet
+	_set_holster_visible(false)
+	AudioDirector.play_sfx(&"yoyo_throw", -3.0, 1.0, 0.05)
+	_deploy()
+	_try_bounce()
+
+
 func recall_instant() -> void:
 	state = State.HOLSTERED
 	_hide_all()

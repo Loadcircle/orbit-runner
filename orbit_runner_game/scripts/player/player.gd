@@ -15,6 +15,9 @@ signal slid
 signal bounced(source: StringName)
 signal yoyo_thrown
 
+## Below this vertical speed an air throw unfolds the disc under the feet.
+const FALLING_YOYO_SPEED := 3.0
+
 @export var tuning: MovementTuning
 
 var input_enabled := true
@@ -44,6 +47,8 @@ var _boost := 0.0
 var _was_on_floor := true
 var _fall_speed := 0.0
 var _wind_frames := 0
+## Set when the goal is reached: the character stops dead where it touched it.
+var _frozen := false
 ## Brief protection after respawning so stale trigger overlaps (hazards,
 ## trampolines) from the previous position cannot act on the new one.
 var _spawn_grace := 0.0
@@ -63,7 +68,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if is_dead:
+	if is_dead or _frozen:
 		velocity = Vector3.ZERO
 		return
 	_spawn_grace = maxf(_spawn_grace - delta, 0.0)
@@ -264,6 +269,14 @@ func _try_throw_yoyo(on_floor: bool, h: Vector3) -> void:
 			target = hit.position - facing * 1.3 - Vector3.UP * 0.5
 	else:
 		yoyo_charges -= 1
+		if velocity.y < -FALLING_YOYO_SPEED:
+			# Already falling: a thrown disc would be left above. Unfold it under
+			# the feet instead, which works as an air jump.
+			yoyo.deploy_under(global_position + Vector3.DOWN * 0.1)
+			throw_timer = 0.3
+			Progress.add_stat(&"yoyo_throws", 1, false)
+			yoyo_thrown.emit()
+			return
 		target = global_position + h * tuning.yoyo_air_lead - Vector3.UP * tuning.yoyo_air_drop
 	yoyo.throw(origin, target)
 	throw_timer = 0.3
@@ -297,7 +310,7 @@ func _update_facing(delta: float) -> void:
 
 ## Vertical launch from trampolines and the yo-yo disc. Restores air actions.
 func bounce(vertical_speed: float, source: StringName) -> void:
-	if is_dead or is_spawn_protected():
+	if is_dead or _frozen or is_spawn_protected():
 		return
 	_end_slide()
 	is_dashing = false
@@ -313,6 +326,8 @@ func bounce(vertical_speed: float, source: StringName) -> void:
 
 ## Boost pads: pushes along `direction` and raises the speed cap briefly.
 func apply_boost(direction: Vector3, speed: float) -> void:
+	if _frozen:
+		return
 	var dir := Vector3(direction.x, 0.0, direction.z).normalized()
 	_boost = maxf(_boost, speed - tuning.run_speed)
 	var along := Vector3(velocity.x, 0.0, velocity.z).dot(dir)
@@ -325,6 +340,8 @@ func apply_boost(direction: Vector3, speed: float) -> void:
 
 ## Wind columns call this every physics frame while the player is inside.
 func apply_wind(lift: float, max_up_speed: float, delta: float) -> void:
+	if _frozen:
+		return
 	_wind_frames = 2
 	dash_available = true
 	# Air drag inside the current keeps the player in the column (forgiving).
@@ -341,7 +358,7 @@ func is_spawn_protected() -> bool:
 
 
 func hurt() -> void:
-	if is_dead or is_spawn_protected():
+	if is_dead or _frozen or is_spawn_protected():
 		return
 	is_dead = true
 	_end_slide()
@@ -369,6 +386,15 @@ func respawn_at(xform: Transform3D) -> void:
 	reset_physics_interpolation()
 	if yoyo:
 		yoyo.recall_instant()
+
+
+## Goal reached: stop on the spot and ignore hazards, pads and gravity.
+func freeze() -> void:
+	_frozen = true
+	input_enabled = false
+	_end_slide()
+	is_dashing = false
+	velocity = Vector3.ZERO
 
 
 func horizontal_speed() -> float:

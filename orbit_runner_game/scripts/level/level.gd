@@ -228,7 +228,7 @@ func finish() -> void:
 		return
 	finished = true
 	timer_running = false
-	player.input_enabled = false
+	player.freeze()
 	player.visual.celebrating = true
 	hud.on_finished()
 	AudioDirector.play_sfx(&"goal")
