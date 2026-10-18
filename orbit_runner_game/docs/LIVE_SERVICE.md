@@ -232,7 +232,8 @@ Decisiones del propietario:
 - **Corrección**:
   - ahora el alcance se calcula con la altura redondeada;
   - el lote genera cada intento a partir de la especificación ya pasada por JSON, exactamente como se guarda.
-- Esto cambia algunos niveles generados, así que se regeneraron los desafíos diarios (`daily_seeds.tres`, 30 días desde el 2026-10-18).
+- Esto cambia algunos niveles generados, así que se regeneraron los desafíos diarios (`daily_seeds.tres`, 30 días desde el 2026-10-18): 28 validados por el bot; los otros 2 días usan la semilla local.
+- Comprobación: los 80 niveles de temporada y los 28 diarios se reconstruyen fuera del lote con el mismo hash de ruta.
 
 ### Pendiente (freemium)
 
