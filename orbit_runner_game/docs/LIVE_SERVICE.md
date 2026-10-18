@@ -162,7 +162,7 @@ Decisiones del propietario:
   - Los 4 primeros niveles son un escalón más fáciles, como calentamiento.
   - Se prueban hasta 4 variantes de semilla por nivel. Se queda la primera aceptada; si ninguna lo es, la primera reclasificada.
   - En la entrada del calendario, `difficulty` es la dificultad usada para generar y `category` la que midió el bot.
-- **Preprogramadas**:
+- **Preprogramadas** (79 niveles aceptados y 1 reclasificado de 80):
 
   | Temporada | Inicio | Dificultad | Bioma |
   |---|---|---|---|
