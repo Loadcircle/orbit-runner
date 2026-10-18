@@ -221,13 +221,24 @@ func _build() -> void:
 	_prompt_panel = PanelContainer.new()
 	_prompt_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
 	_prompt_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_prompt_panel.position.y = 190
+	# High and see-through: the route ahead (platforms, hazards) stays visible.
+	_prompt_panel.position.y = 92
 	_prompt_panel.visible = false
 	_prompt_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var prompt_style := StyleBoxFlat.new()
+	prompt_style.bg_color = Color(0.05, 0.1, 0.24, 0.55)
+	prompt_style.set_corner_radius_all(14)
+	prompt_style.content_margin_left = 18
+	prompt_style.content_margin_right = 18
+	prompt_style.content_margin_top = 8
+	prompt_style.content_margin_bottom = 8
+	_prompt_panel.add_theme_stylebox_override("panel", prompt_style)
 	_root.add_child(_prompt_panel)
-	_prompt_label = UiKit.label("", 28, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER)
+	_prompt_label = UiKit.label("", 24, Color.WHITE, HORIZONTAL_ALIGNMENT_CENTER)
+	_prompt_label.add_theme_constant_override("outline_size", 6)
+	_prompt_label.add_theme_color_override("font_outline_color", Color(0.02, 0.05, 0.14, 0.9))
 	_prompt_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_prompt_label.custom_minimum_size = Vector2(560, 0)
+	_prompt_label.custom_minimum_size = Vector2(620, 0)
 	_prompt_panel.add_child(_prompt_label)
 
 	_flash = ColorRect.new()

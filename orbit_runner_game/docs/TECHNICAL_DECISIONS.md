@@ -116,6 +116,7 @@ Español e inglés. Por defecto el juego sigue el idioma del dispositivo (`OS.ge
   - La plantilla de compilación está en `android/build/` y no se versiona. En un clon nuevo se instala descomprimiendo `%APPDATA%\Godot\export_templates\4.7.2.stable\android_source.zip` en `android/build/` y escribiendo la versión en `android/.build_version` (o desde el editor: Proyecto → Instalar plantilla de compilación Android).
   - Gradle descarga sus dependencias oficiales (Gradle 8.11.1, Android Gradle Plugin 8.6.1) la primera vez; requiere el JDK 17 configurado en el editor.
   - `addons/*` y `android/*` están excluidos del paquete del juego.
+- **Recursos de texto sin convertir** (`editor/export/convert_text_resources_to_binary=false`, 2026-10-18): la conversión de Godot 4.7.2 de `.tres` a binario al exportar vaciaba `world_title_keys` del catálogo de niveles. En el teléfono solo se veía un mundo en la selección de niveles y la pantalla Desafíos fallaba. Los `.tres` se empaquetan tal cual.
 - **AAB / publicación** (pendiente, requiere decisiones del propietario):
   - crear un keystore de publicación propio, sin versionarlo (Godot guarda las credenciales en `.godot/export_credentials.cfg`, ignorado por git);
   - cambiar `package/unique_name` (`com.orbitrunner.game` es provisional);

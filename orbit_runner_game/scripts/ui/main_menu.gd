@@ -27,7 +27,18 @@ func _ready() -> void:
 	var levels := Progress.levels()
 	var play_text := tr("MENU_PLAY") if next_index == 0 and not Progress.is_completed(levels[0].id) \
 		else "%s: %s" % [tr("MENU_CONTINUE"), tr(levels[next_index].title_key)]
-	var play := UiKit.button(play_text, func(): SceneRouter.play_level(next_index), IconGlyph.Icon.PLAY, 460)
+	var play_action := func(): SceneRouter.play_level(next_index)
+	# Campaign finished: continue with the live season instead of replaying the last level.
+	var live := Season.current()
+	var season_next := Progress.season_next_level(live) if not live.is_empty() else -1
+	if Progress.campaign_finished() and season_next >= 0:
+		play_text = "%s: %s · %s" % [tr("MENU_CONTINUE"), Season.title(live), tr("SEASON_LEVEL_N") % (season_next + 1)]
+		play_action = func(): SceneRouter.play_generated(Season.level_spec(live, season_next),
+				Season.run_key(live, season_next))
+	elif Progress.campaign_finished():
+		play_text = tr("MENU_LEVELS")
+		play_action = func(): SceneRouter.go_to(SceneRouter.LEVEL_SELECT)
+	var play := UiKit.button(play_text, play_action, IconGlyph.Icon.PLAY, 460)
 	play.add_theme_stylebox_override("normal", _accent_style())
 	left.add_child(play)
 	var season := Season.current()

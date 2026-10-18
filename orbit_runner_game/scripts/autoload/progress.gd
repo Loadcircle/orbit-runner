@@ -192,6 +192,14 @@ func campaign_levels_completed() -> int:
 	return total
 
 
+## Every campaign level (tutorial included) completed.
+func campaign_finished() -> bool:
+	for info in LEVEL_CATALOG.levels:
+		if not is_completed(info.id):
+			return false
+	return true
+
+
 func campaign_level_count() -> int:
 	var total := 0
 	for info in LEVEL_CATALOG.levels:
@@ -357,6 +365,14 @@ func season_record(key: String) -> Dictionary:
 		levels[slot] = {"completed": false, "best_time": 0.0, "gems": [false, false, false], "medal": 0,
 				"best_points": 0, "attempts": 0}
 	return levels[slot]
+
+
+## First season level not completed yet, or -1 when all are done.
+func season_next_level(season: Dictionary) -> int:
+	for i in Season.level_count(season):
+		if not bool(season_record(Season.run_key(season, i))["completed"]):
+			return i
+	return -1
 
 
 func season_level_unlocked(season: Dictionary, index: int) -> bool:

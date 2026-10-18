@@ -34,6 +34,10 @@ Services="*res://scripts/autoload/services.gd"
 AudioDirector="*res://scripts/autoload/audio_director.gd"
 SceneRouter="*res://scripts/autoload/scene_router.gd"
 
+[editor]
+
+export/convert_text_resources_to_binary=false
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/orbit_notifications/plugin.cfg")
