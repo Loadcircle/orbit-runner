@@ -35,7 +35,7 @@ func _ready() -> void:
 		_data["outfit"] = "outfit_explorer"
 	if not _data.has("yoyo"):
 		_data["yoyo"] = "yoyo_classic"
-	for key in ["daily", "tower", "missions"]:
+	for key in ["daily", "tower", "missions", "seasons"]:
 		if typeof(_data.get(key)) != TYPE_DICTIONARY:
 			_data[key] = {}
 	missions = MissionBoard.new(_data["missions"], stat)
@@ -338,6 +338,82 @@ func _prune(dict: Dictionary, keep: int) -> void:
 		dict.erase(keys.pop_front())
 
 
+# ------------------------------------------------------------------ seasons
+
+## Saved state of a season: {levels: {"01": record}, final_rank, rewarded}.
+func season_state(season_id: String) -> Dictionary:
+	var seasons: Dictionary = _data["seasons"]
+	if typeof(seasons.get(season_id)) != TYPE_DICTIONARY:
+		seasons[season_id] = {"levels": {}, "final_rank": 0, "final_size": 0, "rewarded": false}
+	return seasons[season_id]
+
+
+## Record of one season level, by run key ("S1-07").
+func season_record(key: String) -> Dictionary:
+	var parts := Season.parse_key(key)
+	var levels: Dictionary = season_state(parts[0])["levels"]
+	var slot := "%02d" % (int(parts[1]) + 1)
+	if typeof(levels.get(slot)) != TYPE_DICTIONARY:
+		levels[slot] = {"completed": false, "best_time": 0.0, "gems": [false, false, false], "medal": 0,
+				"best_points": 0, "attempts": 0}
+	return levels[slot]
+
+
+func season_level_unlocked(season: Dictionary, index: int) -> bool:
+	return index <= 0 or bool(season_record(Season.run_key(season, index - 1))["completed"])
+
+
+## Sum of the best points and best times of the levels finished.
+func season_totals(season_id: String) -> Dictionary:
+	var totals := {"points": 0, "time": 0.0, "levels": 0}
+	var seasons: Dictionary = _data["seasons"]
+	if not seasons.has(season_id):
+		return totals
+	for slot in seasons[season_id]["levels"]:
+		var rec: Dictionary = seasons[season_id]["levels"][slot]
+		if bool(rec["completed"]):
+			totals["points"] += int(rec["best_points"])
+			totals["time"] += float(rec["best_time"])
+			totals["levels"] += 1
+	return totals
+
+
+func submit_season(key: String, info: LevelInfo, run: Dictionary) -> Dictionary:
+	var rec := season_record(key)
+	var time := float(run["time"])
+	var best := float(rec["best_time"])
+	var medal := medal_for_time(info, time)
+	var run_gems := 0
+	for g in run["gems"]:
+		if g:
+			run_gems += 1
+	var ratio := float(run["sparks"]) / maxf(float(run["sparks_total"]), 1.0)
+	var points := SeasonScoring.points(medal, run_gems, ratio, int(run["respawns"]) == 0)
+	var summary := {"first_clear": not bool(rec["completed"]), "new_best": best <= 0.0 or time < best,
+			"previous_best": best, "medal": medal, "medal_improved": medal > int(rec["medal"]),
+			"sparks_earned": int(run["sparks"]), "achievements": [], "cosmetics": [], "new_gems": 0,
+			"season_points": points, "season_points_improved": points > int(rec["best_points"])}
+	rec["completed"] = true
+	rec["attempts"] = int(rec.get("attempts", 0)) + 1
+	if summary["new_best"]:
+		rec["best_time"] = time
+	rec["medal"] = maxi(int(rec["medal"]), medal)
+	rec["best_points"] = maxi(int(rec["best_points"]), points)
+	var gems: Array = rec["gems"]
+	var gem_list: Array = run["gems"]
+	for i in mini(gems.size(), gem_list.size()):
+		if gem_list[i] and not gems[i]:
+			gems[i] = true
+			summary["new_gems"] += 1
+	if medal == Medal.GOLD:
+		add_stat(&"gold_runs", 1, false)
+	add_stat(&"season_levels", 1, false)
+	add_sparks(int(run["sparks"]))
+	missions_changed.emit()
+	SaveService.request_save()
+	return summary
+
+
 # ------------------------------------------------------------------ missions
 
 func refresh_missions() -> void:
@@ -502,6 +578,7 @@ func reset_all() -> void:
 	ReplayStore.delete_all()
 	_ready()
 	Settings._ready()
+	Services.reload()
 	SaveService.save_now()
 	equipment_changed.emit()
 	wallet_changed.emit(sparks())

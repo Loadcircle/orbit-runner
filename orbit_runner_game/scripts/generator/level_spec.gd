@@ -4,7 +4,7 @@ extends Resource
 ## version produce the same level on every device.
 
 enum Difficulty { EASY, MEDIUM, HARD, EXTREME }
-enum Mode { CAMPAIGN, DAILY, TOWER }
+enum Mode { CAMPAIGN, DAILY, TOWER, SEASON }
 
 const BIOMES: Array[StringName] = [&"isles", &"toyworks", &"ruins"]
 ## Everything a generated level may ask of the player. Seasons add new ids.
@@ -55,7 +55,7 @@ static func from_dict(data: Dictionary) -> LevelSpec:
 	spec.difficulty = clampi(int(data.get("difficulty", 1)), 0, 3) as Difficulty
 	spec.target_seconds = float(data.get("target_seconds", 45.0))
 	spec.mechanics = PackedStringArray(data.get("mechanics", ALL_MECHANICS))
-	spec.mode = clampi(int(data.get("mode", 0)), 0, 2) as Mode
+	spec.mode = clampi(int(data.get("mode", 0)), 0, Mode.size() - 1) as Mode
 	var adjust: Dictionary = data.get("adjustments", {})
 	for key in adjust:
 		spec.adjustments[int(key)] = adjust[key]

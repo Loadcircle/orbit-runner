@@ -1,6 +1,16 @@
 # Estado del proyecto — Orbit Runner
 
-Actualizado: 2026-10-17 (juego como servicio, fases A y B, rama `feature/juego-como-servicio`). Punto de entrada para retomar el trabajo en una nueva sesión.
+Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la rama `feature/freemium-temporadas`). Punto de entrada para retomar el trabajo en una nueva sesión.
+
+## Ramas (2026-10-18)
+
+- `master`: rama principal. Contiene la v1, el pase visual v2, las fases A y B del juego como servicio y los arreglos del 2026-10-18:
+  - selección de niveles deslizable;
+  - congelado al tocar la meta;
+  - yo-yo bajo los pies en caída.
+- `respaldo/master-v1`: el `master` anterior (v1 + pase visual v2), guardado por petición del propietario.
+- `feature/freemium-temporadas`: energía, tienda, anuncios, temporadas semanales, rivales simulados, amigos, avisos y plugin Android de notificaciones. Todo lo externo es simulado; el siguiente paso es integrarlo con Firebase. Sin fusionar: fusionar con `master` cuando el propietario lo pruebe y lo pida.
+- `feature/juego-como-servicio`: ya fusionada en `master` (avance rápido).
 
 ## Leer primero
 1. `AGENTS.md`: reglas del proyecto.
@@ -23,7 +33,17 @@ Actualizado: 2026-10-17 (juego como servicio, fases A y B, rama `feature/juego-c
 - Comentario del propietario sobre la v1 en el S25: "se ve muy bien, va fluido, algún tirón".
 - Git local en la raíz, sin remoto. Commits por hito.
 
-## Juego como servicio (rama `feature/juego-como-servicio`, sin fusionar)
+## Freemium y temporadas (rama `feature/freemium-temporadas`)
+- Decisiones del propietario:
+  - 1 de energía por intento, máximo 10, recarga con el tiempo; más energía con anuncios o pagando;
+  - temporadas preprogramadas de 1 semana y 20 niveles;
+  - rivales simulados cuando no hay amigos o conexión;
+  - login con Google/Facebook;
+  - el público incluye menores de 13 años.
+- Proveedores simulados ahora; el siguiente paso es Firebase.
+- Detalle, comandos y pendientes: `orbit_runner_game/docs/LIVE_SERVICE.md`, sección "Freemium, temporadas, rivales, amigos y avisos".
+
+## Juego como servicio (fases A y B, ya en `master`)
 - Fase A completa salvo A12 (calibración con personas): generador por dificultad, validador, bot v2 (termina los 11 niveles de campaña), índice de dificultad y lotes en paralelo.
 - Fase B completa: desafío diario, Torre del Viento, repeticiones exactas y fantasma, maestría (4 estrellas y 3 trajes), misiones locales; nueva pantalla "Desafíos" en el menú.
 - APK de depuración con todo esto exportado el 2026-10-17 (`orbit_runner_game/build/android/orbit_runner_debug.apk`, ~37 MB, firmado con la clave de depuración: sirve para compartir e instalar a mano, no para la tienda). Instalado en el S25 el mismo día; el propietario lo está probando en el teléfono y en la PC.

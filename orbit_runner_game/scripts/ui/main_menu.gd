@@ -1,8 +1,9 @@
 extends Control
-## Main menu: continue the campaign, level select, rewards, achievements,
-## options and credits.
+## Main menu: continue the campaign, season, level select, challenges,
+## rewards, options and credits; energy, shop, friends, inbox and achievements.
 
 var _overlay: Control
+var _unread: Label
 
 
 func _ready() -> void:
@@ -29,6 +30,11 @@ func _ready() -> void:
 	var play := UiKit.button(play_text, func(): SceneRouter.play_level(next_index), IconGlyph.Icon.PLAY, 460)
 	play.add_theme_stylebox_override("normal", _accent_style())
 	left.add_child(play)
+	var season := Season.current()
+	var season_text := tr("MENU_SEASON")
+	if not season.is_empty():
+		season_text = Season.title(season)
+	left.add_child(UiKit.button(season_text, func(): SceneRouter.go_to(SceneRouter.SEASON), IconGlyph.Icon.FLAG, 460))
 	left.add_child(UiKit.button(tr("MENU_LEVELS"), func(): SceneRouter.go_to(SceneRouter.LEVEL_SELECT), IconGlyph.Icon.STAR, 460))
 	var challenges := UiKit.button(tr("MENU_CHALLENGES"), func(): SceneRouter.go_to(SceneRouter.CHALLENGES),
 			IconGlyph.Icon.CLOCK, 460)
@@ -37,8 +43,6 @@ func _ready() -> void:
 	left.add_child(challenges)
 	left.add_child(UiKit.button(tr("MENU_REWARDS"), func(): SceneRouter.go_to("res://scenes/ui/wardrobe_screen.tscn"),
 			IconGlyph.Icon.SHIRT, 460))
-	left.add_child(UiKit.button(tr("MENU_ACHIEVEMENTS"), func(): SceneRouter.go_to("res://scenes/ui/achievements_screen.tscn"),
-			IconGlyph.Icon.TROPHY, 460))
 	var row := UiKit.hbox(12)
 	left.add_child(row)
 	var settings := UiKit.button(tr("MENU_SETTINGS"), _open_settings, IconGlyph.Icon.GEAR)
@@ -53,6 +57,20 @@ func _ready() -> void:
 	layout.add_child(UiKit.spacer())
 	var right := UiKit.vbox(10)
 	layout.add_child(right)
+	right.add_child(EnergyChip.new())
+	var shortcuts := UiKit.hbox(10)
+	shortcuts.alignment = BoxContainer.ALIGNMENT_END
+	right.add_child(shortcuts)
+	shortcuts.add_child(UiKit.icon_button(IconGlyph.Icon.PEOPLE, func(): SceneRouter.go_to(SceneRouter.FRIENDS), 70))
+	shortcuts.add_child(UiKit.icon_button(IconGlyph.Icon.TROPHY,
+			func(): SceneRouter.go_to("res://scenes/ui/achievements_screen.tscn"), 70))
+	var bell := UiKit.icon_button(IconGlyph.Icon.BELL, _open_inbox, 70)
+	shortcuts.add_child(bell)
+	_unread = UiKit.label("", 20, UiKit.ORANGE)
+	_unread.position = Vector2(48, -6)
+	bell.add_child(_unread)
+	Services.notifications.inbox_changed.connect(_update_unread)
+	_update_unread()
 	var wallet := UiKit.panel()
 	right.add_child(wallet)
 	var stats := UiKit.vbox(6)
@@ -64,6 +82,23 @@ func _ready() -> void:
 	stats.add_child(_stat_row(IconGlyph.Icon.TROPHY, UiKit.ORANGE, "%d/%d" % [Progress.achievements_unlocked_count(),
 			Progress.ACHIEVEMENT_CATALOG.achievements.size()]))
 	UiKit.focus_first(left)
+	if Services.age_group() == Services.AgeGroup.UNKNOWN:
+		_ask_age.call_deferred()
+
+
+func _ask_age() -> void:
+	await AgeGate.run()
+	Services.notifications.request_permission()
+
+
+func _open_inbox() -> void:
+	await NotificationInbox.open()
+	_update_unread()
+
+
+func _update_unread() -> void:
+	var count := Services.notifications.unread_count()
+	_unread.text = str(count) if count > 0 else ""
 
 
 func handle_back() -> void:

@@ -32,6 +32,10 @@ func _init(movement: MovementTuning = null) -> void:
 ## Longest edge-to-edge gap the technique clears when the landing surface is
 ## `rise` metres above the take-off surface (negative = below).
 func max_gap(tech: String, rise := 0.0) -> float:
+	# Computed from the rounded rise so the cached value depends only on the key
+	# (otherwise the first caller would decide it and results would depend on
+	# the order levels were generated in).
+	rise = snappedf(rise, 0.01)
 	var key := "%s:%.2f" % [tech, rise]
 	if _gap_cache.has(key):
 		return _gap_cache[key]

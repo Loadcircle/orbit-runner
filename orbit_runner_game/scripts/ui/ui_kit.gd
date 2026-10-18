@@ -108,6 +108,17 @@ static func dim_background() -> ColorRect:
 	return r
 
 
+## Orange call-to-action style (the button must be in the tree).
+static func accent(b: Button) -> void:
+	var base := b.get_theme_stylebox("normal") as StyleBoxFlat
+	if base == null:
+		return
+	var style := base.duplicate() as StyleBoxFlat
+	style.bg_color = Color(0.95, 0.5, 0.12)
+	style.border_color = Color(0.62, 0.3, 0.05)
+	b.add_theme_stylebox_override("normal", style)
+
+
 static func medal_color(medal: int) -> Color:
 	match medal:
 		Progress.Medal.GOLD:

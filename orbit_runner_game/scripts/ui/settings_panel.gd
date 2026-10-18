@@ -91,6 +91,7 @@ func _game_page() -> Control:
 	page.add_child(_toggle("SETTINGS_SHAKE", "screen_shake"))
 	page.add_child(_toggle("SETTINGS_TIMER", "show_timer"))
 	page.add_child(_toggle("SETTINGS_GHOST", "show_ghost"))
+	page.add_child(_toggle("SETTINGS_NOTIFICATIONS", "notifications"))
 	var note := UiKit.label(tr("SETTINGS_QUALITY_NOTE"), 20, UiKit.DIM)
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	page.add_child(note)

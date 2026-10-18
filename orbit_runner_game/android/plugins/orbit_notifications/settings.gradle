@@ -1,0 +1,15 @@
+// Standalone build of the OrbitNotifications Android plugin (see README.md).
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "orbit_notifications"

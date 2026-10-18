@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <!-- Godot Android plugin v2 registration. -->
+        <meta-data
+            android:name="org.godotengine.plugin.v2.OrbitNotifications"
+            android:value="org.orbitrunner.notifications.OrbitNotifications" />
+
+        <receiver
+            android:name="org.orbitrunner.notifications.ReminderReceiver"
+            android:exported="false" />
+    </application>
+</manifest>

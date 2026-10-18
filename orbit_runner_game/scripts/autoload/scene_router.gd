@@ -6,6 +6,9 @@ const TITLE := "res://scenes/ui/title_screen.tscn"
 const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
 const LEVEL_SELECT := "res://scenes/ui/level_select.tscn"
 const CHALLENGES := "res://scenes/ui/challenges_screen.tscn"
+const SEASON := "res://scenes/ui/season_screen.tscn"
+const STORE := "res://scenes/ui/store_screen.tscn"
+const FRIENDS := "res://scenes/ui/friends_screen.tscn"
 const FADE_TIME := 0.25
 
 ## Index in Progress.levels() of the level being loaded or played.
@@ -38,8 +41,10 @@ func go_to(path: String, data: Dictionary = {}) -> void:
 	await _change(func() -> Error: return get_tree().change_scene_to_file(path), path, data)
 
 
-## Builds a level on the device (behind the fade) and plays it.
+## Builds a level on the device (behind the fade) and plays it. Costs energy.
 func play_generated(spec: LevelSpec, key: String) -> void:
+	if _busy or not _pay_attempt(false):
+		return
 	current_spec = spec
 	await _change(func() -> Error: return get_tree().change_scene_to_node(GeneratedRun.build(spec, key)),
 			"generated %s" % spec.key(), {})
@@ -55,6 +60,7 @@ func _change(change: Callable, label: String, data: Dictionary) -> void:
 	tween.tween_property(_fade, "color:a", 1.0, FADE_TIME)
 	await tween.finished
 	get_tree().paused = false
+	Modal.close_all()
 	var err: Error = change.call()
 	if err != OK:
 		push_error("SceneRouter: cannot load %s (%s)" % [label, err])
@@ -67,12 +73,23 @@ func _change(change: Callable, label: String, data: Dictionary) -> void:
 	_busy = false
 
 
+## Plays a campaign level. Every attempt costs energy except the tutorial.
 func play_level(index: int) -> void:
 	var levels := Progress.levels()
 	index = clampi(index, 0, levels.size() - 1)
+	if _busy or not _pay_attempt(levels[index].is_tutorial and Services.economy.free_tutorial):
+		return
 	current_level_index = index
 	current_spec = null
 	go_to(levels[index].scene_path)
+
+
+## Spends the energy of one attempt; without enough, offers ways to get more.
+func _pay_attempt(free: bool) -> bool:
+	if free or Services.energy.spend(Services.economy.energy_per_attempt):
+		return true
+	EnergyDialog.open()
+	return false
 
 
 func current_level() -> LevelInfo:
@@ -101,6 +118,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _dispatch_back() -> void:
 	if _busy:
+		return
+	if Modal.top():
+		Modal.top().handle_back()
 		return
 	var scene := get_tree().current_scene
 	if scene and scene.has_method("handle_back"):

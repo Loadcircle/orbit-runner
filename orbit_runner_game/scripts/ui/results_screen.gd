@@ -40,11 +40,16 @@ func _build(summary: Dictionary) -> void:
 	var info := _level.info
 	var tower := _level.mode == LevelSpec.Mode.TOWER
 	var daily := _level.mode == LevelSpec.Mode.DAILY
+	var season_mode := _level.mode == LevelSpec.Mode.SEASON
+	var run_key: String = _level.get_meta("run_key", "")
 	box.add_child(UiKit.title(tr("RESULTS_TOWER_TITLE" if tower else "RESULTS_TITLE"), 48))
 	if info:
 		var subtitle := tr(info.title_key)
 		if daily:
-			subtitle += "  %s" % _level.get_meta("run_key", "")
+			subtitle += "  %s" % run_key
+		elif season_mode:
+			var parts := Season.parse_key(run_key)
+			subtitle = "%s · %s" % [Season.title(Season.by_id(parts[0])), tr("SEASON_LEVEL_N") % (int(parts[1]) + 1)]
 		box.add_child(UiKit.label(subtitle, 28, UiKit.CYAN, HORIZONTAL_ALIGNMENT_CENTER))
 
 	var stats := UiKit.hbox(40)
@@ -82,7 +87,13 @@ func _build(summary: Dictionary) -> void:
 	elif summary.get("new_best", false) and not summary.get("first_clear", false):
 		times.add_child(UiKit.label(tr("RESULTS_NEW_BEST"), 24, UiKit.GOLD))
 	elif info:
-		var best: float = Progress.daily_record(_level.get_meta("run_key", ""))["best_time"] if daily 			else Progress.record(info.id)["best_time"]
+		var best: float
+		if daily:
+			best = Progress.daily_record(run_key)["best_time"]
+		elif season_mode:
+			best = Progress.season_record(run_key)["best_time"]
+		else:
+			best = Progress.record(info.id)["best_time"]
 		times.add_child(UiKit.label("%s %s" % [tr("RESULTS_BEST"), UiKit.format_time(best)], 22, UiKit.DIM))
 	if info and not info.is_tutorial and not tower:
 		times.add_child(UiKit.label("%s %s   %s %s" % [tr("MEDAL_GOLD"), UiKit.format_time(info.gold_time),
@@ -127,6 +138,12 @@ func _build(summary: Dictionary) -> void:
 			rewards.append("%s: %s" % [tr("WORD_UNLOCKED"), tr(c.title_key)])
 	if summary.get("first_clear", false) and SceneRouter.has_next_level() and _level.spec == null:
 		rewards.append(tr("RESULTS_NEXT_UNLOCKED"))
+	if season_mode:
+		rewards.append(tr("RESULTS_SEASON_POINTS") % int(summary.get("season_points", 0)))
+		var season := Season.by_id(Season.parse_key(run_key)[0])
+		if not season.is_empty():
+			var rank := Leaderboard.player_rank(season, GameClock.now())
+			rewards.append(tr("RESULTS_SEASON_RANK") % [rank.x, rank.y])
 	if daily and summary.get("first_clear", false) and int(summary.get("streak", 0)) > 1:
 		rewards.append(tr("RESULTS_STREAK") % int(summary["streak"]))
 	if not rewards.is_empty():
@@ -138,9 +155,21 @@ func _build(summary: Dictionary) -> void:
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(buttons)
 	buttons.add_child(UiKit.button(tr("RESULTS_RETRY"), _level.restart, IconGlyph.Icon.RESTART))
-	buttons.add_child(UiKit.button(tr("RESULTS_CHALLENGES" if _level.spec else "RESULTS_LEVELS"), _go_select,
-			IconGlyph.Icon.HOME))
-	if _level.spec:
+	var back_key := "RESULTS_LEVELS"
+	if season_mode:
+		back_key = "RESULTS_SEASON"
+	elif _level.spec:
+		back_key = "RESULTS_CHALLENGES"
+	buttons.add_child(UiKit.button(tr(back_key), _go_select, IconGlyph.Icon.HOME))
+	var season_next := _season_next(run_key) if season_mode else -1
+	if season_next >= 0:
+		var season := Season.by_id(Season.parse_key(run_key)[0])
+		var next := UiKit.button(tr("RESULTS_NEXT"), func():
+			SceneRouter.play_generated(Season.level_spec(season, season_next), Season.run_key(season, season_next)),
+				IconGlyph.Icon.PLAY)
+		buttons.add_child(next)
+		next.grab_focus.call_deferred()
+	elif _level.spec:
 		buttons.get_child(0).grab_focus.call_deferred()
 	elif SceneRouter.has_next_level():
 		var next := UiKit.button(tr("RESULTS_NEXT"), func(): SceneRouter.play_level(SceneRouter.current_level_index + 1),
@@ -159,8 +188,19 @@ func _build(summary: Dictionary) -> void:
 	tween.tween_property(panel, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
+## Index of the next season level if the season is still live, else -1.
+func _season_next(run_key: String) -> int:
+	var parts := Season.parse_key(run_key)
+	var season := Season.current()
+	if season.is_empty() or season["id"] != parts[0] or int(parts[1]) + 1 >= Season.level_count(season):
+		return -1
+	return int(parts[1]) + 1
+
+
 func _go_select() -> void:
-	if _level.spec:
+	if _level.mode == LevelSpec.Mode.SEASON:
+		SceneRouter.go_to(SceneRouter.SEASON)
+	elif _level.spec:
 		SceneRouter.go_to(SceneRouter.CHALLENGES)
 	else:
 		SceneRouter.go_to(SceneRouter.LEVEL_SELECT, {"world": _level.info.world_index if _level.info else 0})

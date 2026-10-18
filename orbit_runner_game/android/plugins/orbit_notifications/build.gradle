@@ -1,0 +1,22 @@
+plugins {
+    id 'com.android.library' version '8.6.1'
+}
+
+android {
+    namespace 'org.orbitrunner.notifications'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 24
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // Godot's own library from the installed build template (android/build/libs).
+    compileOnly files('../../build/libs/release/godot-lib.template_release.aar')
+}

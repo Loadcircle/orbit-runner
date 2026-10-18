@@ -30,8 +30,13 @@ buses/default_bus_layout="res://audio/default_bus_layout.tres"
 SaveService="*res://scripts/autoload/save_service.gd"
 Settings="*res://scripts/autoload/settings.gd"
 Progress="*res://scripts/autoload/progress.gd"
+Services="*res://scripts/autoload/services.gd"
 AudioDirector="*res://scripts/autoload/audio_director.gd"
 SceneRouter="*res://scripts/autoload/scene_router.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/orbit_notifications/plugin.cfg")
 
 [display]
 

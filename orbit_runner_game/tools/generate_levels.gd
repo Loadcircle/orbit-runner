@@ -17,6 +17,10 @@ extends Node
 ##   start=YYYY-MM-DD from this date (default: today); writes
 ##                    resources/generator/daily_seeds.tres (seed variants are
 ##                    tried when a day's level is discarded)
+##   season=N         instead of count: season N with levels=20 levels from
+##                    start=YYYY-MM-DD, lasting days=7, at difficulty=0..3 (the
+##                    first 4 levels one step easier) and biome=<name>|rotate;
+##                    adds it to resources/seasons/season_schedule.tres
 ## Output: <out>/levels/<category>/<key>.tscn for kept levels,
 ## <out>/reports/<seed>.json per level and <out>/summary.csv for the batch.
 
@@ -29,8 +33,10 @@ const CSV_HEADER := "seed,biome,requested,measured,status,index,perfect,expert,c
 var options := {
 	"count": "8", "seed": "1000", "difficulty": "all", "biome": "rotate", "mode": "campaign", "target": "45",
 	"attempts": "10", "repairs": "3", "workers": "1", "worker": "-1", "out": "res://build/generated",
-	"dailies": "0", "start": "",
+	"dailies": "0", "start": "", "season": "0", "levels": "20", "days": "7",
 }
+## Season levels below this index are one difficulty step easier (warm-up).
+const SEASON_WARMUP := 4
 const SEED_VARIANTS := 4
 const VARIANT_STEP := 1000003
 var runner: Node
@@ -46,6 +52,10 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(out + "/reports")
 	if int(options["dailies"]) > 0:
 		options["count"] = options["dailies"]
+		if options["start"] == "":
+			options["start"] = DailyChallenge.today_key()
+	if int(options["season"]) > 0:
+		options["count"] = options["levels"]
 		if options["start"] == "":
 			options["start"] = DailyChallenge.today_key()
 	if int(options["workers"]) > 1 and int(options["worker"]) < 0:
@@ -83,6 +93,8 @@ func _run_master(out: String) -> void:
 	_write_summary(out)
 	if int(options["dailies"]) > 0:
 		_write_daily_table(out)
+	if int(options["season"]) > 0:
+		_write_season(out)
 	print("GEN done in %.0f s" % ((Time.get_ticks_msec() - started) / 1000.0))
 
 
@@ -95,6 +107,8 @@ func _run_worker(out: String) -> void:
 		var report: Dictionary
 		if int(options["dailies"]) > 0:
 			report = await _produce_daily(i, out)
+		elif int(options["season"]) > 0:
+			report = await _produce_season(i, out)
 		else:
 			report = await _produce(i, out, _spec_for(i))
 		var file := FileAccess.open("%s/reports/%d.json" % [out, report["seed"]], FileAccess.WRITE)
@@ -106,6 +120,8 @@ func _run_worker(out: String) -> void:
 		_write_summary(out)
 		if int(options["dailies"]) > 0:
 			_write_daily_table(out)
+		if int(options["season"]) > 0:
+			_write_season(out)
 
 
 # ------------------------------------------------------------------ one level
@@ -138,6 +154,34 @@ func _produce_daily(i: int, out: String) -> Dictionary:
 	return report
 
 
+## Level i of the season: the first variant accepted in its category, else the
+## first one reclassified (kept with its measured category).
+func _produce_season(i: int, out: String) -> Dictionary:
+	var number := int(options["season"])
+	var difficulty := int(options["difficulty"]) if options["difficulty"] != "all" else LevelSpec.Difficulty.MEDIUM
+	if i < SEASON_WARMUP:
+		difficulty = maxi(difficulty - 1, 0)
+	var biome: StringName = LevelSpec.BIOMES[i % 3] if options["biome"] == "rotate" else StringName(options["biome"])
+	var report := {}
+	var fallback := {}
+	for variant in SEED_VARIANTS:
+		var spec := LevelSpec.create(number * 100000 + i * 101 + 7 + variant * VARIANT_STEP,
+				difficulty as LevelSpec.Difficulty, biome, LevelSpec.Mode.SEASON, Season.TARGET_SECONDS)
+		report = await _produce(i, out, spec)
+		report["slot"] = i
+		if report["status"] == "accepted":
+			break
+		if report["status"] == "reclassified" and fallback.is_empty():
+			fallback = report
+	if report["status"] != "accepted" and not fallback.is_empty():
+		report = fallback
+	DirAccess.make_dir_recursive_absolute(out + "/season")
+	var file := FileAccess.open("%s/season/%02d.json" % [out, i], FileAccess.WRITE)
+	file.store_string(JSON.stringify(report, "	"))
+	file.close()
+	return report
+
+
 func _produce(_i: int, out: String, spec: LevelSpec) -> Dictionary:
 	var started := Time.get_ticks_msec()
 	var report := {"seed": spec.seed_value, "biome": String(spec.biome), "requested": int(spec.difficulty),
@@ -145,6 +189,9 @@ func _produce(_i: int, out: String, spec: LevelSpec) -> Dictionary:
 	var max_repairs := int(options["repairs"])
 	for repair in max_repairs + 1:
 		report["repairs"] = repair
+		# Build from the spec exactly as it will be stored (JSON text), so repaired
+		# float scales rebuild the same level on the phone.
+		spec = LevelSpec.from_dict(JSON.parse_string(JSON.stringify(spec.to_dict())))
 		var generated := generator.generate(spec)
 		if generated["level"] == null:
 			report["reason"] = "static validation: %s" % [generated["validation"].get("errors", [])]
@@ -254,6 +301,38 @@ func _write_daily_table(out: String) -> void:
 		if key < today:
 			table.entries.erase(key)
 	print("GEN daily table: %d accepted -> %s (%s)" % [added, path, error_string(ResourceSaver.save(table, path))])
+
+
+## Adds (or replaces) the season in resources/seasons/season_schedule.tres.
+func _write_season(out: String) -> void:
+	var dir := DirAccess.open(out + "/season")
+	if dir == null:
+		return
+	var levels := []
+	var files := Array(dir.get_files())
+	files.sort()
+	for f in files:
+		var r: Variant = JSON.parse_string(FileAccess.get_file_as_string(out + "/season/" + f))
+		if typeof(r) != TYPE_DICTIONARY or not r.get("status", "") in ["accepted", "reclassified"]:
+			continue
+		var spec: Dictionary = r["spec"]
+		# "difficulty" is the generator input; "category" is what the bot measured.
+		levels.append({"seed": int(spec["seed"]), "difficulty": int(spec["difficulty"]),
+				"category": int(r.get("measured", spec["difficulty"])),
+				"biome": spec["biome"], "adjustments": spec.get("adjustments", {}), "gold": r["gold"],
+				"silver": r["silver"], "index": r["index"], "route_hash": r["route_hash"]})
+	var number := int(options["season"])
+	var id := "S%d" % number
+	var schedule := SeasonSchedule.new()
+	if ResourceLoader.exists(Season.SCHEDULE_PATH):
+		schedule = load(Season.SCHEDULE_PATH)
+	schedule.seasons = schedule.seasons.filter(func(s): return s["id"] != id)
+	schedule.seasons.append({"id": id, "number": number, "start": options["start"], "days": int(options["days"]),
+			"difficulty": int(options["difficulty"]) if options["difficulty"] != "all" else LevelSpec.Difficulty.MEDIUM,
+			"levels": levels})
+	schedule.seasons.sort_custom(func(a, b): return a["start"] < b["start"])
+	print("GEN season %s: %d/%d levels -> %s (%s)" % [id, levels.size(), int(options["levels"]), Season.SCHEDULE_PATH,
+			error_string(ResourceSaver.save(schedule, Season.SCHEDULE_PATH))])
 
 
 func _write_summary(out: String) -> void:

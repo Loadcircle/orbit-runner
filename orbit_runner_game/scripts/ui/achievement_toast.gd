@@ -2,6 +2,8 @@ class_name AchievementToast
 extends CanvasLayer
 ## Queued pop-up shown whenever an achievement or reward unlocks, on any screen.
 
+static var _instance: AchievementToast
+
 var _queue: Array[Dictionary] = []
 var _showing := false
 var _panel: PanelContainer
@@ -34,6 +36,16 @@ func _ready() -> void:
 	Progress.cosmetic_unlocked.connect(func(c: CosmeticInfo):
 		if c.unlock != CosmeticInfo.Unlock.DEFAULT and c.unlock != CosmeticInfo.Unlock.SPARKS:
 			_push(IconGlyph.Icon.SHIRT, tr("TOAST_REWARD"), tr(c.title_key)))
+
+
+## Pop-up for any other event (energy, purchases, notifications).
+static func show_message(icon: IconGlyph.Icon, heading: String, text: String) -> void:
+	if _instance:
+		_instance._push(icon, heading, text)
+
+
+func _enter_tree() -> void:
+	_instance = self
 
 
 func _push(icon: IconGlyph.Icon, heading: String, text: String) -> void:

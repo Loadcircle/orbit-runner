@@ -184,6 +184,11 @@ func resume() -> void:
 
 
 func restart() -> void:
+	# A new attempt costs energy: without it, stay paused behind the dialog.
+	var free := info != null and info.is_tutorial and spec == null and Services.economy.free_tutorial
+	if not free and not Services.energy.can_start(Services.economy.energy_per_attempt):
+		EnergyDialog.open()
+		return
 	get_tree().paused = false
 	if mode == LevelSpec.Mode.TOWER:
 		_submit_tower()
@@ -197,6 +202,8 @@ func quit_to_menu() -> void:
 	get_tree().paused = false
 	if mode == LevelSpec.Mode.TOWER:
 		end_tower_run()
+	elif mode == LevelSpec.Mode.SEASON:
+		SceneRouter.go_to(SceneRouter.SEASON)
 	elif spec:
 		SceneRouter.go_to(SceneRouter.CHALLENGES)
 	else:
@@ -239,6 +246,8 @@ func finish() -> void:
 			"deaths_by_motif": deaths_by_motif}
 	if mode == LevelSpec.Mode.DAILY:
 		summary = Progress.submit_daily(get_meta("run_key", ""), info, run)
+	elif mode == LevelSpec.Mode.SEASON:
+		summary = Progress.submit_season(get_meta("run_key", ""), info, run)
 	elif info:
 		summary = Progress.submit_run(info, run)
 	summary["new_ghost"] = ReplayStore.save_if_best(recorder.finish(elapsed, respawns))
@@ -269,7 +278,14 @@ func on_spark() -> void:
 func gem_already_owned(index: int) -> bool:
 	if info == null or mode == LevelSpec.Mode.TOWER:
 		return false
-	var owned: Array = Progress.daily_record(get_meta("run_key", ""))["gems"] if mode == LevelSpec.Mode.DAILY 		else Progress.record(info.id)["gems"]
+	var owned: Array
+	match mode:
+		LevelSpec.Mode.DAILY:
+			owned = Progress.daily_record(get_meta("run_key", ""))["gems"]
+		LevelSpec.Mode.SEASON:
+			owned = Progress.season_record(get_meta("run_key", ""))["gems"]
+		_:
+			owned = Progress.record(info.id)["gems"]
 	return index < owned.size() and bool(owned[index])
 
 

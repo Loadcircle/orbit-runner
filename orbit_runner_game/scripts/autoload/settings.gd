@@ -20,6 +20,7 @@ const DEFAULTS := {
 	"screen_shake": true,
 	"show_timer": true,
 	"show_ghost": true,
+	"notifications": true,
 }
 const LANGUAGES := ["es", "en"]
 const FPS_OPTIONS := [30, 60, 120]

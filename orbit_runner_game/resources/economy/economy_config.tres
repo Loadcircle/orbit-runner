@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="EconomyConfig" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/economy_config.gd" id="1_econ"]
+[ext_resource type="Script" path="res://scripts/economy/store_product.gd" id="2_prod"]
+
+[sub_resource type="Resource" id="Product_energy10"]
+script = ExtResource("2_prod")
+id = &"energy_10"
+title_key = "PRODUCT_ENERGY_10"
+desc_key = "PRODUCT_ENERGY_10_DESC"
+kind = 0
+amount = 10
+price_hint = "0,99 €"
+
+[sub_resource type="Resource" id="Product_energy30"]
+script = ExtResource("2_prod")
+id = &"energy_30"
+title_key = "PRODUCT_ENERGY_30"
+desc_key = "PRODUCT_ENERGY_30_DESC"
+kind = 0
+amount = 30
+price_hint = "2,49 €"
+featured = true
+
+[sub_resource type="Resource" id="Product_unlimited"]
+script = ExtResource("2_prod")
+id = &"unlimited_60"
+title_key = "PRODUCT_UNLIMITED_60"
+desc_key = "PRODUCT_UNLIMITED_60_DESC"
+kind = 1
+amount = 60
+price_hint = "1,49 €"
+
+[sub_resource type="Resource" id="Product_sparks"]
+script = ExtResource("2_prod")
+id = &"sparks_1000"
+title_key = "PRODUCT_SPARKS_1000"
+desc_key = "PRODUCT_SPARKS_1000_DESC"
+kind = 2
+amount = 1000
+price_hint = "0,99 €"
+
+[sub_resource type="Resource" id="Product_pass"]
+script = ExtResource("2_prod")
+id = &"season_pass"
+title_key = "PRODUCT_SEASON_PASS"
+desc_key = "PRODUCT_SEASON_PASS_DESC"
+kind = 3
+amount = 0
+price_hint = ""
+
+[resource]
+script = ExtResource("1_econ")
+energy_max = 10
+energy_recharge_seconds = 1200
+energy_per_attempt = 1
+free_tutorial = true
+ad_energy = 2
+ads_per_day = 5
+simulated_ad_seconds = 5.0
+season_rewards = PackedInt32Array(1500, 1000, 600, 300, 100)
+products = Array[ExtResource("2_prod")]([SubResource("Product_energy10"), SubResource("Product_energy30"), SubResource("Product_unlimited"), SubResource("Product_sparks"), SubResource("Product_pass")])

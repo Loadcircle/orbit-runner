@@ -24,7 +24,8 @@ Plan de referencia: *Orbit Runner como servicio: plan de desarrollo* (página pr
 | B4 | Torre del Viento sin conexión | Hecho: pisos generados sobre la marcha |
 | B5 | Desafío diario local | Hecho, con tabla de semillas validadas por el bot |
 | D5 | Misiones diarias y semanales | Hecho en local (premio en chispas; la XP del pase espera a D4) |
-| C1–C9, D1–D4, D6–D7, E1–E5 | Servidor, pagos, temporadas | **Pendientes de decisiones del propietario** |
+| — | Freemium: energía, tienda, anuncios, temporadas semanales, rivales simulados, amigos, avisos | Hecho en local con proveedores simulados (2026-10-18; ver "Freemium, temporadas, rivales, amigos y avisos") |
+| C1–C9, D1–D4, D6–D7, E1–E5 | Servidor, pagos y temporadas en línea | **Pendientes**: integración con Firebase (decisión del propietario) |
 
 ## Generador de niveles
 
@@ -114,3 +115,135 @@ Estado al 2026-10-17. APK de depuración: `build/android/orbit_runner_debug.apk`
 8. **Fusión con master**: solo cuando el propietario lo pida, idealmente tras su prueba.
 
 Orden recomendado: 1 → 2 y 3 en la misma tanda → decisiones de la fase C.
+
+## Freemium, temporadas, rivales, amigos y avisos (2026-10-18)
+
+Este trabajo está en la rama `feature/freemium-temporadas`, creada sobre `master`. `master` ya contiene las fases A y B; el `master` anterior quedó guardado en `respaldo/master-v1`.
+
+Todo lo externo es **simulado** detrás de interfaces. El siguiente paso es sustituir los proveedores simulados por los reales (previsto: Firebase).
+
+Decisiones del propietario:
+- energía: 1 por intento, máximo 10;
+- temporadas semanales de 20 niveles;
+- el público **incluye menores de 13 años**.
+
+### Arquitectura
+
+- **Autoload nuevo `Services`** (`scripts/autoload/services.gd`). Crea la energía, los anuncios, la tienda, la cuenta, los amigos y los avisos. Reprograma los avisos al abrir el juego y cada 30 s, y liquida las temporadas terminadas. Es el único sitio donde se cambia un proveedor simulado por uno real.
+- **Interfaces y simulados** en `scripts/services/`:
+  - `AdsProvider` / `SimulatedAds`: anuncio con premio de 5 s; cerrarlo antes no da premio. El modo `family_safe` está siempre activo.
+  - `StoreProvider` / `SimulatedStore`: confirma la compra sin cobrar.
+  - `AuthProvider` / `SimulatedAuth`: login con Google o Facebook.
+  - `SocialProvider` / `SimulatedSocial`: amigos e invitaciones.
+  - `NotificationCenter`: bandeja de avisos y avisos programados.
+  - `GameClock`: hora local. El argumento `clock_hours=N` adelanta el reloj para pruebas.
+- **Valores ajustables**: `resources/economy/economy_config.tres` (`EconomyConfig`): energía, anuncios, premios de temporada y catálogo de productos (`StoreProduct`).
+- **Guardado**: sección `services` (energía, cuenta, avisos) y `progress.seasons` (récord de cada nivel de temporada, posición final, premio cobrado).
+
+### Energía
+
+- Máximo 10. Se recupera 1 rayo cada 20 min mientras está por debajo del máximo: de 0 a lleno, 3 h 20 min.
+- Las compras y los anuncios pueden superar el máximo; la recarga solo corre por debajo de él.
+- **Cuesta 1 por intento al empezar cualquier nivel**: campaña, diario, Torre y temporada. Reintentar y "Siguiente" también cuentan como intento. Morir no cuesta nada.
+- **El tutorial es gratis** (`free_tutorial`), para que nadie se quede bloqueado en la primera partida.
+- El cobro está en un único punto: `SceneRouter.play_level()` y `play_generated()`.
+- Sin energía aparece `EnergyDialog`, con tres opciones: esperar (muestra el tiempo hasta el siguiente rayo), ver un anuncio (+2, hasta 5 al día) o ir a la tienda.
+- **Tienda** (`scripts/ui/store_screen.gd`): anuncio gratis, packs de 10 y 30 rayos, energía ilimitada 1 h, 1000 chispas y pase de temporada ("Próximamente"). Los precios son orientativos.
+- **Puerta parental** (`ParentalGate`: una multiplicación que se escribe):
+  - antes de cualquier compra;
+  - antes de copiar o canjear invitaciones si el jugador es menor.
+
+### Temporadas
+
+- **Calendario**: `resources/seasons/season_schedule.tres` (`SeasonSchedule`). Cada temporada tiene id, número, fecha de inicio (00:00 UTC), duración en días, dificultad y 20 niveles validados por el bot (semilla, reparaciones, medallas y hash de ruta).
+- **Lanzar una temporada** es añadirla al calendario o mover su fecha. Con el servicio en línea vendrá de configuración remota.
+- **Generación**:
+  `godot --headless --fixed-fps 60 --path . res://tools/generate_levels.tscn -- season=5 start=2026-11-15 difficulty=2 biome=rotate levels=20 days=7 attempts=8 workers=12 out=res://build/season5`
+  - Los 4 primeros niveles son un escalón más fáciles, como calentamiento.
+  - Se prueban hasta 4 variantes de semilla por nivel. Se queda la primera aceptada; si ninguna lo es, la primera reclasificada.
+  - En la entrada del calendario, `difficulty` es la dificultad usada para generar y `category` la que midió el bot.
+- **Preprogramadas**:
+
+  | Temporada | Inicio | Dificultad | Bioma |
+  |---|---|---|---|
+  | S1 | 2026-10-18 | Medio | Islas |
+  | S2 | 2026-10-25 | Difícil | Taller |
+  | S3 | 2026-11-01 | Medio | Ruinas |
+  | S4 | 2026-11-08 | Difícil | Mezcla |
+
+- **Puntos por nivel** (`SeasonScoring`):
+  - medalla: oro 1000, plata 700, bronce 400;
+  - 100 por gema;
+  - hasta 200 por chispas;
+  - 150 si no hay caídas.
+- Cuenta la mejor puntuación de cada nivel. El ranking ordena por puntos, después por niveles completados y desempata por la suma de los mejores tiempos. Los niveles se desbloquean en orden.
+- **Al terminar la temporada** se fija la posición final en el ranking global, se pagan chispas y llega un aviso a la bandeja. Premios: 1.º 1500, top 3 1000, top 10 600, mitad superior 300, resto 100.
+- **Pantalla** `scripts/ui/season_screen.gd` (menú → Temporada):
+  - durante la temporada: cuenta atrás, los 20 niveles y la clasificación con pestañas Amigos / Global; sin amigos, muestra los rivales cercanos;
+  - entre temporadas: cuenta atrás de la próxima y el último resultado.
+
+### Rivales simulados
+
+- `RivalRoster` define 60 corredores deterministas. Cada uno tiene:
+  - nombre de una lista segura y un traje;
+  - perfil de habilidad (novato, casual, experto o perfecto, como el bot);
+  - ritmo de niveles por día y retraso inicial;
+  - probabilidad de estar jugando en cada hora.
+- Su resultado en una temporada se calcula con la semilla rival + temporada, a partir de las medallas validadas. Avanza con la hora real, así que el ranking se mueve sin conexión y es el mismo en cada apertura.
+- **Siempre se marcan** con un rombo y una nota, en el ranking y en amigos. Es una decisión del agente: presentar bots como personas reales sería engañoso, sobre todo con menores, y choca con las políticas de Google Play.
+- Retirarlos cuando haya jugadores reales es filtrar `simulated` en `Leaderboard`.
+
+### Cuenta, amigos y menores de 13
+
+- **Pantalla de edad** (`AgeGate`), la primera vez:
+  - es neutral: se elige el año de nacimiento con −10/−1/+1/+10, empezando en el año actual, sin edad sugerida;
+  - solo se guarda el grupo de edad; quien cumple 13 este año cuenta como menor;
+  - hasta responder, el juego trata al jugador como menor.
+- **Menores**: sin login social, nombre elegido de la lista segura, anuncios aptos para familias, y compras e invitaciones tras la puerta parental.
+- **Pantalla de amigos** (`scripts/ui/friends_screen.gd`):
+  - nombre del jugador;
+  - conectar con Google o Facebook (simulado: aparecen 4 amigos de la lista de rivales);
+  - código de invitación `ORB-XXXX`, que se copia al portapapeles, y campo para canjear códigos;
+  - estado de cada amigo (jugando ahora / hace N h) y sus puntos de temporada.
+
+### Avisos
+
+- **`NotificationCenter`**: avisos por id, con hora y caducidad. Al vencer pasan a la bandeja (campana del menú) y se muestran como aviso emergente. Un aviso caducado se descarta en lugar de llegar tarde.
+- **Avisos programados**:
+  - energía llena;
+  - temporada nueva (caduca cuando termina);
+  - último día de la temporada, si participas (caduca cuando termina);
+  - nuevo desafío diario, si jugaste el de hoy;
+  - resultado de la temporada.
+- Se pueden desactivar en Ajustes → Juego → Avisos.
+- **Android**: plugin propio `OrbitNotifications`.
+  - Fuente en `android/plugins/orbit_notifications/`: Java, `AlarmManager` inexacto y `NotificationManager`.
+  - En Android 13+ pide el permiso `POST_NOTIFICATIONS` después de la pantalla de edad.
+  - Se incluye en la exportación con el addon `addons/orbit_notifications/` (AAR en `bin/`).
+  - Las alarmas no sobreviven a un reinicio del teléfono; el juego las reprograma al abrirse.
+  - Sin el plugin (PC, o exportación sin Gradle) solo funciona la bandeja.
+- **Recompilar el AAR**:
+  1. `cd android/plugins/orbit_notifications && ../../build/gradlew.bat -p . assembleRelease`, con `JAVA_HOME` en el JDK 17 y `local.properties` con `sdk.dir=<SDK de Android>`.
+  2. Copiar `build/outputs/aar/orbit_notifications-release.aar` a `addons/orbit_notifications/bin/`.
+
+### Corrección del generador (determinismo)
+
+- **Fallo**: `MovementReach.max_gap` guardaba en caché el alcance usando la altura redondeada, pero lo calculaba con la altura exacta. El primer nivel generado en un proceso fijaba el valor para los siguientes, así que el mismo `LevelSpec` podía dar otro nivel en el teléfono. Se detectó porque un nivel de temporada salía "no verificado".
+- **Corrección**:
+  - ahora el alcance se calcula con la altura redondeada;
+  - el lote genera cada intento a partir de la especificación ya pasada por JSON, exactamente como se guarda.
+- Esto cambia algunos niveles generados, así que se regeneraron los desafíos diarios (`daily_seeds.tres`, 30 días desde el 2026-10-18).
+
+### Pendiente (freemium)
+
+1. **Integración real** con Firebase (decisión del propietario). Solo hay que cambiar los proveedores en `Services.reload()`:
+   - Authentication (Google; Facebook requiere crear una app de Facebook);
+   - Firestore y Functions para rankings, amigos y validación de marcas con las repeticiones;
+   - Remote Config para temporadas y economía;
+   - FCM para avisos;
+   - AdMob en modo familias;
+   - Play Billing con verificación en el servidor.
+2. **Hora del servidor**: la energía y las temporadas usan el reloj del teléfono, que se puede adelantar.
+3. **Pase de temporada**: definir recompensas y precio.
+4. **Precios reales y valores de energía**, tras probar con jugadores.
+5. **Revisión de privacidad y cumplimiento** (COPPA, Families, GDPR-K) antes de publicar.

@@ -10,3 +10,8 @@
 *.aab
 *.idsig
 android/build/
+
+# Android plugin builds (sources in android/plugins/*/src are versioned).
+android/plugins/*/build/
+android/plugins/*/.gradle/
+android/plugins/*/local.properties

@@ -63,6 +63,14 @@ Materiales (v2, 2026-10-17): **shader toon propio** compatible con Compatibility
 
 - **Juego como servicio (fases A y B)**: generador de niveles por dificultad (`scripts/generator/`), bot validador y lotes (`tools/bot/`, `tools/generate_levels.tscn`), repeticiones y fantasmas (`scripts/replay/`), desafío diario, Torre del Viento y misiones. Detalle en `docs/LIVE_SERVICE.md`. Sin nuevos autoloads: `Progress` guarda diario, torre, maestría y misiones (`scripts/progress/mission_board.gd`); `SceneRouter.play_generated()` construye el nivel en memoria (`change_scene_to_node`). `SaveService.persist = false` impide que las herramientas escriban el guardado real.
 
+- **Freemium y servicios (2026-10-18)**: nuevo autoload `Services` (`scripts/autoload/services.gd`). Agrupa energía, anuncios, tienda, cuenta, amigos y avisos. Cada servicio externo es una interfaz (`scripts/services/*_provider.gd`) con un proveedor simulado; la integración real (prevista con Firebase) solo cambia los proveedores en `Services.reload()`.
+  - Temporadas en `scripts/season/` (calendario, puntuación, rivales simulados, ranking).
+  - Energía en `scripts/economy/` y `resources/economy/economy_config.tres`.
+  - Diálogos (`Modal`, `EnergyDialog`, `ParentalGate`, `AgeGate`, `NotificationInbox`) construidos en código sobre `UiKit`.
+  - La hora sale de `GameClock` (reloj local; adelantable con el argumento `clock_hours=N`).
+  - El público incluye menores de 13 años: pantalla de edad neutral, sin login social para menores, puerta parental en compras e invitaciones, anuncios aptos para familias.
+  - Detalle en `docs/LIVE_SERVICE.md`.
+
 ## 5. Flujo Blender → GLB → Godot
 
 - Blender 5.2.2 LTS (Microsoft Store). Blender MCP conectado y usado para inspección; la producción se hizo con scripts reproducibles en modo *background* (`assets_source/blender/scripts/`):
@@ -104,7 +112,14 @@ Español e inglés. Por defecto el juego sigue el idioma del dispositivo (`OS.ge
 - Android (arm64-v8a): `--export-debug "Android" build/android/orbit_runner_debug.apk` (firmado con el keystore de depuración configurado en los ajustes del editor).
 - Android emulador (x86_64, solo pruebas): preset "Android Emulator (x86_64, solo pruebas)".
 - Windows: preset "Windows Desktop" (`build/windows/OrbitRunner.exe`).
-- **AAB / publicación** (pendiente, requiere decisiones del propietario): crear un keystore de publicación propio (no versionarlo; Godot guarda las credenciales en `.godot/export_credentials.cfg`, ignorado por git), cambiar `package/unique_name` (`com.orbitrunner.game` es provisional), activar `gradle_build/use_gradle_build`, instalar la plantilla de compilación Android (Proyecto → Instalar plantilla de compilación Android) y exportar con formato AAB.
+- **Compilación con Gradle (desde 2026-10-18)**: activada en los presets de Android para incluir el plugin propio de notificaciones (`addons/orbit_notifications/`, fuente en `android/plugins/orbit_notifications/`).
+  - La plantilla de compilación está en `android/build/` y no se versiona. En un clon nuevo se instala descomprimiendo `%APPDATA%\Godot\export_templates\4.7.2.stable\android_source.zip` en `android/build/` y escribiendo la versión en `android/.build_version` (o desde el editor: Proyecto → Instalar plantilla de compilación Android).
+  - Gradle descarga sus dependencias oficiales (Gradle 8.11.1, Android Gradle Plugin 8.6.1) la primera vez; requiere el JDK 17 configurado en el editor.
+  - `addons/*` y `android/*` están excluidos del paquete del juego.
+- **AAB / publicación** (pendiente, requiere decisiones del propietario):
+  - crear un keystore de publicación propio, sin versionarlo (Godot guarda las credenciales en `.godot/export_credentials.cfg`, ignorado por git);
+  - cambiar `package/unique_name` (`com.orbitrunner.game` es provisional);
+  - exportar con formato AAB.
 
 ## 11. Estructura del proyecto
 
@@ -119,6 +134,11 @@ orbit_runner_game/
   localization/
   scripts/generator/  generador de niveles (spec, perfiles, alcances, motivos, validador, diario)
   scripts/replay/     repeticiones y fantasma        scripts/progress/  misiones
+  scripts/services/   interfaces y proveedores simulados (anuncios, tienda, cuenta, amigos, avisos, reloj)
+  scripts/economy/    energía y catálogo              scripts/season/    temporadas, rivales, ranking
+  resources/economy/  economy_config.tres             resources/seasons/ season_schedule.tres
+  addons/orbit_notifications/  exportación del plugin Android (AAR)
+  android/plugins/    fuente de plugins Android (android/build/ = plantilla Gradle, no versionada)
   resources/generator/  difficulty_profiles.tres, daily_seeds.tres
   tools/          generadores (build_data, build_prop_scenes, build_levels, generate_levels) y bot/ (no se exportan)
   assets_source/  blender/ (.blend + scripts)  audio/ (generador)   [.gdignore]
@@ -132,4 +152,5 @@ Diferencias respecto a la guía: `art/materials` y `art/textures` no se usan (ma
 - Sin validación en el S25: rendimiento, *frame pacing*, temperatura y tacto de los controles están pendientes de prueba real.
 - Paquete Android y firma de publicación provisionales (ver §10).
 - Fuente: se usa la fuente por defecto de Godot.
+- Anuncios, compras, login, amigos y rankings son simulados (2026-10-18). La energía y las temporadas usan el reloj del teléfono hasta tener hora del servidor.
 - Las sombras dinámicas se limitan a 30–45 m; los objetos lejanos usan la sombra circular del jugador como referencia de aterrizaje.

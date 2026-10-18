@@ -4,7 +4,7 @@ extends Control
 ## Vector icons drawn in code so the UI stays crisp at any scale without
 ## external image assets. Shapes back up colour (accessibility).
 
-enum Icon { NONE, JUMP, YOYO, ACTION, PAUSE, GEM, SPARK, MEDAL, LOCK, GEAR, TROPHY, STAR, CHECK, BACK, PLAY, SHIRT, CLOCK, RESTART, HOME, ARROW_RIGHT, ARROW_LEFT }
+enum Icon { NONE, JUMP, YOYO, ACTION, PAUSE, GEM, SPARK, MEDAL, LOCK, GEAR, TROPHY, STAR, CHECK, BACK, PLAY, SHIRT, CLOCK, RESTART, HOME, ARROW_RIGHT, ARROW_LEFT, BOLT, BELL, CART, PEOPLE, FLAG }
 
 @export var icon := Icon.NONE:
 	set(value):
@@ -139,6 +139,36 @@ func _draw() -> void:
 					Vector2(c.x + s * 0.26, c.y - s * 0.02), Vector2(c.x + s * 0.26, c.y + s * 0.36), Vector2(c.x - s * 0.26, c.y + s * 0.36),
 					Vector2(c.x - s * 0.26, c.y - s * 0.02), Vector2(c.x - s * 0.38, c.y - s * 0.02)])
 			_poly(house, w)
+		Icon.BOLT:
+			_poly(PackedVector2Array([Vector2(c.x + s * 0.08, c.y - s * 0.44), Vector2(c.x - s * 0.26, c.y + s * 0.06),
+					Vector2(c.x - s * 0.02, c.y + s * 0.06), Vector2(c.x - s * 0.1, c.y + s * 0.44), Vector2(c.x + s * 0.26, c.y - s * 0.08),
+					Vector2(c.x + s * 0.02, c.y - s * 0.08)]), w)
+		Icon.BELL:
+			_poly(PackedVector2Array([Vector2(c.x, c.y - s * 0.36), Vector2(c.x + s * 0.2, c.y - s * 0.26),
+					Vector2(c.x + s * 0.24, c.y + s * 0.12), Vector2(c.x + s * 0.36, c.y + s * 0.24), Vector2(c.x - s * 0.36, c.y + s * 0.24),
+					Vector2(c.x - s * 0.24, c.y + s * 0.12), Vector2(c.x - s * 0.2, c.y - s * 0.26)]), w)
+			draw_circle(Vector2(c.x, c.y + s * 0.34), s * 0.09, outline)
+			draw_circle(Vector2(c.x, c.y + s * 0.34), s * 0.06, color)
+		Icon.CART:
+			_poly(PackedVector2Array([Vector2(c.x - s * 0.3, c.y - s * 0.22), Vector2(c.x + s * 0.38, c.y - s * 0.22),
+					Vector2(c.x + s * 0.26, c.y + s * 0.14), Vector2(c.x - s * 0.2, c.y + s * 0.14)]), w)
+			draw_line(Vector2(c.x - s * 0.3, c.y - s * 0.22), Vector2(c.x - s * 0.42, c.y - s * 0.36), outline, w + 3.0)
+			draw_line(Vector2(c.x - s * 0.3, c.y - s * 0.22), Vector2(c.x - s * 0.42, c.y - s * 0.36), color, w)
+			for dx in [-0.14, 0.18]:
+				draw_circle(Vector2(c.x + dx * s, c.y + s * 0.3), s * 0.08, outline)
+				draw_circle(Vector2(c.x + dx * s, c.y + s * 0.3), s * 0.05, color)
+		Icon.PEOPLE:
+			for dx in [-0.16, 0.16]:
+				var head := Vector2(c.x + dx * s, c.y - s * 0.16)
+				draw_circle(head, s * 0.14, outline)
+				draw_circle(head, s * 0.11, color)
+				draw_colored_polygon(PackedVector2Array([Vector2(head.x - s * 0.18, c.y + s * 0.36), Vector2(head.x - s * 0.14, c.y + s * 0.06),
+						Vector2(head.x + s * 0.14, c.y + s * 0.06), Vector2(head.x + s * 0.18, c.y + s * 0.36)]), color)
+		Icon.FLAG:
+			draw_line(Vector2(c.x - s * 0.24, c.y - s * 0.4), Vector2(c.x - s * 0.24, c.y + s * 0.42), outline, w + 3.0)
+			draw_line(Vector2(c.x - s * 0.24, c.y - s * 0.4), Vector2(c.x - s * 0.24, c.y + s * 0.42), color, w)
+			_poly(PackedVector2Array([Vector2(c.x - s * 0.2, c.y - s * 0.38), Vector2(c.x + s * 0.36, c.y - s * 0.24),
+					Vector2(c.x - s * 0.2, c.y - s * 0.06)]), w)
 
 
 func _poly(points: PackedVector2Array, w: float) -> void:
