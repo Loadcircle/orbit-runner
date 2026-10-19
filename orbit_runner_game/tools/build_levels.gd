@@ -2,6 +2,8 @@ extends Node
 ## Authors every campaign level with LevelBuilder and writes the level catalog.
 ##   godot --headless --path . res://tools/build_levels.tscn
 ## Re-running regenerates scenes/levels/*.tscn and resources/levels/level_catalog.tres.
+## After the hand-authored levels of each world come the generated ones listed
+## in tools/campaign_generated.json (see tools/campaign_plan.gd).
 ##
 ## Gap reference (see docs/LEVEL_DESIGN.md): plain jump <= 3.5 m flat (+1 m rise
 ## <= 3 m), long jump (slide + jump) <= 6 m, jump + air dash <= 7.5 m, jump +
@@ -11,24 +13,36 @@ const ISLES: BiomeTheme = preload("res://resources/biomes/isles.tres")
 const TOYWORKS: BiomeTheme = preload("res://resources/biomes/toyworks.tres")
 const RUINS: BiomeTheme = preload("res://resources/biomes/ruins.tres")
 const OUT := "res://scenes/levels/%s.tscn"
+const CampaignPlan := preload("res://tools/campaign_plan.gd")
+## Difficulty label of the hand-authored levels, one per world. The bot's index
+## needs generator metadata, so it comes from its success rates (2026-10-18,
+## 8 runs per profile; it underrates hand-made timing sections) and from what
+## each world teaches. Generated levels use the category the bot measured.
+const HAND_DIFFICULTY := [LevelSpec.Difficulty.EASY, LevelSpec.Difficulty.MEDIUM, LevelSpec.Difficulty.HARD]
 
 var b := LevelBuilder.new()
 var results: Array[Dictionary] = []
+var generated_entries: Array = []
 
 
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://scenes/levels"))
+	if FileAccess.file_exists(CampaignPlan.RESULT_PATH):
+		generated_entries = JSON.parse_string(FileAccess.get_file_as_string(CampaignPlan.RESULT_PATH))["levels"]
 	_level("tutorial", 0, ISLES, "isle", 1, true, _tutorial)
 	_level("w1_l1", 0, ISLES, "isle", 11, false, _breeze_isles)
 	_level("w1_l2", 0, ISLES, "isle", 12, false, _wind_leaps)
 	_level("w1_l3", 0, ISLES, "isle", 13, false, _crystal_bridges)
 	_level("w1_l4", 0, ISLES, "isle", 14, false, _cloud_summit)
+	_generated_world(0)
 	_level("w2_l1", 1, TOYWORKS, "toy", 21, false, _toy_workshop)
 	_level("w2_l2", 1, TOYWORKS, "toy", 22, false, _crazy_gears)
 	_level("w2_l3", 1, TOYWORKS, "toy", 23, false, _bounce_factory)
+	_generated_world(1)
 	_level("w3_l1", 2, RUINS, "ruin", 31, false, _dawn_ruins)
 	_level("w3_l2", 2, RUINS, "ruin", 32, false, _wind_temple)
 	_level("w3_l3", 2, RUINS, "ruin", 33, false, _heart_of_the_sun)
+	_generated_world(2)
 	_write_catalog()
 	get_tree().quit()
 
@@ -46,6 +60,35 @@ func _level(id: String, world: int, biome: BiomeTheme, prefix: String, seed_valu
 	print("%s: %s length=%.0f wait=%.1f sparks=%d" % [id, result["error"], result["length"], result["wait"], result["sparks"]])
 
 
+## Generated levels of a world, rebuilt from the spec the bot validated; the
+## route hash proves the scene is the level the bot played.
+func _generated_world(world: int) -> void:
+	var generator := LevelGenerator.new()
+	for entry in generated_entries:
+		if int(entry["world"]) != world:
+			continue
+		var spec := LevelSpec.from_dict(entry["spec"])
+		var made := generator.generate(spec)
+		var level: Level = made["level"]
+		if level == null:
+			push_error("%s: the generator rejected its spec %s" % [entry["id"], made["validation"]])
+			continue
+		var meta: Dictionary = level.get_meta("generated")
+		if meta["route_hash"] != entry["route_hash"]:
+			push_error("%s: route hash %s, the bot validated %s" % [entry["id"], meta["route_hash"], entry["route_hash"]])
+		meta["gold"] = entry["gold"]
+		meta["silver"] = entry["silver"]
+		meta["index"] = entry["index"]
+		level.set_meta("generated", meta)
+		var path := OUT % entry["id"]
+		var err := LevelBuilder.save_scene(level, path)
+		level.free()
+		results.append({"id": entry["id"], "world": world, "biome": LevelGenerator.BIOMES[spec.biome],
+				"tutorial": false, "path": path, "gold": float(entry["gold"]), "silver": float(entry["silver"]),
+				"difficulty": int(entry["category"])})
+		print("%s: %s generated index=%s gold=%s" % [entry["id"], error_string(err), entry["index"], entry["gold"]])
+
+
 func _write_catalog() -> void:
 	var catalog := LevelCatalog.new()
 	catalog.world_title_keys = PackedStringArray(["WORLD_1", "WORLD_2", "WORLD_3"])
@@ -59,12 +102,19 @@ func _write_catalog() -> void:
 		info.scene_path = r["path"]
 		info.biome = r["biome"]
 		info.is_tutorial = r["tutorial"]
+		if not info.is_tutorial:
+			info.difficulty = r.get("difficulty", HAND_DIFFICULTY[info.world_index])
+		levels.append(info)
+		if r.has("gold"):
+			# Generated: medals from the bot's expert runs.
+			info.gold_time = r["gold"]
+			info.silver_time = r["silver"]
+			continue
 		# Gold assumes a confident run at ~7 m/s plus unavoidable waits;
 		# silver leaves room for a few mistakes. Rounded to half seconds.
 		var gold: float = r["length"] / 7.0 + r["wait"] * 1.6 + 4.0
 		info.gold_time = snappedf(gold, 0.5)
 		info.silver_time = snappedf(gold * 1.35 + 6.0, 0.5)
-		levels.append(info)
 	catalog.levels = levels
 	var err := ResourceSaver.save(catalog, "res://resources/levels/level_catalog.tres")
 	print("catalog: %s" % error_string(err))

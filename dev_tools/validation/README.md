@@ -11,7 +11,7 @@ Se guardan fuera de `orbit_runner_game/` para no incluirlas en el proyecto ni en
 | `_char_shot.tscn` | `godot --path . --resolution 1280x720 res://tools/_char_shot.tscn -- <salida.png> [isles|toyworks|ruins] [animación]` — protagonista (tres poses), chispa y gema con la luz de un bioma, más un primer plano de la cara (`<salida>_face.png`). |
 | `../blender/render_preview.py` | `blender --background --factory-startup --python dev_tools/blender/render_preview.py -- <carpeta> <ASSET> [...]` — vistas previas Eevee de los `.blend` (los personajes añaden cara y espalda). |
 | `_modes.tscn` | `godot --headless --fixed-fps 60 --path . res://tools/_modes.tscn -- daily\|tower\|replay [segundos]` — el bot juega el desafío diario o la torre por el flujo real, o comprueba que una repetición reproduce la partida exacta. |
-| `run_campaign_bot.sh` | `bash ../dev_tools/validation/run_campaign_bot.sh [perfil] [intentos]` — bot v2 (`tools/bot/`, sí versionado porque lo usa el generador de lotes) sobre los 11 niveles. |
+| `run_campaign_bot.sh` | `bash ../dev_tools/validation/run_campaign_bot.sh [perfil] [intentos]` — bot v2 (`tools/bot/`, sí versionado porque lo usa el generador de lotes) sobre todos los niveles del catálogo (31). |
 | `_route.tscn` | `godot --headless --path . res://tools/_route.tscn -- <nivel.tscn>` — imprime las piezas de la ruta. |
 
 **Atención:** estas herramientas usan los autoloads reales y **escriben en el guardado local** (`%APPDATA%\Godot\app_userdata\Orbit Runner\`). Borrar `orbit_runner_save*.json` después si se quiere empezar de cero.

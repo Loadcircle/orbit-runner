@@ -113,6 +113,20 @@ El piloto automático (que usa solo las acciones del InputMap) reveló problemas
 - **Decisión:** 3 misiones diarias y 7 semanales elegidas por fecha, premiadas con chispas.
 - **Motivo:** hábito de vuelta ya en la versión sin conexión; la XP del pase de temporada llegará con la fase D.
 
+## D20. Campaña de 30 niveles, 10 por mundo y dificultad creciente
+- **Decisión (propietario, 2026-10-18):** cada mundo tiene 10 niveles y la campaña sube de dificultad de forma progresiva. Se conservan los 10 niveles hechos a mano (primeros de cada mundo) y se añaden 20 del generador validados por el bot.
+- **Etiqueta en la tarjeta (`LevelInfo.difficulty`):** la categoría Fácil / Medio / Difícil / Extremo, en la misma escala que el diario y las temporadas. Brisa va de Fácil a Difícil, Taller de Medio a Difícil y Ruinas de Difícil a Extremo.
+  - Los generados llevan la categoría que midió el bot.
+  - Los hechos a mano llevan una por mundo (Fácil, Medio, Difícil). El índice del bot necesita los metadatos del generador, así que se decidió con sus tasas de éxito y con lo que enseña cada mundo.
+  - Se descartó una etiqueta por posición dentro del mundo (1–3 Fácil, 4–7 Medio, 8–10 Difícil) porque no coincidía con lo medido. Por ejemplo, *Corazón del Sol* habría salido como Fácil.
+- **Mecánicas por mundo:** los niveles generados solo usan lo que su mundo ya enseñó (Brisa sin aspas, robots, temporales ni placas de impulso) y priorizan las técnicas que lo definen (`LevelSpec.focus`).
+- **Motivo:** más contenido sin perder la enseñanza progresiva de los niveles a mano. La dificultad de los nuevos se mide con el bot en vez de estimarse.
+- **Impacto:**
+  - Al entrar en Taller y en Ruinas, sus niveles a mano presentan las mecánicas nuevas antes de los generados.
+  - Para el bot, los niveles a mano de esos mundos salen más duros que los primeros generados (experto 12–75 %). Parte de eso es el propio bot: su perfil perfecto solo termina *Corazón del Sol* 1 de 8 veces. Debe confirmarse jugando.
+  - Los logros "Tesoro completo" y "Perfección" pasan a 90 gemas y 30 oros.
+  - Un nivel ya completado queda siempre desbloqueado, para las partidas guardadas antes del cambio.
+
 ## Pendiente de decisión del propietario
 - Nombre definitivo del juego y del protagonista (sigue siendo *Orbit Runner* provisional).
 - Identificador del paquete Android (`com.orbitrunner.game` es provisional) y keystore de publicación.

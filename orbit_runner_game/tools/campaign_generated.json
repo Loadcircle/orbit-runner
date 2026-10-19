@@ -1,0 +1,1203 @@
+{
+	"levels": [
+		{
+			"category": 0,
+			"difficulty": 0,
+			"gold": 40.5,
+			"id": "w1_l5",
+			"index": 6.3,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"stairs",
+				"rest",
+				"turn",
+				"crumble_chain",
+				"rest",
+				"spike_corridor",
+				"stairs",
+				"rest",
+				"crumble_chain",
+				"turn",
+				"rest",
+				"rest"
+			],
+			"route_hash": "a8dc6b518209d78e",
+			"silver": 59.5,
+			"spec": {
+				"adjustments": {
+					"2": {
+						"gap": 0.9,
+						"size": 1.0
+					}
+				},
+				"biome": "isles",
+				"difficulty": 0.0,
+				"focus": [
+					"timing",
+					"wind",
+					"trampoline",
+					"disc"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700010.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 0,
+			"difficulty": 0,
+			"gold": 42.5,
+			"id": "w1_l6",
+			"index": 6.9,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"turn",
+				"rest",
+				"stairs",
+				"crumble_chain",
+				"rest",
+				"turn",
+				"spike_corridor",
+				"rest",
+				"stairs",
+				"crumble_chain",
+				"rest",
+				"spike_corridor",
+				"stairs",
+				"rest"
+			],
+			"route_hash": "54870acaa5c00908",
+			"silver": 63.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "isles",
+				"difficulty": 0.0,
+				"focus": [
+					"wind",
+					"trampoline",
+					"disc",
+					"timing"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700111.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 38.0,
+			"id": "w1_l7",
+			"index": 19.4,
+			"motifs": [
+				"start",
+				"trampoline_high",
+				"stairs",
+				"turn",
+				"rest",
+				"stairs",
+				"spike_corridor",
+				"crumble_chain",
+				"rest",
+				"spike_corridor",
+				"spike_corridor",
+				"turn",
+				"rest",
+				"trampoline_high",
+				"rest"
+			],
+			"route_hash": "1297063cd79bf9d7",
+			"silver": 56.0,
+			"spec": {
+				"adjustments": {
+					"2": {
+						"gap": 1.21,
+						"size": -2.0
+					}
+				},
+				"biome": "isles",
+				"difficulty": 1.0,
+				"focus": [
+					"trampoline",
+					"disc",
+					"timing",
+					"wind"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700212.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 37.5,
+			"id": "w1_l8",
+			"index": 18.2,
+			"motifs": [
+				"start",
+				"stairs",
+				"spike_corridor",
+				"crumble_chain",
+				"rest",
+				"yoyo_disc",
+				"spike_corridor",
+				"mover_chain",
+				"rest",
+				"turn",
+				"crumble_chain",
+				"rest"
+			],
+			"route_hash": "7f9bafe769d69cc4",
+			"silver": 55.5,
+			"spec": {
+				"adjustments": {},
+				"biome": "isles",
+				"difficulty": 1.0,
+				"focus": [
+					"disc",
+					"timing",
+					"wind",
+					"trampoline"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700313.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 39.0,
+			"id": "w1_l9",
+			"index": 18.9,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"stairs",
+				"turn",
+				"rest",
+				"crumble_chain",
+				"turn",
+				"stairs",
+				"rest",
+				"spike_corridor",
+				"mover_chain",
+				"spike_corridor",
+				"rest",
+				"rest"
+			],
+			"route_hash": "519c2482469092a7",
+			"silver": 57.5,
+			"spec": {
+				"adjustments": {
+					"5": {
+						"gap": 0.81,
+						"size": 2.0
+					}
+				},
+				"biome": "isles",
+				"difficulty": 1.0,
+				"focus": [
+					"timing",
+					"wind",
+					"trampoline",
+					"disc"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700414.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 40.5,
+			"id": "w1_l10",
+			"index": 38.2,
+			"motifs": [
+				"start",
+				"wind_tower",
+				"spike_corridor",
+				"stairs",
+				"spike_corridor",
+				"rest",
+				"trampoline_high",
+				"turn",
+				"crumble_chain",
+				"turn",
+				"rest",
+				"stairs",
+				"turn",
+				"spike_corridor",
+				"wind_tower",
+				"rest"
+			],
+			"route_hash": "91555d519b69e6fa",
+			"silver": 60.0,
+			"spec": {
+				"adjustments": {
+					"3": {
+						"gap": 1.331,
+						"size": -3.0
+					}
+				},
+				"biome": "isles",
+				"difficulty": 2.0,
+				"focus": [
+					"wind",
+					"trampoline",
+					"disc",
+					"timing"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"mover",
+					"crumble",
+					"spikes",
+					"laser"
+				],
+				"mode": 0.0,
+				"seed": 1700515.0,
+				"target_seconds": 40.0
+			},
+			"status": "accepted",
+			"world": 0
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 42.5,
+			"id": "w2_l4",
+			"index": 19.3,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"trampoline_high",
+				"turn",
+				"rest",
+				"stairs",
+				"turn",
+				"stairs",
+				"rest",
+				"spike_corridor",
+				"crumble_chain",
+				"trampoline_high",
+				"rest",
+				"crumble_chain",
+				"rest"
+			],
+			"route_hash": "3e2d9ded071dc116",
+			"silver": 63.0,
+			"spec": {
+				"adjustments": {
+					"5": {
+						"gap": 0.99,
+						"size": 0.0
+					}
+				},
+				"biome": "toyworks",
+				"difficulty": 1.0,
+				"focus": [
+					"trampoline",
+					"slide",
+					"timing",
+					"boost"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 1700616.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 45.0,
+			"id": "w2_l5",
+			"index": 21.2,
+			"motifs": [
+				"start",
+				"spinner_island",
+				"mover_chain",
+				"turn",
+				"rest",
+				"crumble_chain",
+				"laser_low",
+				"stairs",
+				"rest",
+				"patrol_bots",
+				"timed_windows",
+				"spike_corridor",
+				"rest",
+				"spinner_island",
+				"rest"
+			],
+			"route_hash": "8bb87463b64e63b8",
+			"silver": 66.5,
+			"spec": {
+				"adjustments": {
+					"5": {
+						"gap": 1.21,
+						"size": -2.0
+					},
+					"7": {
+						"gap": 1.1,
+						"size": -1.0
+					}
+				},
+				"biome": "toyworks",
+				"difficulty": 1.0,
+				"focus": [
+					"slide",
+					"timing",
+					"boost",
+					"trampoline"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2700720.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 1,
+			"difficulty": 1,
+			"gold": 42.5,
+			"id": "w2_l6",
+			"index": 25.8,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"timed_windows",
+				"stairs",
+				"rest",
+				"spinner_island",
+				"combo",
+				"patrol_bots",
+				"rest",
+				"spinner_island",
+				"patrol_bots",
+				"boost_run",
+				"rest"
+			],
+			"route_hash": "d6b4247a88ded76a",
+			"silver": 62.5,
+			"spec": {
+				"adjustments": {
+					"3": {
+						"gap": 1.1,
+						"size": -1.0
+					}
+				},
+				"biome": "toyworks",
+				"difficulty": 1.0,
+				"focus": [
+					"timing",
+					"boost",
+					"trampoline",
+					"slide"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 1700818.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 45.0,
+			"id": "w2_l7",
+			"index": 44.1,
+			"motifs": [
+				"start",
+				"laser_low",
+				"trampoline_high",
+				"spike_corridor",
+				"boost_run",
+				"rest",
+				"stairs",
+				"combo",
+				"spike_corridor",
+				"turn",
+				"rest",
+				"spike_corridor",
+				"laser_low",
+				"spike_corridor",
+				"turn",
+				"rest"
+			],
+			"route_hash": "09d657672f0c88e9",
+			"silver": 66.5,
+			"spec": {
+				"adjustments": {},
+				"biome": "toyworks",
+				"difficulty": 2.0,
+				"focus": [
+					"boost",
+					"trampoline",
+					"slide",
+					"timing"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2700922.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 44.0,
+			"id": "w2_l8",
+			"index": 40.4,
+			"motifs": [
+				"start",
+				"turn",
+				"spike_corridor",
+				"trampoline_high",
+				"laser_low",
+				"rest",
+				"crumble_chain",
+				"laser_low",
+				"spike_corridor",
+				"stairs",
+				"rest",
+				"laser_low",
+				"laser_low",
+				"crumble_chain",
+				"spike_corridor",
+				"rest"
+			],
+			"route_hash": "0035f64f831aa97d",
+			"silver": 65.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "toyworks",
+				"difficulty": 2.0,
+				"focus": [
+					"trampoline",
+					"slide",
+					"timing",
+					"boost"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2701023.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 61.5,
+			"id": "w2_l9",
+			"index": 48.7,
+			"motifs": [
+				"start",
+				"laser_low",
+				"combo",
+				"patrol_bots",
+				"spinner_island",
+				"rest",
+				"stairs",
+				"spike_corridor",
+				"laser_low",
+				"spinner_island",
+				"rest",
+				"turn",
+				"spike_corridor",
+				"mover_chain",
+				"rest"
+			],
+			"route_hash": "b74d838b6d31c207",
+			"silver": 90.5,
+			"spec": {
+				"adjustments": {},
+				"biome": "toyworks",
+				"difficulty": 2.0,
+				"focus": [
+					"slide",
+					"timing",
+					"boost",
+					"trampoline"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 701118.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 40.5,
+			"id": "w2_l10",
+			"index": 48.4,
+			"motifs": [
+				"start",
+				"spinner_island",
+				"combo",
+				"patrol_bots",
+				"combo",
+				"rest",
+				"patrol_bots",
+				"spike_corridor",
+				"stairs",
+				"timed_windows",
+				"rest"
+			],
+			"route_hash": "79ad35a2ac8e27a9",
+			"silver": 60.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "toyworks",
+				"difficulty": 2.0,
+				"focus": [
+					"timing",
+					"boost",
+					"trampoline",
+					"slide"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 1701222.0,
+				"target_seconds": 45.0
+			},
+			"status": "accepted",
+			"world": 1
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 51.5,
+			"id": "w3_l4",
+			"index": 42.6,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"stairs",
+				"yoyo_disc",
+				"laser_low",
+				"rest",
+				"turn",
+				"yoyo_disc",
+				"combo",
+				"spike_corridor",
+				"rest",
+				"laser_low",
+				"spike_corridor",
+				"crumble_chain",
+				"wind_tower",
+				"rest"
+			],
+			"route_hash": "bbbbc93700f83427",
+			"silver": 76.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "ruins",
+				"difficulty": 2.0,
+				"focus": [
+					"slide",
+					"wind",
+					"disc",
+					"timing"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2701326.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 58.5,
+			"id": "w3_l5",
+			"index": 43.0,
+			"motifs": [
+				"start",
+				"patrol_bots",
+				"timed_windows",
+				"spinner_island",
+				"crumble_chain",
+				"rest",
+				"mover_chain",
+				"patrol_bots",
+				"spike_corridor",
+				"stairs",
+				"rest",
+				"spike_corridor",
+				"patrol_bots",
+				"rest"
+			],
+			"route_hash": "f8533a6023c64fa7",
+			"silver": 86.5,
+			"spec": {
+				"adjustments": {
+					"1": {
+						"gap": 0.9,
+						"size": 1.0
+					}
+				},
+				"biome": "ruins",
+				"difficulty": 2.0,
+				"focus": [
+					"wind",
+					"disc",
+					"timing",
+					"slide"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2701427.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 74.0,
+			"id": "w3_l6",
+			"index": 44.7,
+			"motifs": [
+				"start",
+				"patrol_bots",
+				"laser_low",
+				"crumble_chain",
+				"spinner_island",
+				"rest",
+				"spike_corridor",
+				"spinner_island",
+				"laser_low",
+				"patrol_bots",
+				"rest",
+				"crumble_chain",
+				"spike_corridor",
+				"combo",
+				"rest"
+			],
+			"route_hash": "f33849184cf3b6ff",
+			"silver": 109.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "ruins",
+				"difficulty": 2.0,
+				"focus": [
+					"disc",
+					"timing",
+					"slide",
+					"wind"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2701528.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		},
+		{
+			"category": 2,
+			"difficulty": 2,
+			"gold": 54.0,
+			"id": "w3_l7",
+			"index": 42.4,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"mover_chain",
+				"crumble_chain",
+				"spike_corridor",
+				"rest",
+				"laser_low",
+				"patrol_bots",
+				"laser_low",
+				"stairs",
+				"rest",
+				"turn",
+				"spinner_island",
+				"crumble_chain",
+				"rest"
+			],
+			"route_hash": "de7a4472a5a82737",
+			"silver": 80.0,
+			"spec": {
+				"adjustments": {
+					"9": {
+						"gap": 1.21,
+						"size": -2.0
+					}
+				},
+				"biome": "ruins",
+				"difficulty": 2.0,
+				"focus": [
+					"timing",
+					"slide",
+					"wind",
+					"disc"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 3701632.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		},
+		{
+			"category": 2,
+			"difficulty": 3,
+			"gold": 93.5,
+			"id": "w3_l8",
+			"index": 50.6,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"patrol_bots",
+				"yoyo_disc",
+				"laser_low",
+				"timed_windows",
+				"spinner_island",
+				"rest",
+				"wind_tower",
+				"crumble_chain",
+				"patrol_bots",
+				"spike_corridor",
+				"spinner_island",
+				"turn",
+				"rest",
+				"spike_corridor",
+				"rest"
+			],
+			"route_hash": "554f60e562439d01",
+			"silver": 138.5,
+			"spec": {
+				"adjustments": {
+					"1": {
+						"gap": 1.1,
+						"size": -1.0
+					}
+				},
+				"biome": "ruins",
+				"difficulty": 3.0,
+				"focus": [
+					"slide",
+					"wind",
+					"disc",
+					"timing"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 1701727.0,
+				"target_seconds": 50.0
+			},
+			"status": "reclassified",
+			"world": 2
+		},
+		{
+			"category": 3,
+			"difficulty": 3,
+			"gold": 60.5,
+			"id": "w3_l9",
+			"index": 61.1,
+			"motifs": [
+				"start",
+				"patrol_bots",
+				"spinner_island",
+				"patrol_bots",
+				"wind_tower",
+				"spike_corridor",
+				"combo",
+				"rest",
+				"spinner_island",
+				"stairs",
+				"patrol_bots",
+				"rest"
+			],
+			"route_hash": "b7f648749585dff4",
+			"silver": 89.0,
+			"spec": {
+				"adjustments": {},
+				"biome": "ruins",
+				"difficulty": 3.0,
+				"focus": [
+					"wind",
+					"disc",
+					"timing",
+					"slide"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 8701849.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		},
+		{
+			"category": 3,
+			"difficulty": 3,
+			"gold": 92.0,
+			"id": "w3_l10",
+			"index": 59.4,
+			"motifs": [
+				"start",
+				"spike_corridor",
+				"patrol_bots",
+				"timed_windows",
+				"laser_low",
+				"wind_tower",
+				"spinner_island",
+				"rest",
+				"laser_low",
+				"combo",
+				"spinner_island",
+				"rest"
+			],
+			"route_hash": "16dc877092e701f4",
+			"silver": 135.5,
+			"spec": {
+				"adjustments": {},
+				"biome": "ruins",
+				"difficulty": 3.0,
+				"focus": [
+					"disc",
+					"timing",
+					"slide",
+					"wind"
+				],
+				"generator_version": 1.0,
+				"mechanics": [
+					"jump",
+					"long",
+					"dash",
+					"boost",
+					"yoyo",
+					"wind",
+					"trampoline",
+					"timed",
+					"mover",
+					"crumble",
+					"spinner",
+					"patrol",
+					"laser",
+					"spikes"
+				],
+				"mode": 0.0,
+				"seed": 2701932.0,
+				"target_seconds": 50.0
+			},
+			"status": "accepted",
+			"world": 2
+		}
+	]
+}

@@ -73,7 +73,8 @@ func is_unlocked(index: int) -> bool:
 	var catalog := LEVEL_CATALOG.levels
 	if index >= catalog.size():
 		return false
-	return is_completed(catalog[index - 1].id)
+	# A completed level stays open even if levels were added before it later.
+	return is_completed(catalog[index].id) or is_completed(catalog[index - 1].id)
 
 
 ## First unlocked level not yet completed (or the last one when all are done).

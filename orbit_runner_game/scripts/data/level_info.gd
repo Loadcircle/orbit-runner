@@ -15,3 +15,6 @@ extends Resource
 @export var is_tutorial: bool = false
 ## Translation key of the short hint shown on the level card.
 @export var hint_key: String
+## Difficulty category shown on the card, on the scale of the generator and the
+## bot (LevelSpec.Difficulty); -1 for the tutorial.
+@export_enum("Easy", "Medium", "Hard", "Extreme") var difficulty: int = -1

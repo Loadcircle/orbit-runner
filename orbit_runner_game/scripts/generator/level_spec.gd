@@ -23,6 +23,9 @@ const DIFFICULTY_KEYS := ["DIFF_EASY", "DIFF_MEDIUM", "DIFF_HARD", "DIFF_EXTREME
 ## Repairs made by the bot pipeline: motif index -> {"gap": scale, "size": steps}.
 ## Part of the spec so the repaired level can be rebuilt on any device.
 @export var adjustments: Dictionary = {}
+## Technique families the level demands before any random one, and repeated
+## motifs become rarer (campaign worlds). Empty: the plain generator.
+@export var focus := PackedStringArray()
 
 
 static func create(seed_value: int, difficulty: Difficulty, biome := &"isles", mode := Mode.CAMPAIGN,
@@ -42,9 +45,13 @@ func key() -> String:
 
 
 func to_dict() -> Dictionary:
-	return {"seed": seed_value, "generator_version": generator_version, "biome": String(biome),
+	var data := {"seed": seed_value, "generator_version": generator_version, "biome": String(biome),
 			"difficulty": difficulty, "target_seconds": target_seconds, "mechanics": Array(mechanics),
 			"mode": mode, "adjustments": adjustments}
+	# Only campaign specs carry it, so stored season and daily specs keep their form.
+	if not focus.is_empty():
+		data["focus"] = Array(focus)
+	return data
 
 
 static func from_dict(data: Dictionary) -> LevelSpec:
@@ -56,6 +63,7 @@ static func from_dict(data: Dictionary) -> LevelSpec:
 	spec.target_seconds = float(data.get("target_seconds", 45.0))
 	spec.mechanics = PackedStringArray(data.get("mechanics", ALL_MECHANICS))
 	spec.mode = clampi(int(data.get("mode", 0)), 0, Mode.size() - 1) as Mode
+	spec.focus = PackedStringArray(data.get("focus", []))
 	var adjust: Dictionary = data.get("adjustments", {})
 	for key in adjust:
 		spec.adjustments[int(key)] = adjust[key]

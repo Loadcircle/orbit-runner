@@ -25,7 +25,7 @@ Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la ra
 
 ## Estado actual (v1.0.0 jugable + pase visual v2)
 - Godot 4.7.2-stable, GDScript, **renderizador Compatibility** en Android y PC (Mobile/Vulkan se descartó porque abortaba en Android sin fallback; ver TECHNICAL_DECISIONS §2).
-- Tutorial + 10 niveles (3 mundos), gemas, chispas, medallas, 23 logros, 15 cosméticos, ajustes, guardado atómico versionado.
+- Tutorial + 30 niveles (3 mundos de 10; en la rama `feature/freemium-temporadas`, 2026-10-18: 10 a mano y 20 generados y validados por el bot, ver `docs/LEVEL_DESIGN.md` y D20), gemas, chispas, medallas, 23 logros, 15 cosméticos, ajustes, guardado atómico versionado.
 - **Idioma:** sigue al dispositivo; si no es ES/EN arranca en inglés; selector en Ajustes → Juego.
 - **Pase visual v2 (2026-10-17):** shader toon propio (`resources/shaders/toon*.gdshader*`, sombras de color por bioma, rim, contornos), cielo por shader, tonemap lineal y niebla por profundidad (`scripts/level/level_environment.gd` + `resources/biomes/*.tres`). Los 49 assets se regeneraron en Blender por script con color de vértice; protagonista nuevo (cara expresiva, parpadeo, animaciones nuevas). Polvo al aterrizar y estallidos al recoger. Icono y retrato renderizados en Godot (`tools/render_ui_images.tscn`).
 - APK de depuración del pase v2 **instalado en el S25** el 2026-10-17 (arranca sin errores en logcat). El puerto de la depuración inalámbrica cambia: usar `adb mdns services` y conectar al puerto más reciente (último: `192.168.1.39:32883`).
@@ -57,6 +57,7 @@ Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la ra
   6. Fusionar con master solo cuando el propietario lo pida.
 
 ## Pendientes inmediatos (en orden)
+0. Probar los 20 niveles nuevos de la campaña en el S25 (sobre todo la curva al entrar en Taller y Ruinas, y los Extremo *Llamarada Eterna* y *Trono del Sol*) y ajustar medallas o dificultad.
 1. Con el APK v2 ya instalado en el S25, medir rendimiento del shader nuevo; confirmar que no hay tirones; recorrer los 10 niveles (sobre todo *Engranajes Locos*, *Fábrica de Rebotes* y *Corazón del Sol*, que el piloto automático no completa por su heurística).
 2. Arte v2 aprobado. Efectos pendientes: anillo al desplegar el disco, estela del yo-yo, confeti en la meta. UI/fuente/logotipo se mantienen por decisión del propietario.
 3. **Monetización**: el propietario debe elegir modelo (propuestas en la página enlazada; recomendación: gratis + desbloqueo completo y modelo como servicio por fases). No integrar nada sin autorización.

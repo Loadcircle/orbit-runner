@@ -294,6 +294,10 @@ func _choose_families() -> void:
 		if family != "jump" and checks.get(family, false):
 			pool.append(family)
 	_shuffle(pool)
+	for i in range(spec.focus.size() - 1, -1, -1):
+		if pool.has(spec.focus[i]):
+			pool.erase(spec.focus[i])
+			pool.push_front(spec.focus[i])
 	var count := rng.randi_range(profile.techniques.x, profile.techniques.y) - 1
 	families = PackedStringArray(["jump"])
 	for i in mini(count, pool.size()):
@@ -346,6 +350,8 @@ func _pick_motif() -> String:
 			w = 0.05
 		elif not _used.has(id):
 			w *= 3.0
+		elif not spec.focus.is_empty():
+			w /= 1.0 + float(_used[id])
 		if info["hazard"]:
 			if density < _hazard_target:
 				w *= 3.0 + 2.0 * _hazard_target

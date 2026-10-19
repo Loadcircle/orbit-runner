@@ -52,7 +52,7 @@ id = &"gems_all"
 title_key = "ACH_GEMS_ALL"
 description_key = "ACH_GEMS_ALL_DESC"
 condition = 3
-target = 30
+target = 90
 reward_sparks = 200
 
 [sub_resource type="Resource" id="Resource_uwh4k"]
@@ -78,7 +78,7 @@ id = &"gold_all"
 title_key = "ACH_GOLD_ALL"
 description_key = "ACH_GOLD_ALL_DESC"
 condition = 4
-target = 10
+target = 30
 reward_sparks = 300
 
 [sub_resource type="Resource" id="Resource_gj663"]

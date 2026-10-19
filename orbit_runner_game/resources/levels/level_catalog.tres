@@ -26,6 +26,7 @@ biome = ExtResource("2_fmcb6")
 gold_time = 26.5
 silver_time = 42.0
 hint_key = "LEVEL_W1_L1_HINT"
+difficulty = 0
 
 [sub_resource type="Resource" id="Resource_16780"]
 script = ExtResource("1_smafw")
@@ -36,6 +37,7 @@ biome = ExtResource("2_fmcb6")
 gold_time = 32.0
 silver_time = 49.5
 hint_key = "LEVEL_W1_L2_HINT"
+difficulty = 0
 
 [sub_resource type="Resource" id="Resource_rneyl"]
 script = ExtResource("1_smafw")
@@ -46,6 +48,7 @@ biome = ExtResource("2_fmcb6")
 gold_time = 26.5
 silver_time = 42.0
 hint_key = "LEVEL_W1_L3_HINT"
+difficulty = 0
 
 [sub_resource type="Resource" id="Resource_lhqfs"]
 script = ExtResource("1_smafw")
@@ -56,8 +59,75 @@ biome = ExtResource("2_fmcb6")
 gold_time = 32.0
 silver_time = 49.0
 hint_key = "LEVEL_W1_L4_HINT"
+difficulty = 0
 
 [sub_resource type="Resource" id="Resource_17j1v"]
+script = ExtResource("1_smafw")
+id = &"w1_l5"
+title_key = "LEVEL_W1_L5"
+scene_path = "res://scenes/levels/w1_l5.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 40.5
+silver_time = 59.5
+hint_key = "LEVEL_W1_L5_HINT"
+difficulty = 0
+
+[sub_resource type="Resource" id="Resource_mywho"]
+script = ExtResource("1_smafw")
+id = &"w1_l6"
+title_key = "LEVEL_W1_L6"
+scene_path = "res://scenes/levels/w1_l6.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 42.5
+silver_time = 63.0
+hint_key = "LEVEL_W1_L6_HINT"
+difficulty = 0
+
+[sub_resource type="Resource" id="Resource_4foqd"]
+script = ExtResource("1_smafw")
+id = &"w1_l7"
+title_key = "LEVEL_W1_L7"
+scene_path = "res://scenes/levels/w1_l7.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 38.0
+silver_time = 56.0
+hint_key = "LEVEL_W1_L7_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_w7v7w"]
+script = ExtResource("1_smafw")
+id = &"w1_l8"
+title_key = "LEVEL_W1_L8"
+scene_path = "res://scenes/levels/w1_l8.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 37.5
+silver_time = 55.5
+hint_key = "LEVEL_W1_L8_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_0w2lp"]
+script = ExtResource("1_smafw")
+id = &"w1_l9"
+title_key = "LEVEL_W1_L9"
+scene_path = "res://scenes/levels/w1_l9.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 39.0
+silver_time = 57.5
+hint_key = "LEVEL_W1_L9_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_djmny"]
+script = ExtResource("1_smafw")
+id = &"w1_l10"
+title_key = "LEVEL_W1_L10"
+scene_path = "res://scenes/levels/w1_l10.tscn"
+biome = ExtResource("2_fmcb6")
+gold_time = 40.5
+silver_time = 60.0
+hint_key = "LEVEL_W1_L10_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_ojacd"]
 script = ExtResource("1_smafw")
 id = &"w2_l1"
 title_key = "LEVEL_W2_L1"
@@ -67,8 +137,9 @@ biome = ExtResource("3_16780")
 gold_time = 32.0
 silver_time = 49.5
 hint_key = "LEVEL_W2_L1_HINT"
+difficulty = 1
 
-[sub_resource type="Resource" id="Resource_mywho"]
+[sub_resource type="Resource" id="Resource_j3iva"]
 script = ExtResource("1_smafw")
 id = &"w2_l2"
 title_key = "LEVEL_W2_L2"
@@ -78,8 +149,9 @@ biome = ExtResource("3_16780")
 gold_time = 38.5
 silver_time = 58.5
 hint_key = "LEVEL_W2_L2_HINT"
+difficulty = 1
 
-[sub_resource type="Resource" id="Resource_4foqd"]
+[sub_resource type="Resource" id="Resource_b4eds"]
 script = ExtResource("1_smafw")
 id = &"w2_l3"
 title_key = "LEVEL_W2_L3"
@@ -89,8 +161,93 @@ biome = ExtResource("3_16780")
 gold_time = 41.0
 silver_time = 61.5
 hint_key = "LEVEL_W2_L3_HINT"
+difficulty = 1
 
-[sub_resource type="Resource" id="Resource_w7v7w"]
+[sub_resource type="Resource" id="Resource_13jm6"]
+script = ExtResource("1_smafw")
+id = &"w2_l4"
+title_key = "LEVEL_W2_L4"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l4.tscn"
+biome = ExtResource("3_16780")
+gold_time = 42.5
+silver_time = 63.0
+hint_key = "LEVEL_W2_L4_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_cu74t"]
+script = ExtResource("1_smafw")
+id = &"w2_l5"
+title_key = "LEVEL_W2_L5"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l5.tscn"
+biome = ExtResource("3_16780")
+gold_time = 45.0
+silver_time = 66.5
+hint_key = "LEVEL_W2_L5_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_5nivw"]
+script = ExtResource("1_smafw")
+id = &"w2_l6"
+title_key = "LEVEL_W2_L6"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l6.tscn"
+biome = ExtResource("3_16780")
+gold_time = 42.5
+silver_time = 62.5
+hint_key = "LEVEL_W2_L6_HINT"
+difficulty = 1
+
+[sub_resource type="Resource" id="Resource_ie32j"]
+script = ExtResource("1_smafw")
+id = &"w2_l7"
+title_key = "LEVEL_W2_L7"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l7.tscn"
+biome = ExtResource("3_16780")
+gold_time = 45.0
+silver_time = 66.5
+hint_key = "LEVEL_W2_L7_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_drm1l"]
+script = ExtResource("1_smafw")
+id = &"w2_l8"
+title_key = "LEVEL_W2_L8"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l8.tscn"
+biome = ExtResource("3_16780")
+gold_time = 44.0
+silver_time = 65.0
+hint_key = "LEVEL_W2_L8_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_k1bqu"]
+script = ExtResource("1_smafw")
+id = &"w2_l9"
+title_key = "LEVEL_W2_L9"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l9.tscn"
+biome = ExtResource("3_16780")
+gold_time = 61.5
+silver_time = 90.5
+hint_key = "LEVEL_W2_L9_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_vbdy7"]
+script = ExtResource("1_smafw")
+id = &"w2_l10"
+title_key = "LEVEL_W2_L10"
+world_index = 1
+scene_path = "res://scenes/levels/w2_l10.tscn"
+biome = ExtResource("3_16780")
+gold_time = 40.5
+silver_time = 60.0
+hint_key = "LEVEL_W2_L10_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_k3cwv"]
 script = ExtResource("1_smafw")
 id = &"w3_l1"
 title_key = "LEVEL_W3_L1"
@@ -100,8 +257,9 @@ biome = ExtResource("4_rneyl")
 gold_time = 32.0
 silver_time = 49.0
 hint_key = "LEVEL_W3_L1_HINT"
+difficulty = 2
 
-[sub_resource type="Resource" id="Resource_0w2lp"]
+[sub_resource type="Resource" id="Resource_p4iy0"]
 script = ExtResource("1_smafw")
 id = &"w3_l2"
 title_key = "LEVEL_W3_L2"
@@ -111,8 +269,9 @@ biome = ExtResource("4_rneyl")
 gold_time = 36.5
 silver_time = 55.0
 hint_key = "LEVEL_W3_L2_HINT"
+difficulty = 2
 
-[sub_resource type="Resource" id="Resource_djmny"]
+[sub_resource type="Resource" id="Resource_qon4j"]
 script = ExtResource("1_smafw")
 id = &"w3_l3"
 title_key = "LEVEL_W3_L3"
@@ -122,8 +281,92 @@ biome = ExtResource("4_rneyl")
 gold_time = 52.0
 silver_time = 76.0
 hint_key = "LEVEL_W3_L3_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_8sydf"]
+script = ExtResource("1_smafw")
+id = &"w3_l4"
+title_key = "LEVEL_W3_L4"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l4.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 51.5
+silver_time = 76.0
+hint_key = "LEVEL_W3_L4_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_mcvsr"]
+script = ExtResource("1_smafw")
+id = &"w3_l5"
+title_key = "LEVEL_W3_L5"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l5.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 58.5
+silver_time = 86.5
+hint_key = "LEVEL_W3_L5_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_n545r"]
+script = ExtResource("1_smafw")
+id = &"w3_l6"
+title_key = "LEVEL_W3_L6"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l6.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 74.0
+silver_time = 109.0
+hint_key = "LEVEL_W3_L6_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_f7p1w"]
+script = ExtResource("1_smafw")
+id = &"w3_l7"
+title_key = "LEVEL_W3_L7"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l7.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 54.0
+hint_key = "LEVEL_W3_L7_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_tokg6"]
+script = ExtResource("1_smafw")
+id = &"w3_l8"
+title_key = "LEVEL_W3_L8"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l8.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 93.5
+silver_time = 138.5
+hint_key = "LEVEL_W3_L8_HINT"
+difficulty = 2
+
+[sub_resource type="Resource" id="Resource_aepcx"]
+script = ExtResource("1_smafw")
+id = &"w3_l9"
+title_key = "LEVEL_W3_L9"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l9.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 60.5
+silver_time = 89.0
+hint_key = "LEVEL_W3_L9_HINT"
+difficulty = 3
+
+[sub_resource type="Resource" id="Resource_rctud"]
+script = ExtResource("1_smafw")
+id = &"w3_l10"
+title_key = "LEVEL_W3_L10"
+world_index = 2
+scene_path = "res://scenes/levels/w3_l10.tscn"
+biome = ExtResource("4_rneyl")
+gold_time = 92.0
+silver_time = 135.5
+hint_key = "LEVEL_W3_L10_HINT"
+difficulty = 3
 
 [resource]
 script = ExtResource("1_cat")
-levels = Array[ExtResource("1_smafw")]([SubResource("Resource_smafw"), SubResource("Resource_fmcb6"), SubResource("Resource_16780"), SubResource("Resource_rneyl"), SubResource("Resource_lhqfs"), SubResource("Resource_17j1v"), SubResource("Resource_mywho"), SubResource("Resource_4foqd"), SubResource("Resource_w7v7w"), SubResource("Resource_0w2lp"), SubResource("Resource_djmny")])
+levels = Array[ExtResource("1_smafw")]([SubResource("Resource_smafw"), SubResource("Resource_fmcb6"), SubResource("Resource_16780"), SubResource("Resource_rneyl"), SubResource("Resource_lhqfs"), SubResource("Resource_17j1v"), SubResource("Resource_mywho"), SubResource("Resource_4foqd"), SubResource("Resource_w7v7w"), SubResource("Resource_0w2lp"), SubResource("Resource_djmny"), SubResource("Resource_ojacd"), SubResource("Resource_j3iva"), SubResource("Resource_b4eds"), SubResource("Resource_13jm6"), SubResource("Resource_cu74t"), SubResource("Resource_5nivw"), SubResource("Resource_ie32j"), SubResource("Resource_drm1l"), SubResource("Resource_k1bqu"), SubResource("Resource_vbdy7"), SubResource("Resource_k3cwv"), SubResource("Resource_p4iy0"), SubResource("Resource_qon4j"), SubResource("Resource_8sydf"), SubResource("Resource_mcvsr"), SubResource("Resource_n545r"), SubResource("Resource_f7p1w"), SubResource("Resource_tokg6"), SubResource("Resource_aepcx"), SubResource("Resource_rctud")])
 world_title_keys = PackedStringArray("WORLD_1", "WORLD_2", "WORLD_3")

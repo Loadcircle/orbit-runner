@@ -21,10 +21,16 @@ extends Node
 ##                    start=YYYY-MM-DD, lasting days=7, at difficulty=0..3 (the
 ##                    first 4 levels one step easier) and biome=<name>|rotate;
 ##                    adds it to resources/seasons/season_schedule.tres
+##   campaign=1       instead of count: the generated campaign slots of
+##                    tools/campaign_plan.gd (up to variants=4 seeds each, stops
+##                    after 2 accepted); writes tools/campaign_generated.json.
+##                    slots=3,7 retries only those slots with variants from
+##                    variant_from=N, keeping the results already in <out>
 ## Output: <out>/levels/<category>/<key>.tscn for kept levels,
 ## <out>/reports/<seed>.json per level and <out>/summary.csv for the batch.
 
 const BotRunner := preload("res://tools/bot/bot_runner.gd")
+const CampaignPlan := preload("res://tools/campaign_plan.gd")
 const BotSkills := preload("res://tools/bot/bot_skills.gd")
 const LevelRating := preload("res://tools/bot/level_rating.gd")
 const CATEGORY_DIRS := ["easy", "medium", "hard", "extreme"]
@@ -33,7 +39,8 @@ const CSV_HEADER := "seed,biome,requested,measured,status,index,perfect,expert,c
 var options := {
 	"count": "8", "seed": "1000", "difficulty": "all", "biome": "rotate", "mode": "campaign", "target": "45",
 	"attempts": "10", "repairs": "3", "workers": "1", "worker": "-1", "out": "res://build/generated",
-	"dailies": "0", "start": "", "season": "0", "levels": "20", "days": "7",
+	"dailies": "0", "start": "", "season": "0", "levels": "20", "days": "7", "campaign": "0", "variants": "4",
+	"slots": "", "variant_from": "0",
 }
 ## Season levels below this index are one difficulty step easier (warm-up).
 const SEASON_WARMUP := 4
@@ -58,6 +65,8 @@ func _ready() -> void:
 		options["count"] = options["levels"]
 		if options["start"] == "":
 			options["start"] = DailyChallenge.today_key()
+	if int(options["campaign"]) > 0:
+		options["count"] = str(CampaignPlan.SLOTS.size())
 	if int(options["workers"]) > 1 and int(options["worker"]) < 0:
 		await _run_master(out)
 	else:
@@ -95,6 +104,8 @@ func _run_master(out: String) -> void:
 		_write_daily_table(out)
 	if int(options["season"]) > 0:
 		_write_season(out)
+	if int(options["campaign"]) > 0:
+		_write_campaign(out)
 	print("GEN done in %.0f s" % ((Time.get_ticks_msec() - started) / 1000.0))
 
 
@@ -102,13 +113,15 @@ func _run_worker(out: String) -> void:
 	var workers := maxi(int(options["workers"]), 1)
 	var worker := maxi(int(options["worker"]), 0)
 	for i in int(options["count"]):
-		if i % workers != worker:
+		if i % workers != worker or (options["slots"] != "" and not str(i) in options["slots"].split(",")):
 			continue
 		var report: Dictionary
 		if int(options["dailies"]) > 0:
 			report = await _produce_daily(i, out)
 		elif int(options["season"]) > 0:
 			report = await _produce_season(i, out)
+		elif int(options["campaign"]) > 0:
+			report = await _produce_campaign(i, out)
 		else:
 			report = await _produce(i, out, _spec_for(i))
 		var file := FileAccess.open("%s/reports/%d.json" % [out, report["seed"]], FileAccess.WRITE)
@@ -122,6 +135,8 @@ func _run_worker(out: String) -> void:
 			_write_daily_table(out)
 		if int(options["season"]) > 0:
 			_write_season(out)
+		if int(options["campaign"]) > 0:
+			_write_campaign(out)
 
 
 # ------------------------------------------------------------------ one level
@@ -179,6 +194,27 @@ func _produce_season(i: int, out: String) -> Dictionary:
 	var file := FileAccess.open("%s/season/%02d.json" % [out, i], FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "	"))
 	file.close()
+	return report
+
+
+## Campaign slot i: several seed variants, so the selection can keep the
+## difficulty rising inside each world (see _write_campaign).
+func _produce_campaign(i: int, out: String) -> Dictionary:
+	DirAccess.make_dir_recursive_absolute(out + "/campaign")
+	var report := {}
+	var accepted := 0
+	var first := int(options["variant_from"])
+	for variant in range(first, first + int(options["variants"])):
+		report = await _produce(i, out, CampaignPlan.spec_for(i, variant, VARIANT_STEP))
+		report["slot"] = i
+		report["variant"] = variant
+		var file := FileAccess.open("%s/campaign/%02d_%d.json" % [out, i, variant], FileAccess.WRITE)
+		file.store_string(JSON.stringify(report, "	"))
+		file.close()
+		if report["status"] == "accepted":
+			accepted += 1
+			if accepted >= 2:
+				break
 	return report
 
 
@@ -333,6 +369,63 @@ func _write_season(out: String) -> void:
 	schedule.seasons.sort_custom(func(a, b): return a["start"] < b["start"])
 	print("GEN season %s: %d/%d levels -> %s (%s)" % [id, levels.size(), int(options["levels"]), Season.SCHEDULE_PATH,
 			error_string(ResourceSaver.save(schedule, Season.SCHEDULE_PATH))])
+
+
+## Picks one variant per campaign slot. Inside each world it tries every
+## combination of the kept variants (accepted ones; reclassified only when a
+## slot has none) and keeps the one where the index rises the most steadily:
+## least total drop between consecutive levels, then the smoothest steps.
+func _write_campaign(out: String) -> void:
+	var dir := DirAccess.open(out + "/campaign")
+	if dir == null:
+		return
+	var by_slot := {}
+	for f in dir.get_files():
+		var r: Variant = JSON.parse_string(FileAccess.get_file_as_string(out + "/campaign/" + f))
+		if typeof(r) == TYPE_DICTIONARY and r.get("status", "") in ["accepted", "reclassified"]:
+			by_slot.get_or_add(int(r["slot"]), []).append(r)
+	var levels := []
+	for world in 3:
+		var slots: Array[int] = []
+		var pools: Array = []
+		for i in CampaignPlan.SLOTS.size():
+			if CampaignPlan.SLOTS[i][1] != world:
+				continue
+			var found: Array = by_slot.get(i, [])
+			var accepted := found.filter(func(r): return r["status"] == "accepted")
+			if found.is_empty():
+				print("GEN campaign %s: no level kept" % CampaignPlan.SLOTS[i][0])
+				continue
+			slots.append(i)
+			pools.append(accepted if not accepted.is_empty() else found)
+		var best := _best_progression(pools, 0, -1.0, [])
+		for k in slots.size():
+			var slot: Array = CampaignPlan.SLOTS[slots[k]]
+			var pick: Dictionary = best["picks"][k]
+			levels.append({"id": slot[0], "world": slot[1], "difficulty": slot[2],
+					"category": int(pick.get("measured", slot[2])), "status": pick["status"], "spec": pick["spec"],
+					"gold": pick["gold"], "silver": pick["silver"], "index": pick["index"],
+					"route_hash": pick["route_hash"], "motifs": pick.get("motifs", [])})
+	var file := FileAccess.open(CampaignPlan.RESULT_PATH, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"levels": levels}, "	"))
+	file.close()
+	print("GEN campaign: %d/%d levels -> %s" % [levels.size(), CampaignPlan.SLOTS.size(), CampaignPlan.RESULT_PATH])
+
+
+## Exhaustive search (a handful of variants per slot): {"drop", "rough", "picks"}.
+func _best_progression(pools: Array, k: int, previous: float, picks: Array) -> Dictionary:
+	if k == pools.size():
+		return {"drop": 0.0, "rough": 0.0, "picks": picks}
+	var best := {}
+	for r in pools[k]:
+		var index := float(r["index"])
+		var step := index - previous if previous >= 0.0 else 0.0
+		var rest := _best_progression(pools, k + 1, index, picks + [r])
+		var drop: float = rest["drop"] + maxf(-step, 0.0)
+		var rough: float = rest["rough"] + step * step
+		if best.is_empty() or drop < best["drop"] - 0.01 or (absf(drop - best["drop"]) <= 0.01 and rough < best["rough"]):
+			best = {"drop": drop, "rough": rough, "picks": rest["picks"]}
+	return best
 
 
 func _write_summary(out: String) -> void:

@@ -36,6 +36,7 @@ Plan de referencia: *Orbit Runner como servicio: plan de desarrollo* (página pr
 - Se genera en ~50 ms (PC). Si el validador rechaza un intento se prueba la siguiente sub-semilla (hasta 12).
 - Salida: escena `Level` con los metadatos `route` (cada pieza con `tech`, `motif`, `rest`…), `generated` (spec, motivos, longitud, estimación de tiempo, medallas, hash) y `extras` (islas de gemas).
 - Reparaciones: `LevelSpec.adjustments` (motivo → escala de hueco y tamaño de plataforma) forma parte de la especificación, así que el nivel reparado se reconstruye igual en el teléfono.
+- Foco (`LevelSpec.focus`, solo campaña): familias de técnica que el nivel exige antes que las aleatorias. Con foco, además, un motivo ya usado pierde peso (1 / (1 + usos)). Sin foco el generador no cambia: los 108 niveles guardados de diarios y temporadas se reconstruyen con el mismo hash.
 
 ## Bot validador y calificación
 
@@ -55,6 +56,11 @@ bash ../dev_tools/validation/run_campaign_bot.sh perfect 1
 # Lote: 24 niveles, 12 procesos
 godot --headless --fixed-fps 60 --path . res://tools/generate_levels.tscn -- count=24 seed=3000 attempts=8 workers=12 out=res://build/batch
 
+# Niveles generados de la campaña (tools/campaign_plan.gd -> tools/campaign_generated.json; luego build_levels)
+godot --headless --fixed-fps 60 --path . res://tools/generate_levels.tscn -- campaign=1 variants=4 workers=15 out=res://build/campaign
+godot --headless --fixed-fps 60 --path . res://tools/generate_levels.tscn -- campaign=1 slots=17,18 variant_from=4 out=res://build/campaign
+godot --headless --path . res://tools/build_levels.tscn
+
 # Desafíos diarios validados para los próximos 30 días (escribe resources/generator/daily_seeds.tres)
 godot --headless --fixed-fps 60 --path . res://tools/generate_levels.tscn -- dailies=30 attempts=8 workers=12 out=res://build/dailies
 ```
@@ -71,6 +77,23 @@ Primera calibración contra el bot (2026-10-17, lotes de 24 niveles): el índice
 | 2 — tras la calibración | 18 | 2 | 4 |
 
 En el lote 2, Fácil, Medio y Difícil salen en su categoría casi siempre (índices ~6–10, ~18–27 y ~40–46). **Extremo sigue corto**: el índice ya cae en su franja, pero el perfil experto lo supera casi siempre (el plan pide un 40–80 %), así que solo 1 de 6 se aceptó. Próximo ajuste: endurecer más los motivos combinados y las ventanas de tiempo de Extremo, o revisar si el perfil experto es demasiado preciso.
+
+### Campaña de 30 niveles (2026-10-18)
+
+- 20 niveles nuevos generados y validados por el bot. Van después de los niveles a mano de cada mundo (D20 en `DESIGN_DECISIONS.md`; tabla en `LEVEL_DESIGN.md`).
+- **Plan** (`tools/campaign_plan.gd`). Para cada hueco: id, mundo y categoría pedida. Cada mundo define:
+  - sus mecánicas: solo las que ya enseñó;
+  - su bioma;
+  - su duración objetivo: 40 / 45 / 50 s;
+  - su foco, rotado de un hueco al siguiente.
+- **Producción.** Se prueban hasta 4 semillas por hueco y se para tras 2 aceptadas.
+- **Selección.** En cada mundo se prueban todas las combinaciones de variantes y se elige la que más sostiene la subida del índice: menor caída total entre niveles seguidos y, después, pasos más regulares. Solo se usa un reclasificado si el hueco no tiene ningún aceptado.
+- **Resultado.**
+  - 19 de 20 aceptados en la categoría pedida.
+  - *Cripta del Espejismo* se pidió Extremo y quedó reclasificada como Difícil (índice 50,6): 10 semillas no dieron un Extremo aceptable, el mismo problema de calibración de Extremo ya anotado.
+  - Quedan bajadas pequeñas del índice dentro de un mundo (≤ 4 puntos, dentro del ruido del bot).
+- **Escenas.** `build_levels.gd` reconstruye cada nivel desde su especificación y comprueba que el hash de ruta coincide con el que validó el bot. Las escenas se guardan en `scenes/levels/wN_lM.tscn`, con las medallas del bot experto.
+- **Si cambia el generador**, `build_levels` avisa con un error de hash. En ese caso hay que regenerar con `campaign=1` y revisar los nuevos niveles; no se debe aceptar a ciegas un nivel distinto del que validó el bot.
 
 ## Modos en el juego
 

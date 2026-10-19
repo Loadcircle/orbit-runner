@@ -8,6 +8,9 @@ const DRAG_THRESHOLD := 24.0
 const FLING_DAMPING := 5.0
 const CARD_GAP := 18
 const WORLD_GAP := 64
+## Colour of each difficulty label (the text carries the meaning).
+const DIFFICULTY_COLORS := [Color(0.5, 0.92, 0.55), Color(1.0, 0.8, 0.25), Color(1.0, 0.55, 0.3),
+		Color(1.0, 0.45, 0.68)]
 
 var _world := 0
 var _offset := 0.0
@@ -251,6 +254,9 @@ func _card(index: int, info: LevelInfo) -> Button:
 	inner.add_child(top)
 	var number := tr("LEVEL_TUTORIAL_SHORT") if info.is_tutorial else str(_campaign_number(index))
 	top.add_child(UiKit.label(number, 40, UiKit.ORANGE))
+	if info.difficulty >= 0:
+		top.add_child(UiKit.label(tr(LevelSpec.DIFFICULTY_KEYS[info.difficulty]), 20,
+				DIFFICULTY_COLORS[info.difficulty]))
 	top.add_child(UiKit.spacer())
 	if not unlocked:
 		top.add_child(UiKit.glyph(IconGlyph.Icon.LOCK, Color(0.85, 0.88, 0.95), 40))
