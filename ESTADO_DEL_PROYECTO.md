@@ -1,6 +1,6 @@
 # Estado del proyecto — Orbit Runner
 
-Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la rama `feature/freemium-temporadas`). Punto de entrada para retomar el trabajo en una nueva sesión.
+Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos, avisos y campaña de 30 niveles en la rama `feature/freemium-temporadas`). Punto de entrada para retomar el trabajo en una nueva sesión.
 
 ## Ramas (2026-10-18)
 
@@ -9,7 +9,7 @@ Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la ra
   - congelado al tocar la meta;
   - yo-yo bajo los pies en caída.
 - `respaldo/master-v1`: el `master` anterior (v1 + pase visual v2), guardado por petición del propietario.
-- `feature/freemium-temporadas`: energía, tienda, anuncios, temporadas semanales, rivales simulados, amigos, avisos y plugin Android de notificaciones. Todo lo externo es simulado; el siguiente paso es integrarlo con Firebase. Sin fusionar: fusionar con `master` cuando el propietario lo pruebe y lo pida.
+- `feature/freemium-temporadas`: energía, tienda, anuncios, temporadas semanales, rivales simulados, amigos, avisos, plugin Android de notificaciones y campaña de 30 niveles (10 por mundo; 20 generados y validados por el bot, D20). Todo lo externo es simulado; el siguiente paso es integrarlo con Firebase. Sin fusionar: fusionar con `master` cuando el propietario lo pruebe y lo pida.
 - `feature/juego-como-servicio`: ya fusionada en `master` (avance rápido).
 
 ## Leer primero
@@ -28,7 +28,7 @@ Actualizado: 2026-10-18 (freemium, temporadas, rivales, amigos y avisos en la ra
 - Tutorial + 30 niveles (3 mundos de 10; en la rama `feature/freemium-temporadas`, 2026-10-18: 10 a mano y 20 generados y validados por el bot, ver `docs/LEVEL_DESIGN.md` y D20), gemas, chispas, medallas, 23 logros, 15 cosméticos, ajustes, guardado atómico versionado.
 - **Idioma:** sigue al dispositivo; si no es ES/EN arranca en inglés; selector en Ajustes → Juego.
 - **Pase visual v2 (2026-10-17):** shader toon propio (`resources/shaders/toon*.gdshader*`, sombras de color por bioma, rim, contornos), cielo por shader, tonemap lineal y niebla por profundidad (`scripts/level/level_environment.gd` + `resources/biomes/*.tres`). Los 49 assets se regeneraron en Blender por script con color de vértice; protagonista nuevo (cara expresiva, parpadeo, animaciones nuevas). Polvo al aterrizar y estallidos al recoger. Icono y retrato renderizados en Godot (`tools/render_ui_images.tscn`).
-- APK de depuración del pase v2 **instalado en el S25** el 2026-10-17 (arranca sin errores en logcat). El puerto de la depuración inalámbrica cambia: usar `adb mdns services` y conectar al puerto más reciente (último: `192.168.1.39:32883`).
+- APK de depuración del pase v2 **instalado en el S25** el 2026-10-17 (arranca sin errores en logcat). El puerto de la depuración inalámbrica cambia: usar `adb mdns services` y conectar al puerto más reciente (último: `192.168.1.39:33017`).
 - **Estilo gráfico v2 aprobado por el propietario (2026-10-17)** tras probarlo en el S25. Es la referencia para assets futuros.
 - Comentario del propietario sobre la v1 en el S25: "se ve muy bien, va fluido, algún tirón".
 - Git local en la raíz, sin remoto. Commits por hito.
