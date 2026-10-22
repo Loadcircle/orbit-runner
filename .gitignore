@@ -15,3 +15,8 @@ orbit_runner_game/assets_source/blender/scripts/last_build.log
 orbit_runner_game/assets_source/blender/scripts/last_character_report.json
 __pycache__/
 orbit_runner_game/tools/_*
+# Roblox
+roblox/tools/
+*.rbxl.lock
+*.rbxlx.lock
+roblox/sourcemap.json

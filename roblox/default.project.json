@@ -1,0 +1,34 @@
+{
+  "name": "OrbitRunner",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "Services": {
+        "$path": "src/server/Services"
+      },
+      "ServerMain": {
+        "$path": "src/entry/ServerMain.server.luau"
+      }
+    },
+    "StarterPlayer": {
+      "$properties": {
+        "EnableMouseLockOption": false,
+        "DevComputerMovementMode": "Scriptable",
+        "DevTouchMovementMode": "Scriptable"
+      },
+      "StarterPlayerScripts": {
+        "Client": {
+          "$path": "src/client"
+        },
+        "ClientMain": {
+          "$path": "src/entry/ClientMain.client.luau"
+        }
+      }
+    }
+  }
+}
