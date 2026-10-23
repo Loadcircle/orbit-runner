@@ -112,7 +112,8 @@ function ResultsScreen.open(self: ResultsScreen, run: Run, summary: { [string]: 
 	end
 	if summary then
 		if summary.accepted then
-			line(string.format("+%d ✦   ·   %s", summary.sparksEarned or 0, Strings.get("RESULTS_SAVED")), 18, Theme.DIM)
+			line(string.format("+%d %s   ·   %s", summary.sparksEarned or 0, Strings.get("RESULTS_SPARKS"),
+				Strings.get("RESULTS_SAVED")), 18, Theme.DIM)
 		else
 			line(Strings.get("RESULTS_REJECTED") .. " (" .. tostring(summary.reason) .. ")", 18, Theme.ORANGE)
 		end

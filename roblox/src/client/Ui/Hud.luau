@@ -141,7 +141,7 @@ function Hud.new(parent: Instance): Hud
 	for i = 1, 3 do
 		table.insert(gemIcons, Theme.label("◇", 40, Color3.new(1, 1, 1), { LayoutOrder = i, Parent = center }))
 	end
-	Theme.label("✦", 34, Theme.GOLD, { LayoutOrder = 5, Parent = center })
+	Theme.sparkIcon(34, { LayoutOrder = 5, Parent = center })
 	local sparkLabel = Theme.label("0/0", 30, Theme.WHITE, { LayoutOrder = 6, Parent = center })
 
 	-- Mensajes y panel de indicaciones.

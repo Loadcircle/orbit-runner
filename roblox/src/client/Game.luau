@@ -23,6 +23,7 @@ local Strings = require(Client:WaitForChild("Strings"))
 local YoyoController = require(Client:WaitForChild("YoyoController"))
 local Ui = Client:WaitForChild("Ui")
 local Hud = require(Ui:WaitForChild("Hud"))
+local LabPanel = require(Ui:WaitForChild("LabPanel"))
 local LevelSelect = require(Ui:WaitForChild("LevelSelect"))
 local PauseMenu = require(Ui:WaitForChild("PauseMenu"))
 local ResultsScreen = require(Ui:WaitForChild("ResultsScreen"))
@@ -49,6 +50,7 @@ local pauseMenu: PauseMenu.PauseMenu
 local results: ResultsScreen.ResultsScreen
 local settingsPanel: SettingsPanel.SettingsPanel
 local levelSelect: LevelSelect.LevelSelect
+local labPanel: LabPanel.LabPanel
 
 local function isTouch(): boolean
 	return InputRouter.preferredDevice == "touch"
@@ -74,6 +76,7 @@ local function closeSession()
 	end
 	pauseMenu:close()
 	results:close()
+	labPanel:setVisible(false)
 	hud:setVisible(false)
 	updateTouchVisibility()
 end
@@ -147,6 +150,7 @@ function Game.play(id: string)
 		updateTouchVisibility()
 	end
 	session = newSession
+	labPanel:setVisible(id == "lab")
 	hud:setVisible(true)
 	updateTouchVisibility()
 end
@@ -204,6 +208,26 @@ local function render(dt: number)
 	if session then
 		session:render(dt)
 	end
+end
+
+-- Mide una técnica en el laboratorio (Dev/Calibration). Salidas en metros: pista A
+-- para los saltos y zona C para los trampolines.
+local function measureTechnique(technique: string): { [string]: any }?
+	local c = controller
+	if not c then
+		return nil
+	end
+	return Calibration.measure(c, technique, function(tech: string)
+		local starts = {
+			trampoline = { 30 - 3.5, 0.1, -16 },
+			trampoline_24 = { 30 + 3.5, 0.1, -16 },
+			yoyo_ground = { 0, 0.1, -20 },
+		}
+		local start = starts[tech] or { 0, 0.1, -20 }
+		c:respawnAt(Vector3.new(start[1], start[2], start[3]) * Units.K, Vector3.new(0, 0, -1))
+		camera.targetYaw = 0
+		camera:snap(0)
+	end)
 end
 
 local function registerProbe()
@@ -266,28 +290,52 @@ local function registerProbe()
 		end
 		return true
 	end)
+	-- Entrada programada para pruebas desde Studio (MCP): mover, pulsar y soltar.
+	local scriptedState: { move: Vector2, held: { [string]: boolean } }? = nil
+	DebugProbe.command("input", function(moveX: number?, moveY: number?)
+		if moveX == nil then
+			scriptedState = nil
+			InputRouter.setScripted(nil)
+			return true
+		end
+		if not scriptedState then
+			scriptedState = { move = Vector2.zero, held = {} }
+			InputRouter.setScripted(scriptedState)
+		end
+		(scriptedState :: any).move = Vector2.new(moveX, moveY or 0)
+		return true
+	end)
+	DebugProbe.command("press", function(name: string, hold: boolean?)
+		InputRouter.scriptedPress(name :: any, hold == true)
+		return true
+	end)
+	DebugProbe.command("release", function(name: string)
+		if scriptedState then
+			scriptedState.held[name] = false
+		end
+		return true
+	end)
+	DebugProbe.command("forceDevice", function(device: string)
+		InputRouter.preferredDevice = device :: any
+		InputRouter.deviceChanged:Fire(device)
+		return true
+	end)
+	DebugProbe.provide("touch", function()
+		local buttons = {}
+		for name, view in touch.buttons do
+			buttons[name] = {
+				position = { view.hit.AbsolutePosition.X, view.hit.AbsolutePosition.Y },
+				size = { view.hit.AbsoluteSize.X, view.hit.AbsoluteSize.Y },
+				dimmed = view.icon.TextTransparency > 0.3,
+			}
+		end
+		return { visible = touch.gui.Enabled, buttons = buttons }
+	end)
 	DebugProbe.command("frameCap", function(fps: number?)
 		Calibration.setFrameCap(fps)
 		return true
 	end)
-	DebugProbe.command("measure", function(technique: string)
-		local c = controller
-		if not c then
-			return nil
-		end
-		return Calibration.measure(c, technique, function(tech: string)
-			-- Salidas en el laboratorio (metros): pista A para saltos, zona C para rebotes.
-			local starts = {
-				trampoline = { 30 - 3.5, 0.1, -16 },
-				trampoline_24 = { 30 + 3.5, 0.1, -16 },
-				yoyo_ground = { 0, 0.1, -20 },
-			}
-			local start = starts[tech] or { 0, 0.1, -20 }
-			c:respawnAt(Vector3.new(start[1], start[2], start[3]) * Units.K, Vector3.new(0, 0, -1))
-			camera.targetYaw = 0
-			camera:snap(0)
-		end)
-	end)
+	DebugProbe.command("measure", measureTechnique)
 end
 
 function Game.start()
@@ -331,6 +379,8 @@ function Game.start()
 		end,
 		levels = showSelect,
 	})
+	labPanel = LabPanel.new(gui)
+	labPanel.measure = measureTechnique
 	levelSelect = LevelSelect.new(gui)
 	levelSelect.onPlay = Game.play
 	levelSelect.onSettings = function()

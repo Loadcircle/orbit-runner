@@ -110,6 +110,29 @@ function Theme.list(direction: Enum.FillDirection, padding: number, align: Enum.
 	}) :: UIListLayout
 end
 
+-- Icono de chispa: rombo dorado (la fuente de Roblox no tiene ✦).
+function Theme.sparkIcon(size: number, props: Props?): Frame
+	local holder = Theme.create("Frame", {
+		BackgroundTransparency = 1,
+		Size = UDim2.fromOffset(size, size),
+	}) :: Frame
+	local diamond = Theme.create("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromScale(0.62, 0.62),
+		Rotation = 45,
+		BackgroundColor3 = Theme.GOLD,
+		BorderSizePixel = 0,
+		Parent = holder,
+	})
+	Theme.create("UICorner", { CornerRadius = UDim.new(0, 3), Parent = diamond })
+	Theme.stroke(Theme.DARK, 2, 0.25).Parent = diamond
+	for key, value in props or {} do
+		(holder :: any)[key] = value
+	end
+	return holder
+end
+
 -- ScreenGui a pantalla completa dentro de las zonas seguras del dispositivo.
 function Theme.screen(name: string, order: number, parent: Instance): ScreenGui
 	return Theme.create("ScreenGui", {

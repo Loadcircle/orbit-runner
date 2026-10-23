@@ -552,7 +552,9 @@ end
 -- ------------------------------------------------------------------ fuerzas externas
 
 -- Lanzamiento vertical de trampolines y del disco. Restaura las acciones aéreas.
-function PlayerController.bounce(self: PlayerController, verticalSpeed: number, source: string)
+-- `immediate` = el rebote se aplica en este mismo fotograma sin entrar en un área (disco
+-- desplegado bajo los pies): no necesita compensación por duración del fotograma.
+function PlayerController.bounce(self: PlayerController, verticalSpeed: number, source: string, immediate: boolean?)
 	if self.isDead or self.frozen or self:isSpawnProtected() then
 		return
 	end
@@ -568,7 +570,7 @@ function PlayerController.bounce(self: PlayerController, verticalSpeed: number, 
 	-- también se compensa.
 	local fall = -self.velocity.Y
 	local extraDt = self._lastDt - 1 / GODOT_TICK_RATE
-	if fall > 0 and extraDt > 0 then
+	if fall > 0 and extraDt > 0 and not immediate then
 		local depth = fall * extraDt * (if source == "yoyo" then 1.5 else 0.5)
 		verticalSpeed = math.sqrt(verticalSpeed * verticalSpeed + 2 * self.tuning.gravityUp * depth)
 	end

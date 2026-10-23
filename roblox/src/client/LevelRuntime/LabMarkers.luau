@@ -15,7 +15,7 @@ local function billboard(parent: BasePart, text: string, size: UDim2, color: Col
 	gui.Size = size
 	gui.AlwaysOnTop = false
 	gui.LightInfluence = 0
-	gui.MaxDistance = 220
+	gui.MaxDistance = 110
 	gui.Parent = parent
 	local label = Instance.new("TextLabel")
 	label.BackgroundTransparency = 1

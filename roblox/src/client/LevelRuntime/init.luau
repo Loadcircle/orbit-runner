@@ -23,6 +23,8 @@ local Strings = require(Client:WaitForChild("Strings"))
 
 local Net = Shared:WaitForChild("Net")
 local L = PropTuning.level
+local DECOR_FADE_NEAR = Units.studs(1.0)
+local DECOR_FADE_FAR = Units.studs(4.0)
 
 export type Deps = {
 	player: any, -- PlayerController
@@ -66,6 +68,7 @@ export type LevelSession = typeof(setmetatable({} :: {
 	_ownedGems: { boolean },
 	_tutorial: boolean,
 	_lab: boolean,
+	_decorParts: { BasePart },
 }, LevelSession))
 
 local function yawToFacing(yaw: number): Vector3
@@ -109,6 +112,7 @@ function LevelSession.new(id: string, deps: Deps): LevelSession
 		_ownedGems = owned,
 		_tutorial = data.tutorial == true,
 		_lab = entry ~= nil and entry.lab,
+		_decorParts = {},
 	}, LevelSession)
 	self:_build()
 	return self
@@ -134,6 +138,16 @@ function LevelSession._build(self: LevelSession)
 	}
 	local built = LevelBuilder.build(data, ctx :: any)
 	self.props = built.props
+	-- Decoración que se difumina cerca de la cámara (level.gd: _fade_decor_near_camera).
+	for _, model in decor:GetChildren() do
+		if model:IsA("Model") then
+			for _, part in model:GetDescendants() do
+				if part:IsA("BasePart") then
+					table.insert(self._decorParts, part)
+				end
+			end
+		end
+	end
 	self.sparksTotal = #((data.collectibles or {}).sparks or {})
 
 	local start = data.player_start or { pos = { 0, 0, 0 }, yaw = 0 }
@@ -220,6 +234,11 @@ end
 function LevelSession.render(self: LevelSession, _dt: number)
 	self.deps.hud:update()
 	self.deps.touch:update()
+	local cameraPosition = workspace.CurrentCamera.CFrame.Position
+	for _, part in self._decorParts do
+		local distance = (part.Position - cameraPosition).Magnitude - part.Size.Magnitude / 2
+		part.LocalTransparencyModifier = 1 - math.clamp((distance - DECOR_FADE_NEAR) / (DECOR_FADE_FAR - DECOR_FADE_NEAR), 0.25, 1)
+	end
 end
 
 function LevelSession._playerStarted(self: LevelSession): boolean

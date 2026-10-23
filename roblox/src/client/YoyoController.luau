@@ -27,7 +27,7 @@ type Owner = {
 	isDead: boolean,
 	velocity: Vector3,
 	feet: (any) -> Vector3,
-	bounce: (any, number, string) -> (),
+	bounce: (any, number, string, boolean?) -> (),
 	rig: { character: Model, root: BasePart },
 }
 
@@ -191,7 +191,7 @@ function YoyoController.deployUnder(self: YoyoController, feet: Vector3)
 	self:_setHolsterVisible(false)
 	self.playSfx("yoyo_throw")
 	self:_deploy()
-	self:_tryBounce()
+	self:_tryBounce(true)
 end
 
 function YoyoController.recallInstant(self: YoyoController)
@@ -305,7 +305,7 @@ function YoyoController._checkOverlap(self: YoyoController)
 	self:_tryBounce()
 end
 
-function YoyoController._tryBounce(self: YoyoController)
+function YoyoController._tryBounce(self: YoyoController, immediate: boolean?)
 	local owner = self.owner
 	if self.state ~= "deployed" or owner.isDead then
 		return
@@ -314,7 +314,7 @@ function YoyoController._tryBounce(self: YoyoController)
 	if owner.velocity.Y > Units.studs(Y.maxBounceEntrySpeed) or owner:feet().Y < self._position.Y - Units.studs(Y.belowTolerance) then
 		return
 	end
-	owner:bounce(owner.tuning.yoyoBounceVelocity, "yoyo")
+	owner:bounce(owner.tuning.yoyoBounceVelocity, "yoyo", immediate)
 	self.playSfx("bounce_yoyo")
 	self.consumed:Fire()
 	self:_startReturn()
