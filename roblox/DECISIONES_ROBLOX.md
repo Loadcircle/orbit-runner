@@ -206,6 +206,7 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Al entrar en una zona con otra dirección (un cruce) corrige aunque se acabe de girar a mano.
   - Parado se puede mirar alrededor libremente; en el vestíbulo no hay asistencia.
   - Al empezar el nivel y al reaparecer, `snap` coloca la cámara detrás del jugador.
+- **Botones de acción táctiles** (`client/InputRouter.luau`): el yo-yo queda encima de Dash/Roll (orden −1) y los dos se ven ×1.2 en pantallas táctiles, con un `UIScale` por botón. El `ActionManager` de la plantilla no se toca, y el joystick y el salto nativos tampoco cambian.
 - **Modo de cámara Classic fijo** (`DevTouchCameraMovementMode` y `DevComputerCameraMovementMode`; antes "UserChoice").
   - En el móvil, la opción por defecto del usuario es "Follow", que ignora los cambios externos de `Camera.CFrame`. En Studio, un giro externo de 170° volvió solo a 0°.
   - Por eso, en el S25 la cámara miraba hacia atrás al pulsar "Siguiente" y al reaparecer.
@@ -227,6 +228,6 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - [x] Cámara: zonas, anticipación, anti-oclusión (`Raycast` del brazo), ajuste manual y salto a la yaw del checkpoint.
 - [x] Flujo completo: inicio → muertes y reapariciones → meta → resultados con medalla, gemas, chispas y estrellas. El servidor registra o rechaza.
 - [x] Controles táctiles en un teléfono real (S25, por el dueño): funcionan, aunque los botones admiten algún ajuste. El teclado está listo y el mando no se ha probado en físico.
-- [ ] Rendimiento en el teléfono.
+- [x] Rendimiento en el teléfono: el dueño lo aprobó en el S25 (2026-10-23, "va súper bien"). No hay cifra de FPS medida.
 - [x] Visto bueno del dueño a la sensación (2026-10-23): controles de la plantilla, cámara asistida, gesto del yo-yo, celebración, sonidos y props. La recalibración de alcances queda aplazada.
 - [ ] Mallas migradas en el juego (bloqueado por la publicación del lugar).

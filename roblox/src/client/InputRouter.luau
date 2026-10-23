@@ -15,6 +15,12 @@ export type ActionName = "yoyo" | "pause"
 local InputRouter = {}
 
 local YOYO_ACTION = "Yo-yo"
+-- Orden en la lista de botones de acción (de arriba abajo): el yo-yo encima de
+-- Dash/Roll, que la plantilla registra con orden 0.
+local YOYO_DISPLAY_ORDER = -1
+-- Tamaño de los botones de acción en pantallas táctiles (Dash/Roll y Yo-yo), pedido por
+-- el dueño tras probar en el S25. El joystick y el salto nativos no cambian.
+local TOUCH_ACTION_SCALE = 1.2
 
 local listeners: { [string]: { (() -> ()) } } = {}
 local started = false
@@ -67,7 +73,23 @@ function InputRouter.start()
 		if state == Enum.UserInputState.Begin then
 			fire("yoyo")
 		end
-	end, Enum.KeyCode.E, Enum.KeyCode.ButtonY, 2)
+	end, Enum.KeyCode.E, Enum.KeyCode.ButtonY, YOYO_DISPLAY_ORDER)
+	if UserInputService.TouchEnabled then
+		local actionGui = Players.LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ActionGui")
+		local list = actionGui:WaitForChild("ListFrame")
+		local function enlarge(child: Instance)
+			if child:IsA("Frame") and not child:FindFirstChild("TouchScale") then
+				local scale = Instance.new("UIScale")
+				scale.Name = "TouchScale"
+				scale.Scale = TOUCH_ACTION_SCALE
+				scale.Parent = child
+			end
+		end
+		list.ChildAdded:Connect(enlarge)
+		for _, child in list:GetChildren() do
+			enlarge(child)
+		end
+	end
 
 	UserInputService:GetPropertyChangedSignal("PreferredInput"):Connect(updatePreferredDevice)
 	updatePreferredDevice()
