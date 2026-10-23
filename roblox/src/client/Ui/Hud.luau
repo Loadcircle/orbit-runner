@@ -147,7 +147,7 @@ function Hud.new(parent: Instance): Hud
 	-- Mensajes y panel de indicaciones.
 	local message = Theme.label("", 56, Theme.GOLD, {
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0.5, 0, 0, topInset + 150),
+		Position = UDim2.new(0.5, 0, 0, topInset + 250), -- bajo el panel de indicaciones
 		TextTransparency = 1,
 		Parent = root,
 	})
@@ -263,13 +263,21 @@ end
 
 function Hud.flashMessage(self: Hud, text: string)
 	local message = self.message
+	-- El contorno (UIStroke de Theme.label) se desvanece con el texto; si no, se queda.
+	local stroke = message:FindFirstChildOfClass("UIStroke")
 	message.Text = text
 	message.TextTransparency = 0
+	if stroke then
+		stroke.Transparency = 0.25
+	end
 	self.messageScale.Scale = 0.6
 	tween(self.messageScale, 0.25, { Scale = 1 }, Enum.EasingStyle.Back)
 	task.delay(1.25, function()
 		if message.Text == text then
 			tween(message, 0.4, { TextTransparency = 1 })
+			if stroke then
+				tween(stroke, 0.4, { Transparency = 1 })
+			end
 		end
 	end)
 end

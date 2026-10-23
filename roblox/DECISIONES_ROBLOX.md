@@ -167,6 +167,26 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - El salto simple es más corto que en Godot (unos 14 studs frente a 21,5), así que los huecos de los niveles se salvan con el doble salto. **Pendiente:** recalibrar los niveles con el dueño.
 - **Lugar:** Place1, la plantilla con Rojo sincronizado, pasa a ser el lugar del juego. Hay que publicarla sobre "Orbit Runner (Test)". Los prefabs de mallas se volvieron a montar en ella.
 
+## R15. Aspecto de los niveles con los assets de la plantilla (2026-10-23, sustituye a R10 en juego)
+- **Motivo:** el dueño vio mal los niveles con las mallas de Blender. Las mallas no coincidían con sus colisiones: el jugador flotaba sobre las islas y el trampolín salía gigante y desplazado. Pidió usar los assets propios de Roblox y traer de lo nuestro solo lo que no exista allí.
+- **Plataformas:** la propia caja de colisión es el bloque visible, como en la plantilla. Lleva el material de muro (`Concrete_Template_Walls`) con el color del bioma y una losa superior con el material de suelo (`Concrete_Template_Floors`). Lo que se ve es lo que se pisa.
+  - isles: blanco y menta;
+  - toyworks: blanco y naranja;
+  - ruins: crema y lavanda.
+- **Assets de la plantilla:** se copiaron en el lugar a `ReplicatedStorage.TemplateAssets`, porque los originales están en `ServerStorage` y el cliente no los ve.
+  - `LevelRuntime/AssetLibrary` traduce los nombres de los niveles a esos assets, con su encaje:
+    - `PLAT_Moving` → plataforma móvil de la plantilla;
+    - `PLAT_Timed` → plataforma de un solo sentido;
+    - `PROP_Spark` → moneda;
+    - `ENV_Tree`, `ENV_Pine`, `ENV_Bush`, `ENV_Rock_*` y `ENV_LampPost` → helechos, hostas, rocas y columna.
+  - Los assets se encajan así:
+    - las plataformas se estiran en X/Z con la cara de arriba en el origen;
+    - la decoración se escala con la base en el origen;
+    - se quitan las luces de cada pieza.
+- **Lo que no existe en Roblox** se queda con nuestras formas nativas: trampolín, impulsor, viento, plataforma que se rompe, peligros, checkpoint, meta, gemas y yo-yo.
+- **Mallas de Blender retiradas del juego:** se borran `ReplicatedStorage.Assets` del lugar y `ServerScriptService.MeshData` del proyecto. Los IDs subidos siguen en `Shared/AssetIds` y las herramientas siguen en `studio_tools/`, por si se recuperan.
+- **HUD:** el contorno del mensaje "¡Punto de control!" ya se desvanece con el texto; antes se quedaba visible. El mensaje baja para no tapar el panel de indicaciones.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

@@ -19,9 +19,6 @@
       },
       "ServerMain": {
         "$path": "src/entry/ServerMain.server.luau"
-      },
-      "MeshData": {
-        "$path": "assets_source/meshes"
       }
     },
     "StarterPlayer": {

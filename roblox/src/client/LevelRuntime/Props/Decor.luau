@@ -1,7 +1,7 @@
 --!strict
 -- Decoración del bioma (assets ENV_*). Solo visual: sin colisión ni consultas, para no
--- tapar la cámara ni interferir con sensores. Formas nativas provisionales hasta que
--- lleguen los MeshParts (H8); ENV_Bush, ENV_Rock y ENV_Cloud se quedan nativos (§3.8).
+-- tapar la cámara ni interferir con sensores. Usa las plantas, rocas y columnas de la
+-- plantilla Platformer (AssetLibrary, R15); lo que no tiene equivalente queda nativo.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -103,11 +103,11 @@ local BUILDERS: { [string]: (Instance, CFrame, number) -> () } = {
 }
 
 function Decor.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
-	-- Malla migrada si existe (ENV_Tree, ENV_Pine…); si no, forma nativa.
+	-- Asset de la plantilla si existe (ENV_Tree, ENV_Rock_A…); si no, forma nativa.
 	local visual = AssetLibrary.instantiate(entry.asset, ctx.decor, Common.frame(entry))
 	if visual then
 		if entry.scale then
-			visual.model:ScaleTo(entry.scale[1])
+			visual.model:ScaleTo(visual.model:GetScale() * entry.scale[1])
 		end
 		return {}
 	end

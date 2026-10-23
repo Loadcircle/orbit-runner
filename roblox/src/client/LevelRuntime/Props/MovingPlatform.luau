@@ -61,7 +61,7 @@ function MovingPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Pro
 			* CFrame.new(0, size.Y / 2 + 0.05, i * size.Z * 0.18) * CFrame.Angles(0, math.rad(35) * i, 0) })
 	end
 
-	local visual = AssetLibrary.instantiate("PLAT_Moving", ctx.geometry, start)
+	local visual = AssetLibrary.instantiate("PLAT_Moving", ctx.geometry, start, size)
 	if visual then
 		body.Transparency = 1
 		for _, decoration in decorations do

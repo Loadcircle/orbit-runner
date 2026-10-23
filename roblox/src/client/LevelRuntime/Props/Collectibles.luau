@@ -127,10 +127,9 @@ function Collectibles.spark(position: { number }, ctx: Types.Context): Types.Pro
 		Material = Enum.Material.Neon,
 		CastShadow = false,
 	})
-	-- Malla migrada (escala 1.1 en spark.tscn).
+	-- Moneda de la plantilla Platformer (AssetLibrary).
 	local visual = AssetLibrary.instantiate("PROP_Spark", ctx.geometry, CFrame.new(pos))
 	if visual then
-		visual.model:ScaleTo(1.1)
 		spark.Transparency = 1
 	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "SparkArea", {

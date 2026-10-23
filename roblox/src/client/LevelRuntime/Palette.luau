@@ -1,16 +1,18 @@
 --!strict
--- Paleta v2 "vivid" de los assets (assets_source/blender/scripts/or_common.py) y ambiente
--- por bioma (resources/biomes/*.tres), traducido a Lighting/Atmosphere nativos.
+-- Paleta v2 "vivid" de los assets (assets_source/blender/scripts/or_common.py) y colores
+-- por bioma. La iluminación y el cielo son los de la plantilla Platformer (R14); las
+-- plataformas usan sus materiales (MaterialVariant del lugar) y su gama pastel (R15).
 -- Lenguaje visual (guía §3.5): seguro = cálido/verde, impulso = amarillo/naranja,
 -- temporal o móvil = cian/azul, peligro = magenta/morado; siempre con forma o animación.
-
-local Lighting = game:GetService("Lighting")
 
 local function hex(value: string): Color3
 	return Color3.fromHex(value)
 end
 
 local Palette = {
+	-- MaterialVariant de la plantilla (MaterialService del lugar, base Plastic).
+	floorVariant = "Concrete_Template_Floors",
+	wallVariant = "Concrete_Template_Walls",
 	grass = hex("#4cb83a"),
 	grassLight = hex("#86d24a"),
 	grassDark = hex("#25863a"),
@@ -66,9 +68,9 @@ export type Biome = {
 Palette.biomes = {
 	isles = {
 		id = "isles",
-		top = Palette.grass,
-		side = Palette.cliff,
-		under = Palette.cliffDark,
+		top = hex("#ffffff"),
+		side = hex("#58daab"),
+		under = hex("#3fb98d"),
 		skyTop = Color3.new(0.05, 0.30, 0.85),
 		skyHorizon = Color3.new(0.78, 0.93, 1.0),
 		sun = Color3.new(1.0, 0.96, 0.86),
@@ -80,9 +82,9 @@ Palette.biomes = {
 	},
 	toyworks = {
 		id = "toyworks",
-		top = Palette.toyYellow,
-		side = Palette.toyRed,
-		under = Palette.toyBlue,
+		top = hex("#ffffff"),
+		side = hex("#ffaa00"),
+		under = hex("#e08a00"),
 		skyTop = Color3.new(0.22, 0.12, 0.62),
 		skyHorizon = Color3.new(1.0, 0.72, 0.62),
 		sun = Color3.new(1.0, 0.92, 0.82),
@@ -94,9 +96,9 @@ Palette.biomes = {
 	},
 	ruins = {
 		id = "ruins",
-		top = Palette.sand,
-		side = Palette.sandstone,
-		under = Palette.sandstoneDark,
+		top = hex("#fff3d6"),
+		side = hex("#ccafff"),
+		under = hex("#a98be0"),
 		skyTop = Color3.new(0.04, 0.26, 0.70),
 		skyHorizon = Color3.new(1.0, 0.80, 0.55),
 		sun = Color3.new(1.0, 0.90, 0.72),
@@ -110,31 +112,6 @@ Palette.biomes = {
 
 function Palette.biome(id: string?): Biome
 	return Palette.biomes[id or "isles"] or Palette.biomes.isles
-end
-
--- Ambiente nativo del bioma: sol (dirección de la DirectionalLight de Godot),
--- ambiente coloreado y una Atmosphere que tiñe el horizonte y la niebla lejana.
-function Palette.applyLighting(biome: Biome)
-	Lighting.Ambient = biome.ambient:Lerp(Color3.new(0, 0, 0), 0.55)
-	Lighting.OutdoorAmbient = biome.ambient
-	Lighting.Brightness = 2 * biome.sunEnergy
-	Lighting.ColorShift_Top = biome.sun
-	Lighting.EnvironmentDiffuseScale = 0.4
-	Lighting.EnvironmentSpecularScale = 0.2
-	Lighting.GlobalShadows = true
-	-- Godot: rotación X = elevación negativa del sol, Y = acimut. Roblox calcula la
-	-- dirección del sol con ClockTime/GeographicLatitude; se aproxima la elevación.
-	local elevation = -biome.sunRotation[1]
-	Lighting.ClockTime = 6 + elevation / 15
-	Lighting.GeographicLatitude = biome.sunRotation[2]
-	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere") or Instance.new("Atmosphere")
-	atmosphere.Density = 0.28
-	atmosphere.Offset = 0.15
-	atmosphere.Color = biome.skyHorizon
-	atmosphere.Decay = biome.skyTop
-	atmosphere.Glare = 0.2
-	atmosphere.Haze = 1.2
-	atmosphere.Parent = Lighting
 end
 
 return Palette

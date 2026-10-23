@@ -43,12 +43,14 @@ function TimedPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		Color = Palette.glow,
 		Material = Enum.Material.Neon,
 	})
-	local visual = AssetLibrary.instantiate("PLAT_Timed", ctx.geometry, frame)
+	local visual = AssetLibrary.instantiate("PLAT_Timed", ctx.geometry, frame, Vector3.new(size.Y, size.X, size.Z))
 	local visualParts: { BasePart } = {}
+	local visualTransparency: { [BasePart]: number } = {}
 	if visual then
 		AssetLibrary.hide({ body })
 		for _, part in visual.parts do
 			table.insert(visualParts, part)
+			visualTransparency[part] = part.Transparency
 		end
 	end
 	local solid = true
@@ -71,7 +73,7 @@ function TimedPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		local transparency = if visible then 0 else 1
 		if visual then
 			for _, part in visualParts do
-				part.Transparency = transparency
+				part.Transparency = if visible then visualTransparency[part] else 1
 			end
 		else
 			body.Transparency = transparency
