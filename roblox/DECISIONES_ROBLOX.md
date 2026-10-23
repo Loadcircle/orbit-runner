@@ -206,6 +206,10 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Al entrar en una zona con otra dirección (un cruce) corrige aunque se acabe de girar a mano.
   - Parado se puede mirar alrededor libremente; en el vestíbulo no hay asistencia.
   - Al empezar el nivel y al reaparecer, `snap` coloca la cámara detrás del jugador.
+- **Modo de cámara Classic fijo** (`DevTouchCameraMovementMode` y `DevComputerCameraMovementMode`; antes "UserChoice").
+  - En el móvil, la opción por defecto del usuario es "Follow", que ignora los cambios externos de `Camera.CFrame`. En Studio, un giro externo de 170° volvió solo a 0°.
+  - Por eso, en el S25 la cámara miraba hacia atrás al pulsar "Siguiente" y al reaparecer.
+  - Con Classic, el `snap` y la asistencia funcionan en todos los dispositivos.
 
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).

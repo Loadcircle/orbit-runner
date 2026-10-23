@@ -31,6 +31,8 @@
         "EnableMouseLockOption": false,
         "DevComputerMovementMode": "UserChoice",
         "DevTouchMovementMode": "UserChoice",
+        "DevComputerCameraMovementMode": "Classic",
+        "DevTouchCameraMovementMode": "Classic",
         "CharacterWalkSpeed": 22,
         "CharacterUseJumpPower": false,
         "CharacterJumpHeight": 8
