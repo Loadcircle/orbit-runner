@@ -166,7 +166,9 @@ function LevelSession._build(self: LevelSession)
 	end))
 	player:respawnAt(self._respawnFeet, self._respawnFacing)
 	deps.camera:setTarget(player)
+	deps.camera.targetYaw = self._respawnYaw
 	deps.camera:snap(self._respawnYaw)
+	deps.camera:setAssist(true)
 	deps.hud:setup(self)
 	deps.hud.onPause = function()
 		self:pause()
@@ -344,7 +346,7 @@ function LevelSession.gemAlreadyOwned(self: LevelSession, index: number): boolea
 end
 
 function LevelSession.setCameraYaw(self: LevelSession, yaw: number)
-	self.deps.camera.targetYaw = yaw
+	self.deps.camera:setTargetYaw(yaw)
 end
 
 function LevelSession.showPrompt(self: LevelSession, owner: any, key: string)
@@ -442,6 +444,7 @@ function LevelSession.destroy(self: LevelSession)
 		end
 	end
 	self.deps.hud:hidePrompt()
+	self.deps.camera:setAssist(false)
 	self.folder:Destroy()
 end
 

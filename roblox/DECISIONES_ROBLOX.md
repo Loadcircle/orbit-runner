@@ -198,6 +198,15 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Los huecos de `w1_l1` miden 3.5 m como máximo, y el doble salto (~7.7 m), el dash y el salto largo (~10 m) cubren los del tutorial.
   - Con la plantilla, los niveles quedan algo más fáciles. Si se quiere la distancia de Godot sin tocar los niveles, se puede usar Gravity 118 y WalkSpeed 28, aunque se siente más flotante. La decisión queda para el dueño.
 
+## R17 — Solo horizontal y cámara asistida (2026-10-23)
+- **Orientación:** `StarterGui.ScreenOrientation = LandscapeSensor`, fijado en `default.project.json` y en el lugar. Admite las dos horizontales y nunca vertical. Prueba hecha por el dueño en el S25: los controles funcionan, con algún ajuste pendiente en los botones.
+- **Cámara asistida** (`client/CameraRig.luau`, equivalente a `follow_camera.gd`): la cámara sigue siendo la nativa y libre.
+  - Durante un nivel, mientras el jugador corre a más de 4 studs/s, gira suavemente hacia la yaw de la zona de cámara actual (a 2.0/s).
+  - Tras un giro manual (con ratón, dedo o stick) espera 1.2 s sin tocarla, como en Godot.
+  - Al entrar en una zona con otra dirección (un cruce) corrige aunque se acabe de girar a mano.
+  - Parado se puede mirar alrededor libremente; en el vestíbulo no hay asistencia.
+  - Al empezar el nivel y al reaparecer, `snap` coloca la cámara detrás del jugador.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

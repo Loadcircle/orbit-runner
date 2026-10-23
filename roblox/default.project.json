@@ -21,6 +21,11 @@
         "$path": "src/entry/ServerMain.server.luau"
       }
     },
+    "StarterGui": {
+      "$properties": {
+        "ScreenOrientation": "LandscapeSensor"
+      }
+    },
     "StarterPlayer": {
       "$properties": {
         "EnableMouseLockOption": false,
