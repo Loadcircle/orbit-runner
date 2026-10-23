@@ -226,7 +226,7 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - reloj común que sigue tras morir.
 - [x] Cámara: zonas, anticipación, anti-oclusión (`Raycast` del brazo), ajuste manual y salto a la yaw del checkpoint.
 - [x] Flujo completo: inicio → muertes y reapariciones → meta → resultados con medalla, gemas, chispas y estrellas. El servidor registra o rechaza.
-- [ ] Controles táctiles en emulador y en un teléfono real; teclado listo; mando sin probar en físico.
+- [x] Controles táctiles en un teléfono real (S25, por el dueño): funcionan, aunque los botones admiten algún ajuste. El teclado está listo y el mando no se ha probado en físico.
 - [ ] Rendimiento en el teléfono.
-- [ ] Visto bueno del dueño a la sensación.
+- [x] Visto bueno del dueño a la sensación (2026-10-23): controles de la plantilla, cámara asistida, gesto del yo-yo, celebración, sonidos y props. La recalibración de alcances queda aplazada.
 - [ ] Mallas migradas en el juego (bloqueado por la publicación del lugar).
