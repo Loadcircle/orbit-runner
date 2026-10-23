@@ -27,11 +27,10 @@ local DECOR_FADE_NEAR = Units.studs(1.0)
 local DECOR_FADE_FAR = Units.studs(4.0)
 
 export type Deps = {
-	player: any, -- PlayerController
-	camera: any, -- FollowCamera
+	player: any, -- Client/Character
+	camera: any, -- Client/CameraRig
 	yoyo: any, -- YoyoController
 	hud: any, -- Hud
-	touch: any, -- TouchControls
 	isTouch: () -> boolean,
 	progress: { [string]: any }?, -- instantánea del servidor (gemas ya conseguidas)
 	onFinished: (session: any, summary: { [string]: any }?) -> (),
@@ -121,8 +120,8 @@ end
 function LevelSession._build(self: LevelSession)
 	local data = self.data
 	local deps = self.deps
+	-- La iluminación es la de la plantilla Platformer (R14); el bioma solo da colores.
 	local biome = Palette.biome(data.biome)
-	Palette.applyLighting(biome)
 	local root, geometry, triggerFolder, decor = LevelBuilder.prepare()
 	self.folder = root
 	self.triggers:addRoot(triggerFolder)
@@ -171,15 +170,6 @@ function LevelSession._build(self: LevelSession)
 	deps.hud:setup(self)
 	deps.hud.onPause = function()
 		self:pause()
-	end
-	deps.touch.readiness = function()
-		return {
-			yoyo = deps.yoyo:isReady() and (player.onFloor or player.yoyoCharges > 0),
-			action = player.onFloor or player.dashAvailable,
-		}
-	end
-	deps.touch.onCameraDrag = function(pixels: number)
-		deps.camera:addTouchDrag(pixels)
 	end
 	table.insert(self._connections, InputRouter.onPressed("pause", function()
 		if not self.finished then
@@ -233,7 +223,6 @@ end
 
 function LevelSession.render(self: LevelSession, _dt: number)
 	self.deps.hud:update()
-	self.deps.touch:update()
 	local cameraPosition = workspace.CurrentCamera.CFrame.Position
 	for _, part in self._decorParts do
 		local distance = (part.Position - cameraPosition).Magnitude - part.Size.Magnitude / 2
@@ -241,11 +230,10 @@ function LevelSession.render(self: LevelSession, _dt: number)
 	end
 end
 
+-- El tiempo arranca cuando el jugador se mueve o sale del suelo.
 function LevelSession._playerStarted(self: LevelSession): boolean
-	return InputRouter.getMove().Magnitude > 0.2
-		or InputRouter.isDown("jump")
-		or InputRouter.isDown("yoyo")
-		or InputRouter.isDown("action")
+	local player = self.deps.player
+	return player:horizontalSpeed() > Units.studs(0.5) or not player.onFloor or self.deps.yoyo.state ~= "holstered"
 end
 
 -- ------------------------------------------------------------------ flujo
@@ -256,9 +244,10 @@ function LevelSession.pause(self: LevelSession)
 	end
 	self.paused = true
 	self.clock.paused = true
-	self.deps.player.rig.root.Anchored = true
-	self.deps.touch:releaseAll()
-	InputRouter.clearPressed()
+	local player = self.deps.player
+	player.rig.root.Anchored = true
+	player.inputEnabled = false
+	player:beginStep()
 	self:_fire("pause")
 end
 
@@ -270,7 +259,7 @@ function LevelSession.resume(self: LevelSession)
 	self.clock.paused = false
 	local player = self.deps.player
 	player.rig.root.Anchored = player.isDead or player.frozen
-	InputRouter.clearPressed()
+	player.inputEnabled = not player.frozen
 	self:_fire("resume")
 end
 
@@ -291,7 +280,6 @@ function LevelSession.finish(self: LevelSession)
 	local player = self.deps.player
 	player:freeze()
 	self.deps.hud:onFinished()
-	self.deps.touch:releaseAll()
 	Sfx.play("goal")
 	Sfx.vibrate(60)
 	local report = {

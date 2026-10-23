@@ -24,11 +24,35 @@ SKIP = {"SETTINGS_LANGUAGE", "SETTINGS_LANG_AUTO", "SETTINGS_QUALITY", "SETTINGS
         "SETTINGS_Q_HIGH", "SETTINGS_FPS", "SETTINGS_QUALITY_NOTE", "SETTINGS_NOTIFICATIONS"}
 
 ROBLOX_OVERRIDES = {
+    # Controles de la plantilla Platformer (R14): doble salto, Mayús = rodar en suelo /
+    # dash en el aire, saltar justo después de rodar = salto largo, cámara nativa.
     "SETTINGS_KEYS_HELP": (
-        "Teclado: WASD/flechas mover · Espacio saltar · E yo-yo · Mayús deslizar/impulso · Q/R girar cámara · P pausa. "
-        "Mando: stick izq. mover · A saltar · X/RB yo-yo · B/LB deslizar/impulso · stick dcho. cámara · Start pausa.",
-        "Keyboard: WASD/arrows move · Space jump · E yo-yo · Shift slide/dash · Q/R turn camera · P pause. "
-        "Gamepad: left stick move · A jump · X/RB yo-yo · B/LB slide/dash · right stick camera · Start pause.",
+        "Teclado: WASD/flechas mover · Espacio saltar (otra vez en el aire: doble salto) · Mayús rodar / dash en el aire · "
+        "E yo-yo · ratón cámara · P pausa. Mando: stick izq. mover · A saltar · X rodar/dash · Y yo-yo · stick dcho. cámara · Start pausa.",
+        "Keyboard: WASD/arrows move · Space jump (again in the air: double jump) · Shift roll / air dash · "
+        "E yo-yo · mouse camera · P pause. Gamepad: left stick move · A jump · X roll/dash · Y yo-yo · right stick camera · Start pause.",
+    ),
+    "TUT_JUMP": (
+        "Pulsa Espacio para saltar. ¡Pulsa otra vez en el aire para un doble salto!",
+        "Press Space to jump. Press it again in the air to double jump!",
+    ),
+    "TUT_JUMP_TOUCH": (
+        "Pulsa el botón de salto. ¡Pulsa otra vez en el aire para un doble salto!",
+        "Press the jump button. Press it again in the air to double jump!",
+    ),
+    "TUT_MOVE_TOUCH": ("Usa el joystick de la izquierda para moverte.", "Use the joystick on the left to move."),
+    "TUT_DASH": ("Salta y pulsa Mayús en el aire para hacer un dash.", "Jump and press Shift in the air to dash."),
+    "TUT_DASH_TOUCH": ("Salta y pulsa Dash/Roll en el aire para hacer un dash.", "Jump and press Dash/Roll in the air to dash."),
+    "TUT_SLIDE": ("Corre y pulsa Mayús para rodar bajo el láser.", "Run and press Shift to roll under the laser."),
+    "TUT_SLIDE_TOUCH": ("Corre y pulsa Dash/Roll para rodar bajo el láser.", "Run and press Dash/Roll to roll under the laser."),
+    "TUT_LONG_JUMP": ("Salto largo: rueda y salta justo después.", "Long jump: roll, then jump right away."),
+    "TUT_YOYO_AIR_TOUCH": (
+        "Salta y pulsa Yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!",
+        "Jump and press Yo-yo in the air: the disc appears below you. Bounce across!",
+    ),
+    "TUT_YOYO_GROUND_TOUCH": (
+        "Pulsa Yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!",
+        "Press Yo-yo: a disc appears ahead. Run onto it to bounce up!",
     ),
     "SELECT_TITLE": ("Elige una prueba", "Choose a run"),
     "SELECT_LAB": ("Laboratorio de mecánicas", "Mechanics lab"),

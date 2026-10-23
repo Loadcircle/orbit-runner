@@ -15,7 +15,7 @@ export type Session = {
 }
 
 export type Context = {
-	player: any, -- PlayerController
+	player: any, -- Client/Character
 	session: Session,
 	triggers: any, -- Triggers
 	folder: Instance, -- Workspace.ActiveLevel

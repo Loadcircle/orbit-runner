@@ -27,8 +27,11 @@
     "StarterPlayer": {
       "$properties": {
         "EnableMouseLockOption": false,
-        "DevComputerMovementMode": "Scriptable",
-        "DevTouchMovementMode": "Scriptable"
+        "DevComputerMovementMode": "UserChoice",
+        "DevTouchMovementMode": "UserChoice",
+        "CharacterWalkSpeed": 22,
+        "CharacterUseJumpPower": false,
+        "CharacterJumpHeight": 8
       },
       "StarterPlayerScripts": {
         "Client": {
@@ -40,8 +43,8 @@
       }
     },
     "Workspace": {
-      "Lobby": {
-        "$path": "world/Lobby.model.json"
+      "$properties": {
+        "Gravity": 160
       }
     }
   }

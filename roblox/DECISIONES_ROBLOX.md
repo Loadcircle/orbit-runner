@@ -142,6 +142,31 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - rendimiento en teléfono.
 - **Rendimiento en Studio (PC):** 60 FPS de media en el laboratorio (785 piezas) y en `w1_l1`. El peor fotograma (43.8 ms) se da al cargar el nivel. No se afirma nada sobre teléfonos sin probar.
 
+## R14. Cambio de base: plantilla Platformer de Roblox (2026-10-23, sustituye a R2–R6 y R8)
+- **Motivo:** el dueño probó el port y lo calificó de "muy mal" al jugarlo. La plantilla oficial **Platformer** de Roblox se sentía mucho mejor. Decisión del dueño: usar la plantilla como base, con **todas** las mecánicas (las suyas y las nuestras) y sus assets. Se acepta reajustar los niveles después.
+- **Qué aporta la plantilla:** vive en el lugar, no en Rojo; el código de la plantilla no se ha modificado.
+  - `ReplicatedStorage.Platformer`: `ControlScript`, `Controller`, `Actions` (salto, doble salto, dash, rodar, salto largo, aturdido), animaciones, efectos, sonidos y la cámara suavizada `SmoothCameraScript`.
+  - `ReplicatedStorage.Utility.ActionManager` y `Gameplay`: monedas, plataformas móviles y de un solo sentido.
+  - El escenario, la iluminación y el audio.
+  - El movimiento es el **Humanoid nativo**, con cámara Classic y joystick y botón de salto táctiles nativos.
+- **Qué se queda de nuestro port, adaptado:**
+  - `Client/Character` sustituye a `PlayerController`, `CharacterRig` y `AnimationDriver`. Es un adaptador sobre el Humanoid con la misma interfaz que usan la sesión, los props y el yo-yo.
+  - Comportamiento del adaptador:
+    - los rebotes y el viento convierten la velocidad de Godot para alcanzar la misma altura con la gravedad de Roblox (160);
+    - los boost pads usan `LinearVelocity`, como el rodar;
+    - **rodar** hace de deslizamiento: baja la cápsula para pasar bajo los láseres;
+    - lanza el yo-yo.
+  - `Client/CameraRig` sustituye a `FollowCamera`: cámara nativa, más la orientación al reaparecer y la sacudida.
+  - `InputRouter` queda solo para el yo-yo (con el `ActionManager` de la plantilla: E, Y del mando o botón táctil) y la pausa (P o Start).
+  - Se eliminan `TouchControls`, `LabPanel` y `Dev/Calibration`, que dependían del controlador viejo.
+- **Escenario:** el de la plantilla hace de vestíbulo, desplazado +3000 studs en Z para no pisar los niveles, que se construyen en el origen. El vestíbulo propio de R8 se retira.
+- **Proyecto:** `StarterPlayer` vuelve a `UserChoice` y fija los valores de la plantilla (WalkSpeed 22, JumpHeight 8, `UseJumpPower` desactivado). `Workspace.Gravity` = 160.
+- **Alcances (Play Solo, 2026-10-23):**
+  - Salto: unos 8 studs de altura. Doble salto: unos 14 studs sobre el suelo. Dash en el aire: unos 25 studs.
+  - Rebote del yo-yo: unos 16 studs (≈ 4,5 m, como en Godot).
+  - El salto simple es más corto que en Godot (unos 14 studs frente a 21,5), así que los huecos de los niveles se salvan con el doble salto. **Pendiente:** recalibrar los niveles con el dueño.
+- **Lugar:** Place1, la plantilla con Rojo sincronizado, pasa a ser el lugar del juego. Hay que publicarla sobre "Orbit Runner (Test)". Los prefabs de mallas se volvieron a montar en ella.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

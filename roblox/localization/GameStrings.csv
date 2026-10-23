@@ -58,7 +58,7 @@ SELECT_TITLE,Choose a run,,,Elige una prueba
 SETTINGS_BACK,Back,,,Volver
 SETTINGS_CAMERA_SENS,Camera sensitivity,,,Sensibilidad de cámara
 SETTINGS_GHOST,Show your best-run ghost,,,Mostrar fantasma de tu mejor marca
-SETTINGS_KEYS_HELP,Keyboard: WASD/arrows move · Space jump · E yo-yo · Shift slide/dash · Q/R turn camera · P pause. Gamepad: left stick move · A jump · X/RB yo-yo · B/LB slide/dash · right stick camera · Start pause.,,,Teclado: WASD/flechas mover · Espacio saltar · E yo-yo · Mayús deslizar/impulso · Q/R girar cámara · P pausa. Mando: stick izq. mover · A saltar · X/RB yo-yo · B/LB deslizar/impulso · stick dcho. cámara · Start pausa.
+SETTINGS_KEYS_HELP,Keyboard: WASD/arrows move · Space jump (again in the air: double jump) · Shift roll / air dash · E yo-yo · mouse camera · P pause. Gamepad: left stick move · A jump · X roll/dash · Y yo-yo · right stick camera · Start pause.,,,Teclado: WASD/flechas mover · Espacio saltar (otra vez en el aire: doble salto) · Mayús rodar / dash en el aire · E yo-yo · ratón cámara · P pausa. Mando: stick izq. mover · A saltar · X rodar/dash · Y yo-yo · stick dcho. cámara · Start pausa.
 SETTINGS_LEFT_HANDED,Left-handed mode,,,Modo zurdo
 SETTINGS_MASTER,Master volume,,,Volumen general
 SETTINGS_MUSIC,Music,,,Música
@@ -74,20 +74,20 @@ SETTINGS_TITLE,Settings,,,Ajustes
 SETTINGS_TOUCH_OPACITY,Touch controls opacity,,,Opacidad de controles
 SETTINGS_TOUCH_SIZE,Touch controls size,,,Tamaño de controles táctiles
 SETTINGS_VIBRATION,Vibration,,,Vibración
-TUT_DASH,Jump and press Shift in the air to dash forward.,,,Salta y pulsa Mayús en el aire para impulsarte hacia delante.
-TUT_DASH_TOUCH,Jump and press the arrows button in the air to dash.,,,Salta y pulsa el botón de flechas en el aire para impulsarte.
+TUT_DASH,Jump and press Shift in the air to dash.,,,Salta y pulsa Mayús en el aire para hacer un dash.
+TUT_DASH_TOUCH,Jump and press Dash/Roll in the air to dash.,,,Salta y pulsa Dash/Roll en el aire para hacer un dash.
 TUT_GOAL,Go through the golden arch to finish!,,,¡Cruza el arco dorado para terminar!
-TUT_JUMP,Press Space to jump. Hold it to jump higher.,,,Pulsa Espacio para saltar. Mantén para saltar más alto.
-TUT_JUMP_TOUCH,Press the orange button to jump. Hold it to go higher.,,,Pulsa el botón naranja para saltar. Mantén para llegar más alto.
-TUT_LONG_JUMP,"Long jump: slide, then jump while sliding.",,,Salto largo: deslízate y salta mientras te deslizas.
+TUT_JUMP,Press Space to jump. Press it again in the air to double jump!,,,Pulsa Espacio para saltar. ¡Pulsa otra vez en el aire para un doble salto!
+TUT_JUMP_TOUCH,Press the jump button. Press it again in the air to double jump!,,,Pulsa el botón de salto. ¡Pulsa otra vez en el aire para un doble salto!
+TUT_LONG_JUMP,"Long jump: roll, then jump right away.",,,Salto largo: rueda y salta justo después.
 TUT_MOVE,Use W A S D or the arrow keys to move. You set the pace!,,,Usa W A S D o las flechas para moverte. ¡Tú decides el ritmo!
-TUT_MOVE_TOUCH,Drag your thumb on the left side to move.,,,Arrastra el pulgar en la zona izquierda para moverte.
-TUT_SLIDE,Run and press Shift to slide under the laser.,,,Corre y pulsa Mayús para deslizarte bajo el láser.
-TUT_SLIDE_TOUCH,Run and press the arrows button to slide under the laser.,,,Corre y pulsa el botón de flechas para deslizarte bajo el láser.
+TUT_MOVE_TOUCH,Use the joystick on the left to move.,,,Usa el joystick de la izquierda para moverte.
+TUT_SLIDE,Run and press Shift to roll under the laser.,,,Corre y pulsa Mayús para rodar bajo el láser.
+TUT_SLIDE_TOUCH,Run and press Dash/Roll to roll under the laser.,,,Corre y pulsa Dash/Roll para rodar bajo el láser.
 TUT_TRAMPOLINE,Yellow trampolines launch you high. Step on the arrow!,,,Los trampolines amarillos te lanzan muy alto. ¡Pisa la flecha!
 TUT_WIND,Drop into the air current to rise.,,,Déjate caer en la corriente de viento para subir.
 TUT_YOYO_AIR,Jump and press E in the air: the disc appears below you. Bounce across the gap!,,,Salta y pulsa E en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar el vacío!
-TUT_YOYO_AIR_TOUCH,Jump and press the yo-yo in the air: the disc appears below you. Bounce across!,,,Salta y pulsa el yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!
+TUT_YOYO_AIR_TOUCH,Jump and press Yo-yo in the air: the disc appears below you. Bounce across!,,,Salta y pulsa Yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!
 TUT_YOYO_GROUND,Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce up!,,,Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre sobre él para rebotar hasta arriba!
-TUT_YOYO_GROUND_TOUCH,Press the yo-yo button: a disc appears ahead. Run onto it to bounce up!,,,Pulsa el botón del yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!
+TUT_YOYO_GROUND_TOUCH,Press Yo-yo: a disc appears ahead. Run onto it to bounce up!,,,Pulsa Yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!
 WORLD_1,Breeze Isles,,,Islas de la Brisa

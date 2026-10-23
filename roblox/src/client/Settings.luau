@@ -1,7 +1,8 @@
 --!strict
 -- Ajustes del jugador (settings.gd). En la Fase 1 viven en memoria; la persistencia en
 -- DataStore llega en la Fase 3. Sin idioma (Roblox lo da) ni calidad/FPS (los gestiona
--- Roblox) ni notificaciones.
+-- Roblox) ni notificaciones. Tampoco controles táctiles ni sensibilidad de cámara: son
+-- los nativos de Roblox (R14) y se ajustan en su menú.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -11,11 +12,7 @@ local DEFAULTS = {
 	masterVolume = 0.9,
 	musicVolume = 0.7,
 	sfxVolume = 0.9,
-	touchScale = 1.0,
-	touchOpacity = 0.65,
-	leftHanded = false,
 	vibration = true,
-	cameraSensitivity = 1.0,
 	screenShake = true,
 	showTimer = true,
 	showGhost = true,
@@ -25,11 +22,7 @@ export type Key =
 	"masterVolume"
 	| "musicVolume"
 	| "sfxVolume"
-	| "touchScale"
-	| "touchOpacity"
-	| "leftHanded"
 	| "vibration"
-	| "cameraSensitivity"
 	| "screenShake"
 	| "showTimer"
 	| "showGhost"

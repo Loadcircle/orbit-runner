@@ -1,6 +1,6 @@
 --!strict
 -- Trampolín (scripts/props/trampoline.gd): impulso vertical fijo al entrar por arriba o a
--- la par (vy ≤ 1 m/s). Restaura el dash y la carga del yo-yo (PlayerController.bounce).
+-- la par (vy ≤ 1 m/s). Restaura el dash y la carga del yo-yo (Character.bounce).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
