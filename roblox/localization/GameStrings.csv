@@ -1,0 +1,93 @@
+Key,Source,Context,Example,es
+HUD_CHECKPOINT,Checkpoint!,,,¡Punto de control!
+HUD_FLOOR,Floor {1},,,Piso {1}
+HUD_FLOOR_BEST,Record: {1},,,Récord: {1}
+HUD_GOAL,Goal!,,,¡Meta!
+HUD_GOLD,Gold:,,,Oro:
+HUD_PAUSE,Pause,,,Pausa
+LEVEL_TUTORIAL,First Flight,,,Primer vuelo
+LEVEL_TUTORIAL_HINT,Learn the controls,,,Aprende los controles
+LEVEL_TUTORIAL_SHORT,Tutorial,,,Tutorial
+LEVEL_W1_L1,Breeze Isles,,,Islas de la Brisa
+LEVEL_W1_L10,Eye of the Storm,,,Ojo del Huracán
+LEVEL_W1_L10_HINT,"Wind, bounces and precision",,,"Viento, rebotes y precisión"
+LEVEL_W1_L1_HINT,Jumps and trampolines,,,Saltos y trampolines
+MEDAL_BRONZE,Bronze,,,Bronce
+MEDAL_GOLD,Gold,,,Oro
+MEDAL_SILVER,Silver,,,Plata
+MENU_LEVELS,Levels,,,Niveles
+MENU_PLAY,Play,,,Jugar
+MENU_SETTINGS,Settings,,,Ajustes
+PAUSE_END_RUN,End the climb,,,Terminar la subida
+PAUSE_QUIT,Exit to levels,,,Salir a niveles
+PAUSE_RESTART,Restart level,,,Reiniciar nivel
+PAUSE_RESUME,Resume,,,Continuar
+PAUSE_TITLE,Paused,,,Pausa
+RESULTS_BEST,Best:,,,Mejor:
+RESULTS_CHALLENGES,Challenges,,,Desafíos
+RESULTS_FINALE,Finale,,,Final
+RESULTS_FLAWLESS,Flawless!,,,¡Sin caídas!
+RESULTS_FLOORS,Floors: {1},,,Pisos: {1}
+RESULTS_GEMS,Gems,,,Gemas
+RESULTS_LEVELS,Levels,,,Niveles
+RESULTS_MASTERY,Mastery,,,Maestría
+RESULTS_NEW_BEST,New record!,,,¡Nuevo récord!
+RESULTS_NEXT,Next,,,Siguiente
+RESULTS_NEXT_UNLOCKED,New level unlocked!,,,¡Nuevo nivel desbloqueado!
+RESULTS_REJECTED,Invalid result: not recorded,,,Resultado no válido: no se registra
+RESULTS_RETRY,Retry,,,Repetir
+RESULTS_SAVED,Result recorded,,,Resultado registrado
+RESULTS_SEASON,Season,,,Temporada
+RESULTS_SEASON_POINTS,+{1} season points,,,+{1} puntos de temporada
+RESULTS_SEASON_RANK,Global rank: {1} of {2},,,Puesto global: {1} de {2}
+RESULTS_SPARKS,Sparks,,,Chispas
+RESULTS_STARS,Mastery,,,Maestría
+RESULTS_STAR_FLAWLESS,No respawns,,,Sin reapariciones
+RESULTS_STAR_GEMS,3 gems,,,3 gemas
+RESULTS_STAR_GOLD,Gold,,,Oro
+RESULTS_STAR_SPARKS,All sparks,,,Todas las chispas
+RESULTS_STREAK,{1}-day streak!,,,¡Racha de {1} días!
+RESULTS_TIME,Time,,,Tiempo
+RESULTS_TITLE,Level complete!,,,¡Nivel completado!
+RESULTS_TOWER_TITLE,Climb over!,,,¡Subida terminada!
+SELECT_BEST,Best: {1},,,Mejor: {1}
+SELECT_LAB,Mechanics lab,,,Laboratorio de mecánicas
+SELECT_LAB_HINT,"Measure jumps, props and hazards",,,"Mide saltos, props y peligros"
+SELECT_PLAY,Play,,,Jugar
+SELECT_TITLE,Choose a run,,,Elige una prueba
+SETTINGS_BACK,Back,,,Volver
+SETTINGS_CAMERA_SENS,Camera sensitivity,,,Sensibilidad de cámara
+SETTINGS_GHOST,Show your best-run ghost,,,Mostrar fantasma de tu mejor marca
+SETTINGS_KEYS_HELP,Keyboard: WASD/arrows move · Space jump · E yo-yo · Shift slide/dash · Q/R turn camera · P pause. Gamepad: left stick move · A jump · X/RB yo-yo · B/LB slide/dash · right stick camera · Start pause.,,,Teclado: WASD/flechas mover · Espacio saltar · E yo-yo · Mayús deslizar/impulso · Q/R girar cámara · P pausa. Mando: stick izq. mover · A saltar · X/RB yo-yo · B/LB deslizar/impulso · stick dcho. cámara · Start pausa.
+SETTINGS_LEFT_HANDED,Left-handed mode,,,Modo zurdo
+SETTINGS_MASTER,Master volume,,,Volumen general
+SETTINGS_MUSIC,Music,,,Música
+SETTINGS_OFF,Off,,,No
+SETTINGS_ON,On,,,Sí
+SETTINGS_SFX,Sound effects,,,Efectos
+SETTINGS_SHAKE,Camera shake,,,Vibración de cámara
+SETTINGS_TAB_AUDIO,Audio,,,Audio
+SETTINGS_TAB_CONTROLS,Controls,,,Controles
+SETTINGS_TAB_GAME,Game,,,Juego
+SETTINGS_TIMER,Show timer,,,Mostrar cronómetro
+SETTINGS_TITLE,Settings,,,Ajustes
+SETTINGS_TOUCH_OPACITY,Touch controls opacity,,,Opacidad de controles
+SETTINGS_TOUCH_SIZE,Touch controls size,,,Tamaño de controles táctiles
+SETTINGS_VIBRATION,Vibration,,,Vibración
+TUT_DASH,Jump and press Shift in the air to dash forward.,,,Salta y pulsa Mayús en el aire para impulsarte hacia delante.
+TUT_DASH_TOUCH,Jump and press the arrows button in the air to dash.,,,Salta y pulsa el botón de flechas en el aire para impulsarte.
+TUT_GOAL,Go through the golden arch to finish!,,,¡Cruza el arco dorado para terminar!
+TUT_JUMP,Press Space to jump. Hold it to jump higher.,,,Pulsa Espacio para saltar. Mantén para saltar más alto.
+TUT_JUMP_TOUCH,Press the orange button to jump. Hold it to go higher.,,,Pulsa el botón naranja para saltar. Mantén para llegar más alto.
+TUT_LONG_JUMP,"Long jump: slide, then jump while sliding.",,,Salto largo: deslízate y salta mientras te deslizas.
+TUT_MOVE,Use W A S D or the arrow keys to move. You set the pace!,,,Usa W A S D o las flechas para moverte. ¡Tú decides el ritmo!
+TUT_MOVE_TOUCH,Drag your thumb on the left side to move.,,,Arrastra el pulgar en la zona izquierda para moverte.
+TUT_SLIDE,Run and press Shift to slide under the laser.,,,Corre y pulsa Mayús para deslizarte bajo el láser.
+TUT_SLIDE_TOUCH,Run and press the arrows button to slide under the laser.,,,Corre y pulsa el botón de flechas para deslizarte bajo el láser.
+TUT_TRAMPOLINE,Yellow trampolines launch you high. Step on the arrow!,,,Los trampolines amarillos te lanzan muy alto. ¡Pisa la flecha!
+TUT_WIND,Drop into the air current to rise.,,,Déjate caer en la corriente de viento para subir.
+TUT_YOYO_AIR,Jump and press E in the air: the disc appears below you. Bounce across the gap!,,,Salta y pulsa E en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar el vacío!
+TUT_YOYO_AIR_TOUCH,Jump and press the yo-yo in the air: the disc appears below you. Bounce across!,,,Salta y pulsa el yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!
+TUT_YOYO_GROUND,Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce up!,,,Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre sobre él para rebotar hasta arriba!
+TUT_YOYO_GROUND_TOUCH,Press the yo-yo button: a disc appears ahead. Run onto it to bounce up!,,,Pulsa el botón del yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!
+WORLD_1,Breeze Isles,,,Islas de la Brisa

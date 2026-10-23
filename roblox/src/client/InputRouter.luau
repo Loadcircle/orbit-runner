@@ -22,6 +22,9 @@ local listeners: { [string]: { (() -> ()) } } = {}
 local touchMove = Vector2.zero
 local touchMoveActive = false
 local started = false
+-- Entrada programada para las mediciones del laboratorio (Calibration, solo pruebas):
+-- sustituye a la del jugador mientras está activa.
+local scripted: { move: Vector2, held: { [string]: boolean } }? = nil
 
 InputRouter.preferredDevice = "keyboard" :: "keyboard" | "gamepad" | "touch"
 InputRouter.deviceChanged = Instance.new("BindableEvent")
@@ -112,6 +115,9 @@ end
 
 -- Vector de movimiento: x = derecha, y = adelante (+). Magnitud ≤ 1.
 function InputRouter.getMove(): Vector2
+	if scripted then
+		return scripted.move
+	end
 	if touchMoveActive then
 		return touchMove
 	end
@@ -126,6 +132,9 @@ function InputRouter.getCameraAxis(): number
 end
 
 function InputRouter.isDown(name: ActionName): boolean
+	if scripted then
+		return scripted.held[name] == true
+	end
 	return actions[name]:GetState() == true
 end
 
@@ -141,9 +150,18 @@ function InputRouter.clearPressed()
 	table.clear(pressedQueue)
 end
 
-function InputRouter.onPressed(name: ActionName, callback: () -> ())
+function InputRouter.onPressed(name: ActionName, callback: () -> ()): { Disconnect: (any) -> () }
 	listeners[name] = listeners[name] or {}
-	table.insert(listeners[name], callback)
+	local list = listeners[name]
+	table.insert(list, callback)
+	return {
+		Disconnect = function()
+			local index = table.find(list, callback)
+			if index then
+				table.remove(list, index)
+			end
+		end,
+	}
 end
 
 -- Joystick táctil: el vector ya llega con su zona muerta (touch_controls.gd).
@@ -156,6 +174,20 @@ end
 -- Enlaza un botón táctil a una acción como InputBinding nativo.
 function InputRouter.bindTouchButton(name: ActionName, button: GuiButton): InputBinding
 	return binding(actions[name], { UIButton = button })
+end
+
+-- Solo pruebas: activa (tabla) o desactiva (nil) la entrada programada.
+function InputRouter.setScripted(state: { move: Vector2, held: { [string]: boolean } }?)
+	scripted = state
+	InputRouter.clearPressed()
+end
+
+-- Solo pruebas: pulsa una acción programada (flanco + mantenida).
+function InputRouter.scriptedPress(name: ActionName, hold: boolean)
+	if scripted then
+		pressedQueue[name] = true
+		scripted.held[name] = hold
+	end
 end
 
 function InputRouter.setEnabled(enabled: boolean)

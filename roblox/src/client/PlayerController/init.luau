@@ -22,6 +22,9 @@ local GROUND_TIME_CALIBRATION = 0.915 -- ver CharacterRig
 local AIR_LOCK = 0.1 -- s sin detectar suelo tras un salto o rebote
 local BOOST_GROUND_FACTOR = 2.5
 local MIN_FACING_SPEED = Units.studs(0.6)
+-- Godot simula a 60 Hz fijos; algunas duraciones y detecciones se ajustan a esa
+-- referencia para que el resultado no dependa del framerate de Roblox.
+local GODOT_TICK_RATE = 60
 
 local PlayerController = {}
 PlayerController.__index = PlayerController
@@ -74,6 +77,8 @@ export type PlayerController = typeof(setmetatable({} :: {
 	_spawnGrace: number,
 	_airLock: number,
 	_velocityDirty: boolean,
+	_dashExitPending: boolean,
+	_lastDt: number,
 }, PlayerController))
 
 local function flat(v: Vector3): Vector3
@@ -150,6 +155,8 @@ function PlayerController.new(character: Model): PlayerController
 		_spawnGrace = 0,
 		_airLock = 0,
 		_velocityDirty = false,
+		_dashExitPending = false,
+		_lastDt = 1 / GODOT_TICK_RATE,
 	}, PlayerController)
 	return self
 end
@@ -163,13 +170,20 @@ function PlayerController.beginStep(self: PlayerController)
 		return
 	end
 	local hit = if self._airLock > 0 then nil else CharacterRig.probeGround(rig)
-	local worldVelocity = rig.root.AssemblyLinearVelocity
 	self.groundVelocity = if hit then hit.velocity else Vector3.zero
+	if self._velocityDirty then
+		-- Una fuerza externa aplicada después de step() (p. ej. el rebote del yo-yo, que
+		-- se procesa tras el jugador como en Godot) aún no llegó a la física: se conserva
+		-- y se escribe ahora en lugar de releer la velocidad del cuerpo.
+		rig.root.AssemblyLinearVelocity = self.velocity + (if hit then self.groundVelocity else Vector3.zero)
+		self.onFloor = hit ~= nil and self.velocity.Y <= Units.studs(1.0)
+		return
+	end
+	local worldVelocity = rig.root.AssemblyLinearVelocity
 	-- Subiendo respecto al suelo (salto, rebote) no se cuenta como apoyado.
 	local relative = worldVelocity - self.groundVelocity
 	self.onFloor = hit ~= nil and relative.Y <= Units.studs(1.0)
 	self.velocity = relative
-	self._velocityDirty = false
 end
 
 function PlayerController.step(self: PlayerController, dt: number)
@@ -177,8 +191,15 @@ function PlayerController.step(self: PlayerController, dt: number)
 	if self.isDead or self.frozen then
 		return
 	end
+	self._lastDt = dt
 	self._spawnGrace = math.max(self._spawnGrace - dt, 0)
 	self._airLock = math.max(self._airLock - dt, 0)
+	if self._dashExitPending then
+		-- El fotograma anterior mezcló el final del dash; ahora se sale con su velocidad.
+		self._dashExitPending = false
+		self.velocity = self._dashDir * self.tuning.dashExitSpeed
+		self._velocityDirty = true
+	end
 	local onFloor = self.onFloor
 	local jumpPressed = self:_pressed("jump")
 	local actionPressed = self:_pressed("action")
@@ -389,7 +410,10 @@ end
 function PlayerController._startDash(self: PlayerController, wish: Vector3)
 	self.dashAvailable = false
 	self.isDashing = true
-	self._dashTimer = self.tuning.dashDuration
+	-- En Godot (60 Hz fijos) el dash mueve a velocidad de dash los ticks en que el
+	-- temporizador sigue > 0 tras restar: floor(0.18 · 60) = 10 ticks = 0.167 s. Se
+	-- reproduce esa duración efectiva para no depender del framerate.
+	self._dashTimer = math.floor(self.tuning.dashDuration * GODOT_TICK_RATE - 1e-6) / GODOT_TICK_RATE
 	local dir = if wish.Magnitude > 0.2 then wish.Unit else self.facing
 	self._dashDir = flat(dir).Unit
 	self.dashed:Fire()
@@ -397,11 +421,23 @@ end
 
 function PlayerController._processDash(self: PlayerController, dt: number)
 	local t = self.tuning
-	self._dashTimer -= dt
-	self.velocity = self._dashDir * t.dashSpeed + Vector3.new(0, t.dashLift, 0)
-	if self._dashTimer <= 0 then
+	local dash = self._dashDir * t.dashSpeed + Vector3.new(0, t.dashLift, 0)
+	local exit = self._dashDir * t.dashExitSpeed
+	if self._dashTimer >= dt then
+		self._dashTimer -= dt
+		self.velocity = dash
+	else
+		-- El dash termina dentro de este fotograma: se mezcla la velocidad en proporción
+		-- para que el desplazamiento sea el mismo a cualquier framerate, y en el siguiente
+		-- fotograma se parte de la velocidad de salida.
+		local part = math.clamp(self._dashTimer / math.max(dt, 1e-6), 0, 1)
+		self.velocity = dash * part + exit * (1 - part)
+		self._dashTimer = 0
 		self.isDashing = false
-		self.velocity = self._dashDir * t.dashExitSpeed
+		self._dashExitPending = part > 0
+		if not self._dashExitPending then
+			self.velocity = exit
+		end
 	end
 	self._velocityDirty = true
 end
@@ -522,6 +558,20 @@ function PlayerController.bounce(self: PlayerController, verticalSpeed: number, 
 	end
 	self:_endSlide()
 	self.isDashing = false
+	self._dashExitPending = false
+	-- Al caer sobre un trampolín o un disco, el contacto se detecta una vez por
+	-- fotograma: con fotogramas más largos que el tick de Godot se entra más hondo y se
+	-- rebotaría más bajo. Se compensa la profundidad media extra con la velocidad
+	-- equivalente (v² + 2·g·Δy), así el alcance no depende del framerate.
+	-- El disco del yo-yo se procesa después del jugador (como en Godot): su rebote se
+	-- aplica un fotograma más tarde, frente a un tick en Godot; ese retraso extra
+	-- también se compensa.
+	local fall = -self.velocity.Y
+	local extraDt = self._lastDt - 1 / GODOT_TICK_RATE
+	if fall > 0 and extraDt > 0 then
+		local depth = fall * extraDt * (if source == "yoyo" then 1.5 else 0.5)
+		verticalSpeed = math.sqrt(verticalSpeed * verticalSpeed + 2 * self.tuning.gravityUp * depth)
+	end
 	self.velocity = Vector3.new(self.velocity.X, verticalSpeed, self.velocity.Z)
 	self._velocityDirty = true
 	self.dashAvailable = true

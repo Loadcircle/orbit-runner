@@ -5,6 +5,12 @@
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"
+      },
+      "Levels": {
+        "$path": "levels_json"
+      },
+      "Localization": {
+        "$path": "localization"
       }
     },
     "ServerScriptService": {
@@ -28,6 +34,11 @@
         "ClientMain": {
           "$path": "src/entry/ClientMain.client.luau"
         }
+      }
+    },
+    "Workspace": {
+      "Lobby": {
+        "$path": "world/Lobby.model.json"
       }
     }
   }
