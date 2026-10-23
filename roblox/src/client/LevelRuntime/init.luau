@@ -279,6 +279,7 @@ function LevelSession.finish(self: LevelSession)
 	self.timerRunning = false
 	local player = self.deps.player
 	player:freeze()
+	player:celebrate()
 	self.deps.hud:onFinished()
 	Sfx.play("goal")
 	Sfx.vibrate(60)

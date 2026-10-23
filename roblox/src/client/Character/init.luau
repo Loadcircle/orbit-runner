@@ -29,6 +29,8 @@ local THROW_POSE_TIME = 0.3
 -- (toolslash, nativo y replicado). Si el avatar trae otro paquete se usa el suyo.
 local THROW_ANIMATION_ID = "rbxassetid://522635514"
 local THROW_ANIMATION_SPEED = 1.6
+-- Celebración en la meta: el "cheer" del Animate estándar (mismo criterio que el lanzamiento).
+local CHEER_ANIMATION_ID = "rbxassetid://507770677"
 
 local Character = {}
 Character.__index = Character
@@ -73,6 +75,7 @@ export type Character = typeof(setmetatable({} :: {
 	_spawnGrace: number,
 	_boost: LinearVelocity?,
 	_throwTrack: AnimationTrack?,
+	_cheerTrack: AnimationTrack?,
 	_connections: { RBXScriptConnection },
 }, Character))
 
@@ -159,6 +162,7 @@ function Character.new(model: Model): Character
 		_spawnGrace = 0,
 		_boost = nil,
 		_throwTrack = nil,
+		_cheerTrack = nil,
 		_connections = {},
 	}, Character)
 	self:_setHitboxHeight(Tuning.standHeight)
@@ -273,29 +277,53 @@ function Character._tryThrowYoyo(self: Character)
 	self:_playThrow()
 end
 
+-- Carga una animación del Animate del avatar (`slot`, p. ej. "toolslash") o, si no la
+-- tiene, la de Roblox por defecto `fallbackId`.
+function Character._loadAnimation(self: Character, slot: string, fallbackId: string): AnimationTrack?
+	local animator = self.rig.humanoid:FindFirstChildOfClass("Animator")
+	if not animator then
+		return nil
+	end
+	local animate = self.rig.character:FindFirstChild("Animate")
+	local folder = animate and animate:FindFirstChild(slot)
+	local source = folder and folder:FindFirstChildOfClass("Animation")
+	local animation = Instance.new("Animation")
+	animation.AnimationId = if source then source.AnimationId else fallbackId
+	local track = animator:LoadAnimation(animation)
+	track.Priority = Enum.AnimationPriority.Action2
+	return track
+end
+
 function Character._playThrow(self: Character)
 	self.throwTimer = THROW_POSE_TIME
-	local track = self._throwTrack
-	if not track then
-		local animator = self.rig.humanoid:FindFirstChildOfClass("Animator")
-		if not animator then
-			self.yoyoThrown:Fire()
-			return
-		end
-		local animate = self.rig.character:FindFirstChild("Animate")
-		local slash = animate and animate:FindFirstChild("toolslash")
-		local source = slash and slash:FindFirstChildOfClass("Animation")
-		local animation = Instance.new("Animation")
-		animation.AnimationId = if source then source.AnimationId else THROW_ANIMATION_ID
-		local loaded = animator:LoadAnimation(animation)
-		loaded.Priority = Enum.AnimationPriority.Action2
-		loaded.Looped = false
-		self._throwTrack = loaded
-		track = loaded
+	if not self._throwTrack then
+		self._throwTrack = self:_loadAnimation("toolslash", THROW_ANIMATION_ID)
 	end
-	assert(track, "pista de lanzamiento")
-	track:Play(0.05, 1, THROW_ANIMATION_SPEED)
+	local track = self._throwTrack
+	if track then
+		track.Looped = false
+		track:Play(0.05, 1, THROW_ANIMATION_SPEED)
+	end
 	self.yoyoThrown:Fire()
+end
+
+-- Meta alcanzada: celebra (en bucle hasta reaparecer o volver al vestíbulo).
+function Character.celebrate(self: Character)
+	if not self._cheerTrack then
+		self._cheerTrack = self:_loadAnimation("cheer", CHEER_ANIMATION_ID)
+	end
+	local track = self._cheerTrack
+	if track then
+		track.Looped = true
+		track:Play(0.2)
+	end
+end
+
+function Character._stopCelebration(self: Character)
+	local track = self._cheerTrack
+	if track and track.IsPlaying then
+		track:Stop(0.2)
+	end
 end
 
 -- ------------------------------------------------------------------ fuerzas externas
@@ -452,6 +480,7 @@ function Character.respawnAt(self: Character, feet: Vector3, facing: Vector3)
 	self.onFloor = true
 	self._yoyoRequested = false
 	self._spawnGrace = self.tuning.spawnGrace
+	self:_stopCelebration()
 	if self.yoyo then
 		self.yoyo:recallInstant()
 	end
@@ -470,6 +499,7 @@ function Character.unfreeze(self: Character)
 	self.frozen = false
 	self.inputEnabled = true
 	self:_setAnchored(false)
+	self:_stopCelebration()
 end
 
 function Character.destroy(self: Character)

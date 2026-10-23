@@ -190,6 +190,7 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 ## R16 — Gesto del yo-yo, sonidos y props con el estilo de la plantilla (2026-10-23)
 - **Rodar bajo el láser:** se queda como está. Usa la animación Roll de la plantilla y el dueño le dio el visto bueno.
 - **Gesto de lanzar el yo-yo:** se usa la animación nativa `toolslash` del `Animate` estándar de Roblox (`rbxassetid://522635514`), con prioridad Action2 y a velocidad ×1.6. Si el avatar trae otro paquete de animaciones, se usa su `toolslash`. Es un asset de Roblox, así que se replica a los demás jugadores sin subir nada.
+- **Celebración en la meta:** se usa la animación nativa `cheer` del `Animate` (`rbxassetid://507770677`), o la del paquete del avatar si trae otra. Se repite mientras dura la pantalla de resultados y se detiene al reaparecer o al volver al vestíbulo (`Character.celebrate`).
 - **Sonidos:** `client/Sfx.luau` clona los `AudioPlayer` de la plantilla (`Platformer.Sounds` y `Gameplay.Sounds`), con un tono propio por evento, y los enruta al bus "UI" de `SoundService.Audio`. Así suenan chispas, gemas, checkpoint, meta, muerte, impulsor, trampolín, plataforma que se rompe y el yo-yo. `AssetIds.sounds` queda sin uso.
 - **Props propios:** `PartFactory` usa por defecto Plastic con la variante `Concrete_Template_Walls`. Las piezas con material explícito no cambian: Neon para impulso y peligro, ForceField para el viento y Metal para la meta.
 - **Calibración de niveles: no hace falta para poder completarlos.**
