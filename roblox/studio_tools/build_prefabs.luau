@@ -1,9 +1,11 @@
 --[[
-	Orbit Runner – crea los prefabs visuales en ReplicatedStorage.Assets a partir de las
-	mallas subidas por el plugin OrbitRunnerAssetUploader (ServerScriptService.MeshData.
-	UploadResult) y de sus datos (pivote, centro de la caja, colores).
-	Se ejecuta en el DataModel de edición (MCP de Studio o barra de comandos) y devuelve
-	el texto de Shared/AssetIds.luau con los IDs, para versionarlo.
+	Orbit Runner – crea los prefabs visuales en ReplicatedStorage.Assets a partir de los IDs
+	de Shared/AssetIds.meshes y de los datos de malla (pivote, centro de la caja, colores) de
+	ServerScriptService.MeshData.
+	Se ejecuta en el DataModel de edición (MCP de Studio o barra de comandos). Trabaja en
+	segundo plano por tandas: el progreso queda en el atributo BuildStatus de la carpeta
+	Assets ("running N" → "done built=N failed=[…]"). Después hay que guardar/publicar el
+	lugar: los prefabs viven en el lugar, no en Rojo.
 
 	Reglas (guía §2.5 y §3.8):
 	  · MeshParts sin colisión, sin consultas y sin Touched; sombras activadas.
@@ -20,7 +22,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local GLOW_UNIFORM_SPREAD = 0.12
 
 local meshData = ServerScriptService:WaitForChild("MeshData")
-local uploads = HttpService:JSONDecode(meshData:WaitForChild("UploadResult").Value)
+local meshIds = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("AssetIds")).meshes
 
 local assets = ReplicatedStorage:FindFirstChild("Assets")
 if not assets then
@@ -53,58 +55,60 @@ local function colorStats(colors)
 	return Color3.new(mean.X, mean.Y, mean.Z), spread
 end
 
-local lines = {}
-local built, failed = 0, {}
-for assetName, parts in uploads do
-	local module = meshData:FindFirstChild(assetName)
-	if not module then
-		continue
-	end
-	local data = require(module)
-	local existing = assets:FindFirstChild(assetName)
-	if existing then
-		existing:Destroy()
-	end
-	local model = Instance.new("Model")
-	model.Name = assetName
-	local idLines = {}
-	for partName, id in parts do
-		local part = data.parts[partName]
-		local ok, meshPart = pcall(function()
-			return AssetService:CreateMeshPartAsync(Content.fromUri("rbxassetid://" .. tostring(id)))
-		end)
-		if not ok or not part then
-			table.insert(failed, assetName .. "/" .. partName .. ": " .. tostring(meshPart))
+local function build()
+	local built, failed = 0, {}
+	for assetName, parts in meshIds do
+		local module = meshData:FindFirstChild(assetName)
+		if not module then
+			table.insert(failed, assetName .. ": sin datos de malla")
 			continue
 		end
-		local pivot = Vector3.new(part.pivot[1], part.pivot[2], part.pivot[3])
-		local center = bounds(part.positions)
-		meshPart.Name = partName
-		meshPart.Anchored = true
-		meshPart.CanCollide = false
-		meshPart.CanQuery = false
-		meshPart.CanTouch = false
-		meshPart.CastShadow = true
-		meshPart.Material = Enum.Material.SmoothPlastic
-		meshPart.Color = Color3.new(1, 1, 1)
-		if part.kind == "Glow" then
-			local mean, spread = colorStats(part.colors)
-			if spread <= GLOW_UNIFORM_SPREAD then
-				meshPart.Material = Enum.Material.Neon
-				meshPart.Color = mean
-			end
+		local data = require(module)
+		local existing = assets:FindFirstChild(assetName)
+		if existing then
+			existing:Destroy()
 		end
-		meshPart.CFrame = CFrame.new(pivot + center)
-		meshPart.PivotOffset = CFrame.new(-center)
-		meshPart.Parent = model
-		table.insert(idLines, string.format("\t\t%s = \"rbxassetid://%s\",", partName, tostring(id)))
+		local model = Instance.new("Model")
+		model.Name = assetName
+		for partName, uri in parts do
+			local part = data.parts[partName]
+			local ok, meshPart = pcall(function()
+				return AssetService:CreateMeshPartAsync(Content.fromUri(uri))
+			end)
+			if not ok or not part then
+				table.insert(failed, assetName .. "/" .. partName .. ": " .. tostring(meshPart))
+				continue
+			end
+			local pivot = Vector3.new(part.pivot[1], part.pivot[2], part.pivot[3])
+			local center = bounds(part.positions)
+			meshPart.Name = partName
+			meshPart.Anchored = true
+			meshPart.CanCollide = false
+			meshPart.CanQuery = false
+			meshPart.CanTouch = false
+			meshPart.CastShadow = true
+			meshPart.Material = Enum.Material.SmoothPlastic
+			meshPart.Color = Color3.new(1, 1, 1)
+			if part.kind == "Glow" then
+				local mean, spread = colorStats(part.colors)
+				if spread <= GLOW_UNIFORM_SPREAD then
+					meshPart.Material = Enum.Material.Neon
+					meshPart.Color = mean
+				end
+			end
+			meshPart.CFrame = CFrame.new(pivot + center)
+			meshPart.PivotOffset = CFrame.new(-center)
+			meshPart.Parent = model
+			task.wait()
+		end
+		model.WorldPivot = CFrame.identity
+		model.Parent = assets
+		built += 1
+		assets:SetAttribute("BuildStatus", "running " .. built)
 	end
-	model.WorldPivot = CFrame.identity
-	model.Parent = assets
-	built += 1
-	table.sort(idLines)
-	table.insert(lines, string.format("\t%s = {\n%s\n\t},", assetName, table.concat(idLines, "\n")))
+	assets:SetAttribute("BuildStatus", string.format("done built=%d failed=%s", built, HttpService:JSONEncode(failed)))
 end
-table.sort(lines)
 
-return string.format("built=%d failed=%s\n---\n%s", built, HttpService:JSONEncode(failed), table.concat(lines, "\n"))
+assets:SetAttribute("BuildStatus", "running 0")
+task.spawn(build)
+return "started"

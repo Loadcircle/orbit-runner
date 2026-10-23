@@ -51,7 +51,7 @@ local function tween(instance: Instance, time: number, props: { [string]: any },
 end
 
 function Hud.new(parent: Instance): Hud
-	local gui = Theme.screen("Hud", 10, parent)
+	local gui = Theme.screen("Hud", 10, parent, Enum.ScreenInsets.CoreUISafeInsets)
 	local root = Theme.root(gui)
 	local topInset = GuiService.TopbarInset.Height
 

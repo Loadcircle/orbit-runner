@@ -10,7 +10,7 @@
 	Cómo se usa:
 	  · Automático: crear un StringValue "UploadRequest" dentro de ServerScriptService.MeshData
 	    (Value = nombres de asset separados por comas, o vacío = todos). El plugin lo detecta,
-	    sube las piezas y escribe el resultado JSON en el StringValue "UploadResult"
+	    sube las piezas y escribe el resultado JSON en el StringValue ServerStorage.UploadResult
 	    ({ [asset] = { [pieza] = assetId } }). Es reanudable: no repite piezas con ID.
 	  · Manual: botón "Subir mallas" en la barra de herramientas del plugin.
 
@@ -21,6 +21,7 @@
 local AssetService = game:GetService("AssetService")
 local HttpService = game:GetService("HttpService")
 local ServerScriptService = game:GetService("ServerScriptService")
+local ServerStorage = game:GetService("ServerStorage")
 
 local DESCRIPTION = "Orbit Runner (Roblox) – malla exportada desde Blender"
 local busy = false
@@ -45,8 +46,9 @@ local function buildEditableMesh(part)
 	return mesh
 end
 
-local function readResult(folder)
-	local holder = folder:FindFirstChild("UploadResult")
+-- El resultado va a ServerStorage: MeshData lo gestiona Rojo y borraría el StringValue.
+local function readResult()
+	local holder = ServerStorage:FindFirstChild("UploadResult")
 	if holder and holder.Value ~= "" then
 		local ok, decoded = pcall(HttpService.JSONDecode, HttpService, holder.Value)
 		if ok then
@@ -56,12 +58,12 @@ local function readResult(folder)
 	return {}
 end
 
-local function writeResult(folder, result, status)
-	local holder = folder:FindFirstChild("UploadResult")
+local function writeResult(result, status)
+	local holder = ServerStorage:FindFirstChild("UploadResult")
 	if not holder then
 		holder = Instance.new("StringValue")
 		holder.Name = "UploadResult"
-		holder.Parent = folder
+		holder.Parent = ServerStorage
 	end
 	holder.Value = HttpService:JSONEncode(result)
 	holder:SetAttribute("Status", status)
@@ -77,7 +79,7 @@ local function upload(names)
 		return
 	end
 	busy = true
-	local result = readResult(folder)
+	local result = readResult()
 	local wanted = {}
 	for name in string.gmatch(names or "", "[^,%s]+") do
 		wanted[name] = true
@@ -96,7 +98,7 @@ local function upload(names)
 				if result[module.Name][partName] then
 					continue -- ya subida
 				end
-				writeResult(folder, result, "uploading " .. module.Name .. "/" .. partName)
+				writeResult(result, "uploading " .. module.Name .. "/" .. partName)
 				local built, mesh = pcall(buildEditableMesh, part)
 				if not built then
 					warn("[OrbitRunnerAssetUploader] " .. module.Name .. "/" .. partName .. ": " .. tostring(mesh))
@@ -122,7 +124,7 @@ local function upload(names)
 			end
 		end
 	end
-	writeResult(folder, result, if errors == 0 then "done" else ("done with " .. errors .. " errors"))
+	writeResult(result, if errors == 0 then "done" else ("done with " .. errors .. " errors"))
 	busy = false
 end
 

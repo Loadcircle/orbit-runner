@@ -31,7 +31,7 @@ export type LabPanel = typeof(setmetatable({} :: {
 }, LabPanel))
 
 function LabPanel.new(parent: Instance): LabPanel
-	local gui = Theme.screen("LabPanel", 12, parent)
+	local gui = Theme.screen("LabPanel", 12, parent, Enum.ScreenInsets.CoreUISafeInsets)
 	gui.Enabled = false
 	local root = Theme.root(gui)
 	local self = setmetatable({

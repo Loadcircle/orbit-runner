@@ -133,13 +133,15 @@ function Theme.sparkIcon(size: number, props: Props?): Frame
 	return holder
 end
 
--- ScreenGui a pantalla completa dentro de las zonas seguras del dispositivo.
-function Theme.screen(name: string, order: number, parent: Instance): ScreenGui
+-- ScreenGui a pantalla completa dentro de las zonas seguras del dispositivo. Las capas
+-- que viven en las esquinas superiores (HUD, panel del laboratorio) piden además
+-- CoreUISafeInsets para no quedar bajo los botones de la barra superior de Roblox.
+function Theme.screen(name: string, order: number, parent: Instance, insets: Enum.ScreenInsets?): ScreenGui
 	return Theme.create("ScreenGui", {
 		Name = name,
 		ResetOnSpawn = false,
 		IgnoreGuiInset = true,
-		ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets,
+		ScreenInsets = insets or Enum.ScreenInsets.DeviceSafeInsets,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 		DisplayOrder = order,
 		AutoLocalize = false,
