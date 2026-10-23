@@ -187,6 +187,16 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - **Mallas de Blender retiradas del juego:** se borran `ReplicatedStorage.Assets` del lugar y `ServerScriptService.MeshData` del proyecto. Los IDs subidos siguen en `Shared/AssetIds` y las herramientas siguen en `studio_tools/`, por si se recuperan.
 - **HUD:** el contorno del mensaje "¡Punto de control!" ya se desvanece con el texto; antes se quedaba visible. El mensaje baja para no tapar el panel de indicaciones.
 
+## R16 — Gesto del yo-yo, sonidos y props con el estilo de la plantilla (2026-10-23)
+- **Rodar bajo el láser:** se queda como está. Usa la animación Roll de la plantilla y el dueño le dio el visto bueno.
+- **Gesto de lanzar el yo-yo:** se usa la animación nativa `toolslash` del `Animate` estándar de Roblox (`rbxassetid://522635514`), con prioridad Action2 y a velocidad ×1.6. Si el avatar trae otro paquete de animaciones, se usa su `toolslash`. Es un asset de Roblox, así que se replica a los demás jugadores sin subir nada.
+- **Sonidos:** `client/Sfx.luau` clona los `AudioPlayer` de la plantilla (`Platformer.Sounds` y `Gameplay.Sounds`), con un tono propio por evento, y los enruta al bus "UI" de `SoundService.Audio`. Así suenan chispas, gemas, checkpoint, meta, muerte, impulsor, trampolín, plataforma que se rompe y el yo-yo. `AssetIds.sounds` queda sin uso.
+- **Props propios:** `PartFactory` usa por defecto Plastic con la variante `Concrete_Template_Walls`. Las piezas con material explícito no cambian: Neon para impulso y peligro, ForceField para el viento y Metal para la meta.
+- **Calibración de niveles: no hace falta para poder completarlos.**
+  - El salto simple de la plantilla alcanza 8 studs (2.29 m), igual que Godot (2.36 m), y llega a unos 4 m frente a los 5.9 m de Godot.
+  - Los huecos de `w1_l1` miden 3.5 m como máximo, y el doble salto (~7.7 m), el dash y el salto largo (~10 m) cubren los del tutorial.
+  - Con la plantilla, los niveles quedan algo más fáciles. Si se quiere la distancia de Godot sin tocar los niveles, se puede usar Gravity 118 y WalkSpeed 28, aunque se siente más flotante. La decisión queda para el dueño.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

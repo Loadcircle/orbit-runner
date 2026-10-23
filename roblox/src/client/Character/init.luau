@@ -25,6 +25,10 @@ local CAN_DOUBLE_JUMP_ATTRIBUTE = "canDoubleJump"
 local FORCE_FACTOR = 1500
 local BOOST_TIME = 0.6
 local THROW_POSE_TIME = 0.3
+-- Gesto de lanzar el yo-yo: el golpe de herramienta del Animate estándar de Roblox
+-- (toolslash, nativo y replicado). Si el avatar trae otro paquete se usa el suyo.
+local THROW_ANIMATION_ID = "rbxassetid://522635514"
+local THROW_ANIMATION_SPEED = 1.6
 
 local Character = {}
 Character.__index = Character
@@ -68,6 +72,7 @@ export type Character = typeof(setmetatable({} :: {
 	_yoyoRequested: boolean,
 	_spawnGrace: number,
 	_boost: LinearVelocity?,
+	_throwTrack: AnimationTrack?,
 	_connections: { RBXScriptConnection },
 }, Character))
 
@@ -153,6 +158,7 @@ function Character.new(model: Model): Character
 		_yoyoRequested = false,
 		_spawnGrace = 0,
 		_boost = nil,
+		_throwTrack = nil,
 		_connections = {},
 	}, Character)
 	self:_setHitboxHeight(Tuning.standHeight)
@@ -258,14 +264,37 @@ function Character._tryThrowYoyo(self: Character)
 			-- Ya cae: un disco lanzado quedaría arriba. Se despliega bajo los pies y
 			-- funciona como un salto aéreo.
 			yoyo:deployUnder(feet - up * Units.studs(0.1))
-			self.throwTimer = THROW_POSE_TIME
-			self.yoyoThrown:Fire()
+			self:_playThrow()
 			return
 		end
 		target = feet + flat(self.velocity) * t.yoyoAirLead - up * t.yoyoAirDrop
 	end
 	yoyo:throw(origin, target)
+	self:_playThrow()
+end
+
+function Character._playThrow(self: Character)
 	self.throwTimer = THROW_POSE_TIME
+	local track = self._throwTrack
+	if not track then
+		local animator = self.rig.humanoid:FindFirstChildOfClass("Animator")
+		if not animator then
+			self.yoyoThrown:Fire()
+			return
+		end
+		local animate = self.rig.character:FindFirstChild("Animate")
+		local slash = animate and animate:FindFirstChild("toolslash")
+		local source = slash and slash:FindFirstChildOfClass("Animation")
+		local animation = Instance.new("Animation")
+		animation.AnimationId = if source then source.AnimationId else THROW_ANIMATION_ID
+		local loaded = animator:LoadAnimation(animation)
+		loaded.Priority = Enum.AnimationPriority.Action2
+		loaded.Looped = false
+		self._throwTrack = loaded
+		track = loaded
+	end
+	assert(track, "pista de lanzamiento")
+	track:Play(0.05, 1, THROW_ANIMATION_SPEED)
 	self.yoyoThrown:Fire()
 end
 

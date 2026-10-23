@@ -1,6 +1,10 @@
 --!strict
 -- Creación de Parts nativas para geometría, props y volúmenes de activación.
--- Las colisiones de juego son Parts sencillas; los modelos visuales llegan en H8.
+-- Las colisiones de juego son Parts sencillas. Por defecto llevan el material de muro de
+-- la plantilla Platformer (R16) para que los props propios encajen con sus niveles; las
+-- piezas que lo indican (Neon de impulso o peligro, metal…) conservan el suyo.
+
+local Palette = require(script.Parent:WaitForChild("Palette"))
 
 local PartFactory = {}
 
@@ -13,7 +17,11 @@ function PartFactory.part(parent: Instance, props: PartProps): BasePart
 	part.CanTouch = false
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	part.Material = Enum.Material.SmoothPlastic
+	part.Material = Enum.Material.Plastic
+	part.MaterialVariant = Palette.wallVariant
+	if props.Material ~= nil and props.MaterialVariant == nil then
+		part.MaterialVariant = ""
+	end
 	for key, value in props do
 		if key ~= "ClassName" then
 			(part :: any)[key] = value
