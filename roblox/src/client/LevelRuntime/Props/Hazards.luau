@@ -10,6 +10,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -94,11 +95,27 @@ function Hazards.spinner(entry: Types.Entry, ctx: Types.Context): Types.Prop
 	})
 	local area = hazardArea(ctx, "SpinnerArea", { Size = armSize })
 	local armCenter = frame * CFrame.new(0, Units.studs(P.armCenterY), 0)
+	-- Malla migrada: el brazo (Arm y sus luces) gira sobre su pivote.
+	local visual = AssetLibrary.instantiate("HAZ_Spinner", m, frame)
+	local meshArms: { { part: BasePart, pivot: CFrame } } = {}
+	if visual then
+		AssetLibrary.hide({ arm, m:FindFirstChild("Hub") :: Instance })
+		for _, name in { "Arm", "Arm_Glow" } do
+			local pivot = AssetLibrary.localPivot(visual, name)
+			if pivot then
+				table.insert(meshArms, { part = visual.parts[name], pivot = pivot })
+			end
+		end
+	end
 	local prop = {}
 	function prop.step(_self, _dt: number, time: number)
-		local cf = armCenter * CFrame.Angles(0, startAngle + speed * time, 0)
+		local angle = startAngle + speed * time
+		local cf = armCenter * CFrame.Angles(0, angle, 0)
 		arm.CFrame = cf
 		area.CFrame = cf
+		for _, meshArm in meshArms do
+			meshArm.part:PivotTo(frame * CFrame.Angles(0, angle, 0) * meshArm.pivot)
+		end
 	end
 	prop.step(prop, 0, 0)
 	return prop
@@ -127,6 +144,11 @@ function Hazards.patrol(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		Material = Enum.Material.Neon,
 	})
 	local area = hazardArea(ctx, "PatrolArea", { Shape = Enum.PartType.Ball, Size = Vector3.one * radius * 2 })
+	-- Malla migrada: su origen es el centro del cuerpo (Body a 0.9 m en patrol_bot.tscn).
+	local visual = AssetLibrary.instantiate("HAZ_PatrolBot", m, frame)
+	if visual then
+		AssetLibrary.hide({ body, eye })
+	end
 	local start = frame * CFrame.new(0, Units.studs(P.centerY), 0)
 	local length = math.max(travel.Magnitude, 0.01)
 	local prop = {}
@@ -138,6 +160,9 @@ function Hazards.patrol(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		body.CFrame = cf
 		eye.CFrame = cf * CFrame.new(0, radius * 0.15, -radius * 0.75)
 		area.CFrame = cf
+		if visual then
+			visual.model:PivotTo(cf)
+		end
 	end
 	prop.step(prop, 0, 0)
 	return prop
@@ -168,6 +193,16 @@ function Hazards.laser(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		attachment.Position = Vector3.new(-side * 0.35, beamHeight - postHeight / 2, 0)
 		attachment.Parent = post
 		table.insert(attachments, attachment)
+	end
+	-- Mallas migradas de los postes, mirándose entre sí (laser_gate.tscn: ±90° en Y).
+	if AssetLibrary.has("HAZ_LaserPost") then
+		for _, child in m:GetChildren() do
+			if child:IsA("BasePart") and child.Name == "Post" then
+				child.Transparency = 1
+			end
+		end
+		AssetLibrary.instantiate("HAZ_LaserPost", m, frame * CFrame.new(-width / 2, 0, 0) * CFrame.Angles(0, math.rad(-90), 0))
+		AssetLibrary.instantiate("HAZ_LaserPost", m, frame * CFrame.new(width / 2, 0, 0) * CFrame.Angles(0, math.rad(90), 0))
 	end
 	local beam = Instance.new("Beam")
 	beam.Attachment0 = attachments[1]

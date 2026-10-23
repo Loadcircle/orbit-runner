@@ -20,3 +20,6 @@ roblox/tools/
 *.rbxl.lock
 *.rbxlx.lock
 roblox/sourcemap.json
+
+# Roblox: datos de malla generados por roblox/assets_source/scripts/export_for_roblox.py
+roblox/assets_source/meshes/

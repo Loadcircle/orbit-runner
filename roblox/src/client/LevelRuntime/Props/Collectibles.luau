@@ -9,6 +9,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Types = require(script.Parent:WaitForChild("Types"))
 
@@ -51,6 +52,16 @@ function Collectibles.gem(entry: { index: number, pos: { number } }, ctx: Types.
 		Material = if owned then Enum.Material.ForceField else Enum.Material.Neon,
 		Transparency = if owned then 0.35 else 0,
 	})
+	-- Malla migrada (modelo a +1 m en gem.tscn); las gemas ya conseguidas, translúcidas.
+	local visual = AssetLibrary.instantiate("PROP_Gem", ctx.geometry, CFrame.new(center))
+	if visual then
+		gem.Transparency = 1
+		if owned then
+			for _, part in visual.parts do
+				part.Transparency = 0.55
+			end
+		end
+	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "GemArea", {
 		Shape = Enum.PartType.Ball,
 		Size = Vector3.one * Units.studs(G.radius) * 2,
@@ -81,8 +92,14 @@ function Collectibles.gem(entry: { index: number, pos: { number } }, ctx: Types.
 				local t = 1 - pop / 0.3
 				local s = if t < 0.4 then 1 + 0.6 * (t / 0.4) else 1.6 * (1 - (t - 0.4) / 0.6)
 				gem.Size = Vector3.one * size * math.max(s, 0.01)
+				if visual then
+					visual.model:ScaleTo(math.max(s, 0.01))
+				end
 				if pop <= 0 then
 					gem:Destroy()
+					if visual then
+						visual.model:Destroy()
+					end
 				end
 			end
 			return
@@ -91,6 +108,9 @@ function Collectibles.gem(entry: { index: number, pos: { number } }, ctx: Types.
 		gem.CFrame = CFrame.new(center + Vector3.new(0, bob, 0))
 			* CFrame.Angles(0, time * G.spinRate, 0)
 			* CFrame.Angles(math.rad(45), 0, math.rad(45))
+		if visual then
+			visual.model:PivotTo(CFrame.new(center + Vector3.new(0, bob, 0)) * CFrame.Angles(0, time * G.spinRate, 0))
+		end
 	end
 	return prop
 end
@@ -107,6 +127,12 @@ function Collectibles.spark(position: { number }, ctx: Types.Context): Types.Pro
 		Material = Enum.Material.Neon,
 		CastShadow = false,
 	})
+	-- Malla migrada (escala 1.1 en spark.tscn).
+	local visual = AssetLibrary.instantiate("PROP_Spark", ctx.geometry, CFrame.new(pos))
+	if visual then
+		visual.model:ScaleTo(1.1)
+		spark.Transparency = 1
+	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "SparkArea", {
 		Shape = Enum.PartType.Ball,
 		Size = Vector3.one * Units.studs(S.radius) * 2,
@@ -125,6 +151,9 @@ function Collectibles.spark(position: { number }, ctx: Types.Context): Types.Pro
 			ctx.session:onSpark()
 			burst(ctx.geometry, pos, Palette.impulse, 8)
 			spark:Destroy()
+			if visual then
+				visual.model:Destroy()
+			end
 		end,
 	})
 	local magnetRadius = Units.studs(S.magnetRadius)
@@ -146,6 +175,9 @@ function Collectibles.spark(position: { number }, ctx: Types.Context): Types.Pro
 			end
 		end
 		spark.CFrame = CFrame.new(pos) * CFrame.Angles(0, spin, 0)
+		if visual then
+			visual.model:PivotTo(spark.CFrame)
+		end
 	end
 	return prop
 end

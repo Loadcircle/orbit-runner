@@ -9,6 +9,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -42,6 +43,12 @@ function BoostPad.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			})
 			table.insert(chevrons, { part = bar, index = i })
 		end
+	end
+	if AssetLibrary.has("PROP_BoostPad") then
+		-- La malla ya tiene sus chevrones: se ocultan los provisionales.
+		AssetLibrary.hide(model:GetChildren())
+		table.clear(chevrons)
+		AssetLibrary.instantiate("PROP_BoostPad", model, frame)
 	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "BoostArea", {
 		Size = size,

@@ -10,6 +10,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -60,9 +61,21 @@ function MovingPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Pro
 			* CFrame.new(0, size.Y / 2 + 0.05, i * size.Z * 0.18) * CFrame.Angles(0, math.rad(35) * i, 0) })
 	end
 
+	local visual = AssetLibrary.instantiate("PLAT_Moving", ctx.geometry, start)
+	if visual then
+		body.Transparency = 1
+		for _, decoration in decorations do
+			decoration.part.Transparency = 1
+		end
+	end
+
 	local prop = {}
 	function prop.step(_self, dt: number, time: number)
-		local frame = start * offset + travel * MovingPlatform.progress(time, period, phase, pause)
+		local shift = travel * MovingPlatform.progress(time, period, phase, pause)
+		if visual then
+			visual.model:PivotTo(start + shift)
+		end
+		local frame = start * offset + shift
 		local previous = body.Position
 		body.CFrame = frame
 		body.AssemblyLinearVelocity = if dt > 0 then (frame.Position - previous) / dt else Vector3.zero

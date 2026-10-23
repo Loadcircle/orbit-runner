@@ -8,6 +8,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -57,6 +58,18 @@ function Trampoline.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		CFrame = areaFrame,
 	})
 
+	-- Malla migrada: el parche (Pad y su parte brillante) se aplasta al rebotar.
+	local visual = AssetLibrary.instantiate("PROP_Trampoline", model, frame)
+	local meshPads = {}
+	if visual then
+		AssetLibrary.hide({ model:FindFirstChild("Base") :: Instance, pad })
+		for name, part in visual.parts do
+			if name == "Pad" or name == "Pad_Glow" then
+				table.insert(meshPads, { part = part, size = part.Size, frame = part.CFrame })
+			end
+		end
+	end
+
 	local squash = 0
 	local function launch()
 		local player = ctx.player
@@ -77,6 +90,11 @@ function Trampoline.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			squash = math.max(squash - dt / 0.35, 0)
 			local wobble = 1 + 0.15 * squash * math.cos((1 - squash) * 12)
 			pad.Size = Vector3.new(padSize.X * math.max(1 - 0.6 * squash, 0.4), padSize.Y * wobble, padSize.Z * wobble)
+			-- Mismo efecto sobre el parche de la malla (Godot: escala 1.15/0.4/1.15 → 1).
+			local flatten = math.max(1 - 0.6 * squash, 0.4)
+			for _, meshPad in meshPads do
+				meshPad.part.Size = Vector3.new(meshPad.size.X * wobble, meshPad.size.Y * flatten, meshPad.size.Z * wobble)
+			end
 		end
 	end
 	return prop

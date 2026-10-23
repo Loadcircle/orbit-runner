@@ -9,6 +9,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -42,6 +43,14 @@ function TimedPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		Color = Palette.glow,
 		Material = Enum.Material.Neon,
 	})
+	local visual = AssetLibrary.instantiate("PLAT_Timed", ctx.geometry, frame)
+	local visualParts: { BasePart } = {}
+	if visual then
+		AssetLibrary.hide({ body })
+		for _, part in visual.parts do
+			table.insert(visualParts, part)
+		end
+	end
 	local solid = true
 	local popTimer = 0
 	local prop = {}
@@ -60,14 +69,26 @@ function TimedPlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			visible = remaining > warning or (remaining % 0.16) > 0.07
 		end
 		local transparency = if visible then 0 else 1
-		body.Transparency = transparency
-		ring.Transparency = transparency
+		if visual then
+			for _, part in visualParts do
+				part.Transparency = transparency
+			end
+		else
+			body.Transparency = transparency
+			ring.Transparency = transparency
+		end
 		if popTimer > 0 then
 			popTimer = math.max(popTimer - dt, 0)
 			local s = 0.3 + 0.7 * Common.backOut(1 - popTimer / T.popTime)
 			body.Size = Vector3.new(size.X, size.Y * s, size.Z * s)
+			if visual then
+				visual.model:ScaleTo(math.max(s, 0.05))
+			end
 		elseif body.Size ~= size then
 			body.Size = size
+			if visual then
+				visual.model:ScaleTo(1)
+			end
 		end
 	end
 	return prop

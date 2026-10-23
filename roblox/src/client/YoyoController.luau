@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+local AssetLibrary = require(script.Parent:WaitForChild("LevelRuntime"):WaitForChild("AssetLibrary"))
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Signal = require(Shared:WaitForChild("Signal"))
 local Units = require(Shared:WaitForChild("Units"))
@@ -57,6 +58,8 @@ export type YoyoController = typeof(setmetatable({} :: {
 	_discScale: number,
 	_position: Vector3,
 	_flightElapsed: number,
+	yoyoModel: Model?,
+	discModel: Model?,
 }, YoyoController))
 
 local function makePart(parent: Instance, props: { [string]: any }): BasePart
@@ -96,6 +99,19 @@ function YoyoController.new(owner: Owner): YoyoController
 		_flightElapsed = 0,
 	} :: any, YoyoController)
 	self:_buildVisuals()
+	-- Mallas migradas (H8): las piezas provisionales siguen marcando posición y visibilidad
+	-- (Transparency lógica) pero no se dibujan; las mallas copian su estado en _render.
+	local yoyoMesh = AssetLibrary.instantiate("PROP_Yoyo", folder, CFrame.identity)
+	if yoyoMesh then
+		self.yoyoModel = yoyoMesh.model
+		self.yoyo.LocalTransparencyModifier = 1
+	end
+	local discMesh = AssetLibrary.instantiate("PROP_YoyoDisc", folder, CFrame.identity)
+	if discMesh then
+		self.discModel = discMesh.model
+		self.disc.LocalTransparencyModifier = 1
+		self.discRing.LocalTransparencyModifier = 1
+	end
 	self:_hideAll()
 	self:_setHolsterVisible(true)
 	return self
@@ -244,7 +260,19 @@ function YoyoController.step(self: YoyoController, dt: number)
 	self:_render()
 end
 
+local function setModelTransparency(model: Model?, transparency: number)
+	if not model then
+		return
+	end
+	for _, part in model:GetDescendants() do
+		if part:IsA("BasePart") then
+			part.Transparency = transparency
+		end
+	end
+end
+
 function YoyoController._render(self: YoyoController)
+	self:_renderMeshes()
 	if self.state == "flying" or self.state == "returning" then
 		local look = (self._to - self._from)
 		local yaw = if look.Magnitude > 0.01 then math.atan2(-look.X, -look.Z) else 0
@@ -258,6 +286,20 @@ function YoyoController._render(self: YoyoController)
 		self.discRing.Size = Vector3.new(self.discRing.Size.X, radius * 0.8, radius * 0.8)
 		self.discRing.CFrame = base
 		self.yoyo.CFrame = CFrame.new(self._position)
+	end
+end
+
+function YoyoController._renderMeshes(self: YoyoController)
+	if self.yoyoModel then
+		setModelTransparency(self.yoyoModel, self.yoyo.Transparency)
+		self.yoyoModel:PivotTo(self.yoyo.CFrame)
+	end
+	if self.discModel then
+		setModelTransparency(self.discModel, if self.disc.Transparency >= 1 then 1 else 0)
+		if self.state == "deployed" then
+			self.discModel:ScaleTo(math.max(0.1 + 0.9 * self._discScale, 0.05))
+			self.discModel:PivotTo(CFrame.new(self._position) * CFrame.Angles(0, self._spin, 0))
+		end
 	end
 end
 
@@ -325,6 +367,9 @@ function YoyoController._hideAll(self: YoyoController)
 	self.disc.Transparency = 1
 	self.discRing.Transparency = 1
 	self.beam.Enabled = false
+	if self.yoyoModel or self.discModel then
+		self:_renderMeshes()
+	end
 end
 
 function YoyoController._setHolsterVisible(self: YoyoController, visible: boolean)

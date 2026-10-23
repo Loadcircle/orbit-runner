@@ -9,6 +9,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -41,6 +42,19 @@ function CrumblePlatform.build(entry: Types.Entry, ctx: Types.Context): Types.Pr
 				Color = if (ix + iz) == 0 then Palette.stone else Palette.stoneDark,
 			})
 			table.insert(tiles, { part = tile, rest = rest })
+		end
+	end
+	-- Malla migrada: sus losetas (Tile_*) sustituyen a las provisionales.
+	local visual = AssetLibrary.instantiate("PLAT_Crumble", ctx.geometry, frame)
+	if visual then
+		for _, tile in tiles do
+			tile.part:Destroy()
+		end
+		table.clear(tiles)
+		for name, part in visual.parts do
+			if name:sub(1, 5) == "Tile_" then
+				table.insert(tiles, { part = part, rest = part.CFrame })
+			end
 		end
 	end
 	local sensor = PartFactory.trigger(ctx.triggerFolder, "CrumbleSensor", {

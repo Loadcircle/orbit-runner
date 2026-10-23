@@ -7,6 +7,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Units = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Units"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -27,6 +28,10 @@ function Platform.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		Color = ctx.biome.side,
 	})
 	body:SetAttribute("Asset", entry.asset)
+	if AssetLibrary.instantiate(entry.asset, ctx.geometry, frame) then
+		body.Transparency = 1
+		return {}
+	end
 	PartFactory.visual(body, {
 		Name = "Top",
 		Size = Vector3.new(size.X + 0.05, TOP_THICKNESS, size.Z + 0.05),

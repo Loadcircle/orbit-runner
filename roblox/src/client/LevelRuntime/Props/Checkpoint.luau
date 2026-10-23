@@ -8,6 +8,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -41,6 +42,20 @@ function Checkpoint.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 		Color = Palette.metalDark,
 	})
 	local flagRest = flag.CFrame
+	-- Malla migrada (en Godot el modelo está desplazado −1.4 m en X); su bandera (Flag)
+	-- se tiñe y se levanta al activarse.
+	local visual = AssetLibrary.instantiate("PROP_Checkpoint", model, frame * CFrame.new(Units.studs(-1.4), 0, 0))
+	local meshFlag: BasePart? = nil
+	local meshFlagSize = Vector3.zero
+	local meshFlagRest = CFrame.identity
+	if visual then
+		AssetLibrary.hide({ model:FindFirstChild("Pole") :: Instance, flag })
+		meshFlag = visual.parts.Flag
+		if meshFlag then
+			meshFlagSize = meshFlag.Size
+			meshFlagRest = meshFlag.CFrame
+		end
+	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "CheckpointArea", {
 		Size = Common.size(C.size),
 		CFrame = frame * CFrame.new(0, Units.studs(C.centerY), 0),
@@ -56,6 +71,9 @@ function Checkpoint.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			activated = true
 			flag.Color = ACTIVE_COLOR
 			flag.Material = Enum.Material.Neon
+			if meshFlag then
+				meshFlag.Color = ACTIVE_COLOR
+			end
 			raise = 0.4
 			ctx.session:playSfx("checkpoint")
 			ctx.session:onCheckpoint(spawn, facing)
@@ -68,6 +86,10 @@ function Checkpoint.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			local s = 0.2 + 0.8 * Common.backOut(1 - raise / 0.4)
 			flag.Size = Vector3.new(flagSize.X, flagSize.Y * s, flagSize.Z)
 			flag.CFrame = flagRest * CFrame.new(0, flagSize.Y * (s - 1) / 2, 0)
+			if meshFlag then
+				meshFlag.Size = Vector3.new(meshFlagSize.X, meshFlagSize.Y * s, meshFlagSize.Z)
+				meshFlag.CFrame = meshFlagRest * CFrame.new(0, meshFlagSize.Y * (s - 1) / 2, 0)
+			end
 		end
 	end
 	return prop

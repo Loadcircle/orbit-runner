@@ -10,6 +10,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local PropTuning = require(Shared:WaitForChild("PropTuning"))
 local Units = require(Shared:WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -61,6 +62,15 @@ function WindColumn.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 	emitter.EmissionDirection = Enum.NormalId.Right -- +X local del cilindro = arriba
 	emitter.Parent = column
 
+	-- Malla migrada del anillo con su rotor girando (9 rad/s, wind_column.gd).
+	local visual = AssetLibrary.instantiate("PROP_WindRing", model, frame)
+	local rotor: BasePart? = nil
+	local rotorPivot = CFrame.identity
+	if visual then
+		AssetLibrary.hide({ model:FindFirstChild("Base") :: Instance })
+		rotor = visual.parts.Rotor
+		rotorPivot = AssetLibrary.localPivot(visual, "Rotor") or CFrame.identity
+	end
 	local area = PartFactory.trigger(ctx.triggerFolder, "WindArea", {
 		Shape = Enum.PartType.Cylinder,
 		Size = columnSize,
@@ -78,7 +88,14 @@ function WindColumn.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
 			player:applyWind(lift * k, maxUp, dt)
 		end,
 	})
-	return {}
+	if not rotor then
+		return {}
+	end
+	local prop = {}
+	function prop.step(_self, _dt: number, time: number)
+		(rotor :: BasePart):PivotTo(frame * rotorPivot * CFrame.Angles(0, time * 9, 0))
+	end
+	return prop
 end
 
 return WindColumn

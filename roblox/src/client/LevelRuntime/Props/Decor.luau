@@ -7,6 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Units = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Units"))
 local Palette = require(script.Parent.Parent:WaitForChild("Palette"))
+local AssetLibrary = require(script.Parent.Parent:WaitForChild("AssetLibrary"))
 local PartFactory = require(script.Parent.Parent:WaitForChild("PartFactory"))
 local Common = require(script.Parent:WaitForChild("Common"))
 local Types = require(script.Parent:WaitForChild("Types"))
@@ -102,6 +103,14 @@ local BUILDERS: { [string]: (Instance, CFrame, number) -> () } = {
 }
 
 function Decor.build(entry: Types.Entry, ctx: Types.Context): Types.Prop
+	-- Malla migrada si existe (ENV_Tree, ENV_Pine…); si no, forma nativa.
+	local visual = AssetLibrary.instantiate(entry.asset, ctx.decor, Common.frame(entry))
+	if visual then
+		if entry.scale then
+			visual.model:ScaleTo(entry.scale[1])
+		end
+		return {}
+	end
 	local builder = BUILDERS[entry.asset or ""]
 	if not builder then
 		return {}
