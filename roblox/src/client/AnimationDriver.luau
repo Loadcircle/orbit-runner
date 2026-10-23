@@ -15,8 +15,11 @@ local DEFAULT_SLOTS = {
 	Jump = { "jump", "JumpAnim" },
 	Fall = { "fall", "FallAnim" },
 }
-local FADE = 0.12
-local RUN_REFERENCE_SPEED = 28 -- studs/s a los que el ciclo de carrera va a velocidad 1.25
+local FADE = 0.12 -- player_visual.gd: BLEND
+local K = 3.5 -- Units.K (studs por metro)
+local RUN_THRESHOLD = 0.6 * K -- player_visual.gd: carrera desde 0.6 m/s
+local JUMP_THRESHOLD = 0.5 * K -- salto si vy > 0.5 m/s; si no, caída
+local RUN_SPEED = 8 * K -- MovementTuning.runSpeed
 
 type Controller = {
 	rig: { character: Model, humanoid: Humanoid, root: BasePart },
@@ -140,14 +143,14 @@ function AnimationDriver.update(self: AnimationDriver, dt: number)
 	elseif self.celebrating or c.frozen then
 		state = "Idle"
 	elseif c.onFloor then
-		state = if speed > 2 and not c.isSliding then "Run" elseif c.isSliding then "Fall" else "Idle"
+		state = if c.isSliding then "Fall" elseif speed > RUN_THRESHOLD then "Run" else "Idle"
 	else
-		state = if c.velocity.Y > 0 then "Jump" else "Fall"
+		state = if c.velocity.Y > JUMP_THRESHOLD then "Jump" else "Fall"
 	end
 	self:_play(state)
 	local run = self.tracks.Run
 	if run and state == "Run" then
-		run:AdjustSpeed(math.clamp(speed / RUN_REFERENCE_SPEED, 0.3, 1.6) * 1.25)
+		run:AdjustSpeed(math.clamp(speed / RUN_SPEED, 0.5, 1.6) * 1.15)
 	end
 
 	-- Retoques procedurales.

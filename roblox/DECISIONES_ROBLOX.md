@@ -44,3 +44,119 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - **Motivo:** guía §2.4. Los controles propios (`InputRouter`, `TouchControls`) son la única entrada de gameplay.
 - **Impacto:** hasta H2 el personaje no se puede mover en *Play*. Esc sigue abriendo el menú de Roblox; la pausa principal en PC será P.
 - **Evidencia (2026-10-22, Play Solo vía MCP):** Rojo sincronizó `Shared`, `Services`, `ServerMain`, `Client` y `ClientMain`, y aplicó las propiedades de `StarterPlayer`. Con W pulsada 1 s y Espacio, el avatar R15 se desplazó 0,00 studs y no saltó. Las teclas llegaron al juego (`UserInputService` las registró). No aparece `TouchGui`. La salida muestra los dos mensajes de arranque y ningún error propio. El aviso `rbxassetid://203785492 … Asset type does not match` no viene de nuestro código.
+
+## R4. Controlador del personaje sobre `ControllerManager` (cierra P1)
+- **Decisión (dueño, 2026-10-22):** el `Humanoid` se queda para el avatar, la apariencia y la replicación, con `EvaluateStateMachine = false`. El movimiento usa el controlador físico nativo: un `ControllerManager` con `GroundController` y `AirController`, más un `ControllerPartSensor` para el suelo (`Client/PlayerController/CharacterRig`). La lógica es un port de `player.gd` (`Client/PlayerController`):
+  - **En suelo:** el `GroundController` acelera y frena con los tiempos de Godot: 38 m/s² al acelerar, 48 al frenar y 70 al invertir el sentido. Se calcula `AccelerationTime = velocidad / aceleración × 0.915` (calibración medida: el controlador tarda un 9 % más por la fricción).
+  - **En el aire:** la velocidad horizontal se integra con el `move_toward` de Godot y se escribe en la física; el `AirController` solo mantiene el equilibrio y la orientación. La gravedad asimétrica (28 al subir / 45 al bajar) la aplica un `VectorForce` que sustituye la de `workspace.Gravity`.
+  - **K = 3.5 studs/m** se mantiene: no hizo falta reajustarla.
+- **Referencia de 60 Hz:** Godot simula a 60 ticks fijos. Tres detalles se ajustan a esa referencia para no depender del framerate:
+  - el dash dura 10 ticks (0,167 s) y se mezcla en el fotograma en que termina;
+  - el disco se despliega en el fotograma más cercano a 9 ticks (0,15 s);
+  - los rebotes al caer se compensan según lo que dura el fotograma (`v² + 2·g·Δy`).
+- **Orden de cada fotograma** (`LevelRuntime.step`, igual que en Godot): reloj → estado del jugador → props y activadores → lógica del jugador → yo-yo → caída. Una fuerza externa aplicada después del jugador (el rebote del yo-yo) queda pendiente y se escribe al empezar el fotograma siguiente.
+- **Evidencia:** laboratorio de mecánicas, batería automática (`Dev/Calibration`), comparada con `MovementReach` de Godot (`tools/_reach_test.gd`, 60 Hz). Hueco plano en metros (incluye el radio de cápsula) / altura máxima:
+
+  | Técnica | Godot | Roblox 60 FPS | Roblox 30 FPS* |
+  |---|---|---|---|
+  | Salto | 6.13 / 2.27 | 6.13 (0.0 %) / 2.27 | 6.18 (+0.8 %) / 2.27 |
+  | Salto largo | 7.80 / 1.53 | 7.81 (+0.1 %) / 1.53 | 7.84 (+0.5 %) / 1.58 (+3.3 %) |
+  | Salto + dash | 9.34 / 2.51 | 9.45 (+1.2 %) / 2.51 | 9.81 (**+5.0 %**) / 2.46 (−2.0 %) |
+  | Salto + disco | 14.15 / 5.80 | 13.77 (−2.7 %) / 5.85 (+0.9 %) | 14.13 (−0.1 %) / 5.79 (−0.2 %) |
+  | Disco en suelo | 8.44 / 4.44 | 8.58 (+1.7 %) / 4.44 | 8.76 (+3.8 %) / 4.44 |
+  | Trampolín 20 | 10.46 / 6.98 | 10.46 / 6.98 | 10.51 (+0.5 %) / 6.98 |
+  | Trampolín 24 | 12.53 / 10.09 | 12.53 / 10.09 | 12.53 / 10.08 |
+
+  \* Los 30 FPS se simulan con una espera activa en `RenderStepped`. Studio limita a 60 FPS y no deja cambiarlo por script, así que **120+ FPS queda por medir en el S25** con el botón "Medir alcances" del laboratorio, que muestra la misma tabla en pantalla. A 30 FPS el dash queda en el límite (+5.0 %) por la latencia de un fotograma entre la pulsación y el dash.
+
+  Salto completo: 2.27 m de altura, igual que Godot. Con integración continua serían 2.36 m; Godot da 2.27 m porque integra en ticks de 60 Hz. El tiempo en el aire es de 0.70 s (Godot: 0.73 s).
+- **Pruebas una a una (Play Solo vía MCP, entrada programada):**
+  - Salto variable: un toque de 2 fotogramas sube 0.76 m.
+  - Coyote: se salta 0.05 s después de salir del borde y no 0.20 s después.
+  - Buffer: pulsar 0.05 s antes de aterrizar salta; 0.25 s antes, no.
+  - Láser fijo: de pie muere; deslizando pasa sin morir.
+  - Salto largo: 12.50 m/s en horizontal.
+  - Dash: solo uno por vuelo; se recarga al aterrizar.
+  - Yo-yo: una carga aérea; el disco dura 1.50 s y parpadea al final; regresa en 0.30 s; el despliegue bajo los pies al caer rebota a 16 m/s; el trampolín devuelve la carga.
+
+## R5. `InputRouter` sobre el Input Action System
+- **Decisión (dueño):** `InputContext` "Gameplay" con las acciones `move`, `camera`, `jump`, `yoyo`, `action` y `pause`, cada una con sus `InputBinding` de teclado y mando (las teclas de `project.godot`). Los botones táctiles son `InputBinding.UIButton`; el joystick hace `Fire()` de `move`. La zona muerta circular con reescalado (0.2) es la de `Input.get_vector`.
+- **Motivo:** es el sistema nativo actual; el propio `PlayerModule` de Roblox ya lo usa.
+- **Evidencia:** WASD, Espacio, Mayús y E funcionan en las pruebas. El botón táctil de salto, pulsado con el ratón, produce un salto de 11.5 m/s.
+
+## R6. Animaciones provisionales (desarrollo de R2)
+- **Implementación:** `AnimationDriver` carga las animaciones `idle`, `run`, `jump` y `fall` del script `Animate` del avatar y apaga ese script. Elige la animación con los mismos umbrales que `player_visual.gd`: carrera desde 0.6 m/s, salto con vy > 0.5 m/s y ritmo de carrera ×1.15. Los retoques son procedurales sobre los `C0`: agachado y echado atrás al deslizar, inclinación en el dash, brazo al lanzar y compresión al aterrizar.
+- **Lista para las animaciones propias** (las mismas acciones que `build_character.py`, a 30 fps): Idle 3 s (bucle), Run 0.53 s (bucle), Jump 0.37 s, Fall 0.53 s (bucle), Slide 0.33 s (bucle), Dash 0.2 s (bucle), Throw 0.5 s, Bounce 0.33 s (bucle), Land 0.3 s, Victory ≥ 0.8 s (bucle) y Hurt 0.43 s. Basta con añadirlas a `DEFAULT_SLOTS`; el controlador no cambia.
+
+## R7. Textos en una `LocalizationTable` dentro de `ReplicatedStorage.Localization`
+- **Decisión:** `roblox/scripts/build_localization.py` genera `localization/GameStrings.csv` a partir de `orbit_runner_game/localization/strings.csv` (Source = inglés, columna `es`, `%d` → `{1}`), con correcciones propias de Roblox (la pausa es P). Rojo la crea como `LocalizationTable`. `Client/Strings` la lee con `GetTranslator(RobloxLocaleId)`. La UI se crea desde código con `AutoLocalize = false`.
+- **Motivo:** `GetTranslatorForPlayerAsync` exige el juego publicado. Además, Rojo no sincroniza en vivo los servicios que se añaden al proyecto con la sesión ya conectada (`LocalizationService`).
+- **Impacto:** si en la Fase 3 se usa la traducción automática de Roblox, la tabla se mueve a `LocalizationService`; el código no cambia.
+
+## R8. Vestíbulo propio en lugar del Baseplate de la plantilla
+- **Decisión:** `world/Lobby.model.json` (Rojo) crea `Workspace.Lobby`, con suelo y `LobbySpawn` en z = +300 studs, lejos de los niveles. Se quitaron del lugar el `Baseplate` y el `SpawnLocation` de la plantilla.
+- **Motivo:** el Baseplate estaba a la altura 0 de los niveles: atravesaba las plataformas y frenaba las caídas.
+- **Impacto:** al salir de un nivel se vuelve al vestíbulo. El hub real es de la Fase 4.
+
+## R9. Exportador JSON adelantado de la Fase 2
+- **Decisión:** se añadió `orbit_runner_game/tools/export_level_json.gd` y su `.tscn`, que es el único cambio en el juego de Godot y solo añade una herramienta. El tutorial y `w1_l1` se construyen desde `roblox/levels_json/*.json`, con el esquema de `levels_json/SCHEMA.md`, en lugar de transcribirlos a mano.
+- **Motivo:** la guía (§3.9) lo permite y da exactitud: chispas, zonas de cámara, indicaciones y medallas salen tal cual de las escenas.
+- **Evidencia:** el tutorial tiene 11 plataformas, 44 chispas, 3 checkpoints y 10 indicaciones; `w1_l1` tiene 19 plataformas, 43 chispas, 2 checkpoints y 19 zonas de cámara. Indicaciones y zonas de cámara probadas (la zona de 90° gira la cámara a 90°).
+
+## R10. Assets: `EditableMesh` desde Blender, color por vértice (cierra P3)
+- **Exportación:** `assets_source/scripts/export_for_roblox.py` usa Blender 5.2.2 en segundo plano y abre los `.blend` solo en lectura. Para cada asset:
+  - quita los contornos de casco invertido;
+  - aplica los modificadores;
+  - convierte los ejes como el exportador glTF y escala ×K;
+  - guarda el color por esquina en sRGB y las normales por esquina;
+  - separa las piezas animadas (Pad, Arm, Flag, Halo, Rotor, Tile_*).
+
+  Exporta los 23 assets de la Fase 1 (Isles, plataformas especiales, props, peligros, yo-yo y disco, gema, chispa, árbol y pino). Todos quedan por debajo de 20 000 triángulos por pieza.
+- **P3, color por vértice:** sí. Una malla creada en Studio con `EditableMesh` (la gema) muestra su color por vértice y el sombreado plano correctos, y el importador 3D también lo admite. No hace falta hornear texturas.
+- **Subida:** `AssetService:CreateAssetAsync` no está disponible desde el MCP. Se escribió el plugin local `studio_tools/OrbitRunnerAssetUploader.lua`, instalado en `%LOCALAPPDATA%\Roblox\Plugins`, pero también responde *"not available yet"* con el lugar sin publicar (PlaceId 0). **Pendiente: publicar el lugar** como privado y reintentar. Después, `studio_tools/build_prefabs.luau` crea los prefabs en `ReplicatedStorage.Assets` y el texto de `Shared/AssetIds`. Alternativa: el dueño importa los GLB con el Asset Manager.
+- **En juego:** `LevelRuntime/AssetLibrary` hace que props, plataformas, decoración y yo-yo usen el prefab si existe; si no, usan formas nativas provisionales. Las colisiones siempre son `Part`s invisibles aparte, como pide §2.5. Los grupos emisivos con color casi uniforme pasan a material Neon.
+- **Temporal:** `ServerScriptService.MeshData`, unos 2.7 MB de datos solo de servidor, se quita del proyecto tras la subida.
+
+## R11. Escala de avatar fija con `HumanoidDescription`
+- **Decisión:** `Services/AvatarService` aplica en el servidor las escalas estándar R15 (altura, anchura, profundidad y cabeza a 1; tipo de cuerpo y proporción a 0) al cargar la apariencia. `CharacterRig` se reajusta si cambia `HipHeight`.
+- **Motivo:** las Avatar Settings no se pueden fijar por script y el lugar aún no está publicado; así el ajuste además vive en el código. La cápsula de juego ya era propia.
+- **Evidencia:** escalas aplicadas (1, 1, 1, 1, 0, 0) y `HipHeight` = 2.0. El salto sigue en 6.17 m.
+
+## R12. Servidor: validación y progreso en memoria
+- **Decisión:**
+  - `Shared/Net` contiene `RemoteEvent`s y `RemoteFunction`s declarados en `.model.json`.
+  - `Services/RunValidator` comprueba el orden de checkpoints, el tiempo ≥ 0.6 × oro, que el tiempo del cliente no supere el real del servidor más 2 s, que las chispas no pasen del total, las gemas notificadas y un máximo de 20 eventos/s.
+  - `Services/ProgressService` es un port de `submit_run` y `mastery`: récord, medalla, gemas, chispas y estrellas acumulativas. Todo en memoria (la persistencia es de la Fase 3). El laboratorio no se registra.
+- **Evidencia:**
+  - Teletransportarse a la meta en 1.02 s se rechaza (`too_fast`); la pantalla lo indica y el servidor lo anota en la salida.
+  - Un intento plausible de 17.87 s con los checkpoints en orden se acepta: oro, nuevo récord, estrella de oro, +6 chispas y "Resultado registrado".
+
+## R13. Limitaciones conocidas de la Fase 1
+- **Audio:** no se ha subido. `Shared/AssetIds.sounds` está vacío y `Sfx` no reproduce nada. La subida va con la de las mallas.
+- **Vibración:** `HapticService` solo vibra en mando. En móvil queda pendiente comprobar el soporte en el S25.
+- **Sin probar todavía:**
+  - joystick táctil con toques reales (se necesita emulador o teléfono; el MCP solo simula ratón y teclado);
+  - servidor con 2 jugadores (el MCP solo arranca Play Solo);
+  - 120+ FPS;
+  - rendimiento en teléfono.
+- **Rendimiento en Studio (PC):** 60 FPS de media en el laboratorio (785 piezas) y en `w1_l1`. El peor fotograma (43.8 ms) se da al cargar el nivel. No se afirma nada sobre teléfonos sin probar.
+
+## Estado de la lista de aceptación (§3.9) a 2026-10-22
+- [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
+- [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.
+- [x] Coyote, buffer, salto variable, deslizar bajo el láser, salto largo, dash único y recarga al aterrizar.
+- [x] Yo-yo: subida en suelo (altura 4.44 m = Godot), lanzamiento aéreo, despliegue al caer rápido, vida de 1.5 s con parpadeo, regreso, una carga aérea. El atenuado del botón está implementado (`TouchControls.update`) pero falta verlo en el teléfono.
+- [x] Props y peligros con sus valores:
+  - boost a 17 m/s;
+  - viento de 8 m (sube hasta 9.8 m y recupera el dash);
+  - plataforma móvil que arrastra 6 m;
+  - temporizadas en ola 0 / 0.3 / 0.6 con ciclo de 3.6 s;
+  - desmoronable que cae y se reconstruye;
+  - pinchos, spinner y patrulla que matan;
+  - reloj común que sigue tras morir.
+- [x] Cámara: zonas, anticipación, anti-oclusión (`Raycast` del brazo), ajuste manual y salto a la yaw del checkpoint.
+- [x] Flujo completo: inicio → muertes y reapariciones → meta → resultados con medalla, gemas, chispas y estrellas. El servidor registra o rechaza.
+- [ ] Controles táctiles en emulador y en un teléfono real; teclado listo; mando sin probar en físico.
+- [ ] Rendimiento en el teléfono.
+- [ ] Visto bueno del dueño a la sensación.
+- [ ] Mallas migradas en el juego (bloqueado por la publicación del lugar).

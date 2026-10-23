@@ -22,4 +22,7 @@ roblox/tools/
 roblox/sourcemap.json
 
 # Roblox: datos de malla generados por roblox/assets_source/scripts/export_for_roblox.py
-roblox/assets_source/meshes/
+roblox/assets_source/meshes/*.json
+# Lugar de Studio guardado localmente: el código sale de Rojo y los IDs de Shared/AssetIds
+roblox/*.rbxl
+roblox/*.rbxlx

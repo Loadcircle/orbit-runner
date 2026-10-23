@@ -125,6 +125,15 @@ function CharacterRig.new(character: Model): CharacterRig
 		queryParams = queryParams,
 	}
 	CharacterRig.setHitboxHeight(rig, Tuning.standHeight)
+	-- Si el servidor normaliza la escala del avatar (AvatarService), cambia la altura de
+	-- cadera: se recalculan la altura del GroundController, el sensor y la cápsula.
+	humanoid:GetPropertyChangedSignal("HipHeight"):Connect(function()
+		rig.groundOffset = humanoid.HipHeight
+		rig.rootHalfHeight = root.Size.Y / 2
+		ground.GroundOffset = humanoid.HipHeight
+		sensor.SearchDistance = humanoid.HipHeight + root.Size.Y / 2 + SENSOR_EXTRA
+		CharacterRig.setHitboxHeight(rig, rig.hitbox.Size.X)
+	end)
 	return rig
 end
 
