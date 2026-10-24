@@ -23,7 +23,7 @@ Rojo convierte cada `.json` de esta carpeta en un `ModuleScript` de `ReplicatedS
 | `id`, `name_key`, `hint_key` | Identificador y claves de traducción (`LEVEL_<ID>`, `LEVEL_<ID>_HINT`). |
 | `world`, `index`, `tutorial` | Mundo (base 1), posición dentro del mundo (base 1; el tutorial vale 0) y si es el tutorial. |
 | `biome`, `difficulty` | `isles` / `toyworks` / `ruins` y `easy` / `medium` / `hard` / `extreme` (vacío en el tutorial). |
-| `medals` | `{ gold, silver }` en segundos, sacados de `resources/levels/level_catalog.tres`. |
+| `medals` | `{ gold, silver, mode? }` en segundos. Desde R25 los calcula `scripts/level_kit.py: medal_times` sobre el camino que recoge todo. Bronce = completar; plata = tiempo ≤ `silver`; oro = tiempo ≤ `gold` + las 3 gemas + todas las chispas. Con `mode = "speed"` (niveles de pura velocidad) el oro es solo el tiempo y se calcula sobre la ruta. |
 | `kill_height` | Altura de caída en metros. |
 | `source` | `{ kind: "handmade" }` o `{ kind: "campaign_gen", seed, route_hash, difficulty_index }`. |
 | `player_start` | `{ pos, yaw }` (pies del jugador; yaw de cámara en grados). |

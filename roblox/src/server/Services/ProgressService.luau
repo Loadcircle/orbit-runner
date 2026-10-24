@@ -97,8 +97,13 @@ function ProgressService.submit(player: Player, report: RunValidator.Report): { 
 		record.bestTime = time
 	end
 	if not tutorial then
-		local medal = LevelCatalog.medalForTime(data, time)
+		local sparksInLevel = #((data.collectibles or {}).sparks or {})
+		local collectedAll = run.gems[1] and run.gems[2] and run.gems[3] and report.sparks >= sparksInLevel
+		local medal = LevelCatalog.medalFor(data, time, collectedAll)
 		summary.medal = medal
+		-- Tiempo de oro sin recogerlo todo: la pantalla de resultados lo explica.
+		summary.goldTimeOnly = medal < 3 and data.medals ~= nil and data.medals.gold ~= nil
+			and time <= data.medals.gold and data.medals.mode ~= "speed"
 		if medal > record.medal then
 			record.medal = medal
 			summary.medalImproved = wasCompleted

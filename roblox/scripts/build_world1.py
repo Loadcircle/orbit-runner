@@ -9,7 +9,7 @@ Uso: python build_world1.py [w1_l3 …]  → roblox/levels_json/w1_l*.json
 import math
 import sys
 
-from level_kit import Level, check_overlaps, report
+from level_kit import Level, check_overlaps, medal_times, report
 
 # ---------------------------------------------------------------------- utilidades
 
@@ -94,13 +94,12 @@ def auto_decor(level: Level, assets):
 def finish(level: Level, decor=("ENV_Tree", "ENV_Bush", "ENV_Pine", "ENV_Rock_B")):
     auto_sparks(level)
     auto_decor(level, decor)
-    waits = sum(1 for p in level.pieces if p["kind"] in ("moving", "timed"))
-    gold = math.ceil(level.span() / 5.0 + 2.5 * waits)
-    level.data["medals"] = {"gold": float(gold), "silver": float(math.ceil(gold * 1.6))}
+    level.data["medals"] = medal_times(level.data)
     level.write()
     report(level)
     check_overlaps(level)
-    print(f"  medallas provisionales: oro {gold} s, plata {math.ceil(gold * 1.6)} s")
+    medals = level.data["medals"]
+    print(f"  medallas: oro {medals['gold']:.0f} s (con todo), plata {medals['silver']:.0f} s")
 
 
 # ---------------------------------------------------------------------- niveles

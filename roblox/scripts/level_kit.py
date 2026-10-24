@@ -303,6 +303,57 @@ MOVES = [
 MARGIN = 0.85
 
 
+# ---------------------------------------------------------------------- medallas
+# Regla de medallas (R25): bronce = completar; plata = tiempo <= plata; oro = las 3 gemas
+# + todas las chispas + tiempo <= oro. En niveles de velocidad (medals.mode = "speed")
+# el oro es solo el tiempo y se mide sobre la ruta, sin coleccionables.
+# Calibración: el dueño hizo w1_l3 (camino con todo = 200 m) en 20,3 s, ~9,8 m/s
+# encadenando saltos largos; el oro pide ~9 m/s para dejar margen sin regalarlo.
+GOLD_SPEED = 9.0  # m/s horizontales sobre el camino
+GOLD_CLIMB_SPEED = 6.0  # m/s de subida (dobles saltos, yo-yo)
+GOLD_WAIT = 2.5  # s por plataforma móvil o temporizada de la ruta
+SILVER_FACTOR = 1.5
+
+
+def _route_progress(route: list, point) -> float:
+    """Longitud de arco del punto de la ruta más cercano a `point` (para ordenar)."""
+    best, progress, travelled = float("inf"), 0.0, 0.0
+    centers = [piece["pos"] for piece in route]
+    for a, b in zip(centers, centers[1:]):
+        seg = [b[k] - a[k] for k in range(3)]
+        length_sq = sum(v * v for v in seg) or 1.0
+        t = max(0.0, min(1.0, sum((point[k] - a[k]) * seg[k] for k in range(3)) / length_sq))
+        closest = [a[k] + seg[k] * t for k in range(3)]
+        distance = math.dist(closest, point)
+        if distance < best:
+            best, progress = distance, travelled + math.sqrt(length_sq) * t
+        travelled += math.sqrt(length_sq)
+    return progress
+
+
+def medal_times(data: dict) -> dict:
+    """Tiempos de oro y plata calculados sobre el camino que recoge todo (o la ruta, en
+    modo velocidad): longitud horizontal / GOLD_SPEED + subida / GOLD_CLIMB_SPEED +
+    esperas."""
+    route = data["route"]
+    speed_mode = data.get("medals", {}).get("mode") == "speed"
+    if speed_mode:
+        points = [piece["pos"] for piece in route]
+    else:
+        collectibles = data.get("collectibles", {})
+        points = list(collectibles.get("sparks", [])) + [gem["pos"] for gem in collectibles.get("gems", [])]
+        points.sort(key=lambda p: _route_progress(route, p))
+    path = [data["player_start"]["pos"]] + points + [data["goal"]["pos"]]
+    flat = sum(math.dist((a[0], a[2]), (b[0], b[2])) for a, b in zip(path, path[1:]))
+    climb = sum(max(0.0, b[1] - a[1]) for a, b in zip(path, path[1:]))
+    waits = sum(1 for piece in route if piece["kind"] in ("moving", "timed"))
+    gold = math.ceil(flat / GOLD_SPEED + climb / GOLD_CLIMB_SPEED + GOLD_WAIT * waits)
+    medals = {"gold": float(gold), "silver": float(math.ceil(gold * SILVER_FACTOR))}
+    if speed_mode:
+        medals["mode"] = "speed"
+    return medals
+
+
 def reach(table: dict, top: float, rise: float) -> float:
     """Alcance a una subida dada, interpolando la tabla; por encima de la última columna
     medida baja en línea recta hasta 1 m a la altura máxima."""

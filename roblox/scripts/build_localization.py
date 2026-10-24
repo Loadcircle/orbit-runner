@@ -121,6 +121,12 @@ ROBLOX_OVERRIDES = {
     "SELECT_CLOSE": ("Cerrar", "Close"),
     "SELECT_LOCKED": ("Bloqueado: completa el nivel anterior", "Locked: beat the previous level"),
     "SELECT_GEMS": ("Gemas {1}/3", "Gems {1}/3"),
+    # Regla de medallas (R25): el oro pide también todas las gemas y chispas.
+    "RESULTS_GOLD_ALL": ("3 gemas y todas las chispas", "3 gems and all sparks"),
+    "RESULTS_GOLD_MISSING": (
+        "¡Tiempo de oro! Recoge todas las gemas y chispas para ganar el oro",
+        "Gold time! Collect every gem and spark to earn gold",
+    ),
     "SETTINGS_BACK": ("Volver", "Back"),
     "SETTINGS_ON": ("Sí", "On"),
     "SETTINGS_OFF": ("No", "Off"),

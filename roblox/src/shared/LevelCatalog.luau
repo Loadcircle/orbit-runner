@@ -98,13 +98,15 @@ function LevelCatalog.data(id: string): { [string]: any }?
 	return nil
 end
 
--- Medalla por tiempo (progress.gd: medal_for_time). 0 = ninguna, 1 bronce, 2 plata, 3 oro.
-function LevelCatalog.medalForTime(data: { [string]: any }, time: number): number
+-- Medalla (R25). 0 = ninguna, 1 bronce (completar), 2 plata (tiempo <= plata), 3 oro
+-- (tiempo <= oro + las 3 gemas + todas las chispas). En niveles de velocidad
+-- (medals.mode = "speed") el oro es solo el tiempo. `collectedAll` lo calcula el servidor.
+function LevelCatalog.medalFor(data: { [string]: any }, time: number, collectedAll: boolean): number
 	local medals = data.medals
 	if data.tutorial or not medals or medals.gold == nil then
 		return 0
 	end
-	if time <= medals.gold then
+	if time <= medals.gold and (collectedAll or medals.mode == "speed") then
 		return 3
 	elseif time <= medals.silver then
 		return 2

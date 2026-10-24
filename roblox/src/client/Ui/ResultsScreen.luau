@@ -13,7 +13,7 @@ export type Run = {
 	sparks: number,
 	sparksTotal: number,
 	respawns: number,
-	medals: { gold: number?, silver: number? }?,
+	medals: { gold: number?, silver: number?, mode: string? }?,
 	tutorial: boolean,
 	hasNext: boolean,
 }
@@ -88,8 +88,16 @@ function ResultsScreen.open(self: ResultsScreen, run: Run, summary: { [string]: 
 	if not run.tutorial and medal > 0 then
 		line(Strings.get(Theme.MEDAL_KEYS[medal]), 30, Theme.MEDAL_COLORS[medal])
 	end
+	if summary and summary.goldTimeOnly then
+		line(Strings.get("RESULTS_GOLD_MISSING"), 22, Theme.GOLD)
+	end
 	if not run.tutorial and run.medals and run.medals.gold then
-		line(string.format("%s %s  ·  %s %s", Strings.get("MEDAL_GOLD"), Strings.formatTime(run.medals.gold),
+		-- Oro = tiempo + las 3 gemas + todas las chispas, salvo en niveles de velocidad (R25).
+		local goldRule = Strings.formatTime(run.medals.gold)
+		if run.medals.mode ~= "speed" then
+			goldRule ..= " + " .. Strings.get("RESULTS_GOLD_ALL")
+		end
+		line(string.format("%s %s  ·  %s %s", Strings.get("MEDAL_GOLD"), goldRule,
 			Strings.get("MEDAL_SILVER"), Strings.formatTime(run.medals.silver or 0)), 20, Theme.DIM)
 	end
 	local gems = 0

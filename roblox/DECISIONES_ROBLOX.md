@@ -385,6 +385,30 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Para un jugador nuevo equivale a la de Godot.
   - Evita huecos como `w1_l1` bloqueado con `w1_l2` completado (perfiles anteriores al bloqueo). El tutorial sigue siendo el primero de la cadena.
 
+## R25 — Regla de medallas y tiempos calculados (2026-10-24)
+- **Decisión del dueño:** el nivel tiene tres objetivos: gemas, chispas y tiempo. El **oro exige las 3 gemas, todas las chispas y un tiempo mínimo**. A futuro habrá niveles cuya meta sea solo la velocidad.
+- **Regla** (`LevelCatalog.medalFor`, en el servidor):
+  - bronce = completar;
+  - plata = tiempo ≤ `silver`;
+  - oro = tiempo ≤ `gold` + 3 gemas (las notificadas a `RunValidator`) + todas las chispas;
+  - con `medals.mode = "speed"`, el oro es solo el tiempo (preparado para los niveles de velocidad; aún no hay ninguno).
+  - Si el tiempo da para oro pero falta algo, los resultados lo dicen: "¡Tiempo de oro! Recoge todas las gemas y chispas para ganar el oro".
+  - La línea de medallas muestra "Oro 00:27 + 3 gemas y todas las chispas · Plata 00:41".
+- **Cálculo** (`scripts/level_kit.py: medal_times`): camino desde el inicio, por todas las chispas y gemas ordenadas según el avance en la ruta, hasta la meta.
+  - **Fórmula:** oro = longitud horizontal / 9 m/s + subida / 6 m/s + 2,5 s por plataforma móvil o temporizada. Plata = 1,5 × oro.
+  - **Calibración:** el dueño hizo `w1_l3` en 20,3 s. El camino con todo mide 200 m, así que fue a ~9,8 m/s encadenando saltos largos (correr da 6,3 m/s). El oro pide ~9 m/s.
+  - En modo velocidad se usa la ruta sin coleccionables.
+- **Mundo 1 regenerado** con `build_world1.py` (determinista: solo cambian `medals`). Oro / plata en segundos:
+
+  | l1 | l2 | l3 | l4 | l5 | l6 | l7 | l8 | l9 | l10 |
+  |---|---|---|---|---|---|---|---|---|---|
+  | 25/38 | 32/48 | 27/41 | 27/41 | 36/54 | 23/35 | 25/38 | 34/51 | 46/69 | 37/56 |
+
+- **Récords guardados:** las medallas ya ganadas no bajan; la plata de `w1_l2` del dueño se conserva.
+- **Antitrampas:** se mantiene en 0,35 × oro, que ahora es más bajo (`w1_l3`: 9,5 s).
+- **Comprobado en Play:** `w1_l3` carga con oro 27 y plata 41. `medalFor` da oro con 20,3 s y todo recogido, plata sin recogerlo todo y bronce con 50 s.
+- **Pendiente:** que el dueño juegue y confirme la dificultad del oro. Si resulta duro o fácil, se ajusta `GOLD_SPEED`.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.
