@@ -373,6 +373,18 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - capturas del vestíbulo con portales y cartel legibles.
 - **Sin comprobar:** el prompt con toque real en el teléfono y la convivencia de dos jugadores en el vestíbulo.
 
+## R24 — Correcciones tras la prueba del dueño (2026-10-24)
+- **Caída al volver al vestíbulo:** con `StreamingEnabled`, mientras se juega un nivel (a ~3500 studs) el `SpawnLocation` no existe en el cliente. `returnToLobby` no encontraba destino y el personaje se quedaba en la posición del nivel ya destruido, cayendo.
+  - **Arreglo:** `HubService` publica `workspace.LobbySpawn` (Vector3). Al volver, el cliente congela al personaje, llama a `RequestStreamAroundAsync` y luego lo coloca.
+  - **Comprobado en Play:** con el tutorial en curso el spawn no era visible y, al volver, el personaje queda de pie en (1, 4, 2999).
+- **El siguiente nivel seguía bloqueado:** el servidor rechazó el intento de `w1_l3` (20.33 s, 3/3 gemas, sin caídas) como `too_fast`, porque el mínimo era 0.6 × oro = 22.2 s.
+  - **Causa:** los tiempos de oro de R20 se estimaron antes de la sensación de la plantilla y son holgados.
+  - **Arreglo:** el mínimo baja a **0.35 × oro**, y el aviso del servidor incluye nivel y tiempo.
+  - **Pendiente (dueño):** recalibrar las medallas del mundo 1 con tiempos reales.
+- **Regla de desbloqueo:** ahora están abiertos todos los niveles de la campaña hasta el siguiente al más avanzado completado.
+  - Para un jugador nuevo equivale a la de Godot.
+  - Evita huecos como `w1_l1` bloqueado con `w1_l2` completado (perfiles anteriores al bloqueo). El tutorial sigue siendo el primero de la cadena.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

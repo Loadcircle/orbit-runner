@@ -69,7 +69,8 @@ end
 function ProgressService.submit(player: Player, report: RunValidator.Report): { [string]: any }
 	local accepted, reason, run = RunValidator.finish(player, report)
 	if not accepted or not run then
-		warn(string.format("[ProgressService] intento de %s rechazado: %s", player.Name, reason))
+		warn(string.format("[ProgressService] intento de %s en %s rechazado: %s (%.2f s)", player.Name,
+			if run then run.levelId else "?", reason, if typeof(report) == "table" and typeof(report.time) == "number" then report.time else -1))
 		return { accepted = false, reason = reason }
 	end
 	local data = run.data

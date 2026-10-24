@@ -217,6 +217,12 @@ function HubService.start()
 	if ok then
 		rankingStore = result
 	end
+	-- Punto de vuelta al vestíbulo para los clientes: con StreamingEnabled no ven el
+	-- SpawnLocation mientras juegan un nivel lejano.
+	local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
+	if spawn then
+		workspace:SetAttribute("LobbySpawn", spawn.Position + Vector3.new(0, spawn.Size.Y / 2, 0))
+	end
 	local hub = Instance.new("Folder")
 	hub.Name = "Hub"
 	for _, config in PORTALS do

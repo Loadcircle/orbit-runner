@@ -71,14 +71,41 @@ local function closeSession()
 	hud:setVisible(false)
 end
 
--- Vuelve al vestíbulo: el escenario de la plantilla, lejos de la zona de niveles.
-local function returnToLobby(current: Character.Character)
-	local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
-	current:unfreeze()
-	if spawn then
-		current:respawnAt(spawn.Position + Vector3.new(0, spawn.Size.Y / 2, 0), Vector3.new(0, 0, -1))
-		camera:snap(0)
+local panelOpening = false
+
+-- Punto de aparición del vestíbulo. Con StreamingEnabled el SpawnLocation no existe en el
+-- cliente mientras se juega un nivel (está a miles de studs), así que se usa el atributo
+-- que publica HubService y, si falta, el SpawnLocation.
+local function lobbyFeet(): Vector3?
+	local published = workspace:GetAttribute("LobbySpawn")
+	if typeof(published) == "Vector3" then
+		return published
 	end
+	local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
+	return if spawn then spawn.Position + Vector3.new(0, spawn.Size.Y / 2, 0) else nil
+end
+
+-- Vuelve al vestíbulo: el escenario de la plantilla, lejos de la zona de niveles. Congela
+-- al personaje mientras el streaming carga el suelo del vestíbulo y luego lo coloca.
+local function returnToLobby(current: Character.Character)
+	local feet = lobbyFeet()
+	if not feet then
+		current:unfreeze()
+		return
+	end
+	current:freeze()
+	task.spawn(function()
+		pcall(function()
+			player:RequestStreamAroundAsync(feet, 10)
+		end)
+		if controller ~= current or session then
+			return -- el personaje cambió o empezó un nivel mientras cargaba
+		end
+		current:unfreeze()
+		current:respawnAt(feet, Vector3.new(0, 0, -1))
+		camera:snap(0)
+		current.inputEnabled = not (levelSelect.gui.Enabled or panelOpening)
+	end)
 end
 
 -- Panel de niveles de un mundo (portal del vestíbulo); 0 = laboratorio.
@@ -87,8 +114,10 @@ local function openWorld(world: number)
 	if current then
 		current.inputEnabled = false
 	end
+	panelOpening = true
 	task.spawn(function()
 		refreshProgress()
+		panelOpening = false
 		levelSelect:open(world, progress)
 	end)
 end
@@ -101,7 +130,6 @@ local function goToLobby(world: number?)
 	local current = controller
 	if current then
 		returnToLobby(current)
-		current.inputEnabled = true
 	end
 	if world then
 		openWorld(world)
@@ -394,7 +422,6 @@ function Game.start()
 			current:hurt()
 		elseif not session then
 			returnToLobby(current)
-			current.inputEnabled = not levelSelect.gui.Enabled
 		end
 	end)
 	task.spawn(function()

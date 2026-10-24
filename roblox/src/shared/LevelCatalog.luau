@@ -56,22 +56,33 @@ function LevelCatalog.world(world: number): { Entry }
 	return list
 end
 
--- Desbloqueo (progress.gd: is_unlocked): el primero de la campaña siempre; los demás si
--- el anterior está completado. Un nivel completado sigue abierto aunque se inserten
--- niveles antes. El laboratorio siempre está abierto.
+-- Desbloqueo (progress.gd: is_unlocked, ampliado en R23): abiertos todos los niveles de
+-- la campaña hasta el siguiente al más avanzado completado. Para un jugador nuevo es la
+-- regla de Godot (el primero, y cada uno al completar el anterior); además no deja
+-- huecos si se completó un nivel posterior (perfiles anteriores al bloqueo). El
+-- laboratorio siempre está abierto.
 function LevelCatalog.isUnlocked(id: string, isCompleted: (id: string) -> boolean): boolean
-	local previous: Entry? = nil
+	local campaign = {}
 	for _, entry in LevelCatalog.entries do
-		if not entry.lab then
+		if entry.lab then
 			if entry.id == id then
-				return previous == nil or isCompleted(id) or isCompleted(previous.id)
+				return true
 			end
-			previous = entry
-		elseif entry.id == id then
-			return true
+		else
+			table.insert(campaign, entry.id)
 		end
 	end
-	return false
+	local highest = 0
+	local target = 0
+	for index, entryId in campaign do
+		if isCompleted(entryId) then
+			highest = index
+		end
+		if entryId == id then
+			target = index
+		end
+	end
+	return target > 0 and target <= highest + 1
 end
 
 -- Datos del nivel (tabla con el esquema JSON v1).

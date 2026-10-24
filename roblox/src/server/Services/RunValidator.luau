@@ -1,6 +1,6 @@
 --!strict
 -- Valida en el servidor que un intento tenga sentido antes de registrarlo (guía §2.3):
--- orden de checkpoints, tiempo mínimo plausible (≥ 0.6 × oro), duración real del
+-- orden de checkpoints, tiempo mínimo plausible (≥ 0.35 × oro), duración real del
 -- intento según el reloj del servidor, chispas ≤ total del nivel, gemas válidas y ritmo
 -- de envío. Si algo no cuadra, el resultado no se registra (no se expulsa a nadie).
 
@@ -8,7 +8,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LevelCatalog = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("LevelCatalog"))
 
-local MIN_GOLD_FRACTION = 0.6
+-- Con la plantilla (R14) los tiempos de oro de R20 son holgados: el dueño hizo w1_l3 en
+-- 20.3 s con oro 37 (0.55). Se baja de 0.6 a 0.35 hasta recalibrar las medallas.
+local MIN_GOLD_FRACTION = 0.35
 local CLOCK_TOLERANCE = 2.0 -- s: el tiempo del cliente no puede superar el real + margen
 local MAX_EVENTS_PER_SECOND = 20
 
