@@ -230,4 +230,11 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - [x] Controles táctiles en un teléfono real (S25, por el dueño): funcionan, aunque los botones admiten algún ajuste. El teclado está listo y el mando no se ha probado en físico.
 - [x] Rendimiento en el teléfono: el dueño lo aprobó en el S25 (2026-10-23, "va súper bien"). No hay cifra de FPS medida.
 - [x] Visto bueno del dueño a la sensación (2026-10-23): controles de la plantilla, cámara asistida, gesto del yo-yo, celebración, sonidos y props. La recalibración de alcances queda aplazada.
-- [ ] Mallas migradas en el juego (bloqueado por la publicación del lugar).
+- [x] ~~Mallas migradas en el juego~~: sustituido por R15 (assets de la plantilla de Roblox). Las mallas se subieron, pero se retiraron del juego.
+- [x] Prueba con 2 jugadores (Studio, Clientes y servidores, 2026-10-23): cada uno juega su nivel con su propio progreso. Si juegan el mismo nivel, los personajes chocan entre sí; el dueño lo da por bueno.
+
+**Fase 1 cerrada el 2026-10-23 con el visto bueno del dueño.**
+
+Antes de empezar la Fase 2 (migración de niveles) hay que decidir la recalibración de alcances (ver R16):
+- mantener la sensación de la plantilla y revisar los niveles;
+- o igualar el salto de Godot con Gravity ≈118 y WalkSpeed ≈28.
