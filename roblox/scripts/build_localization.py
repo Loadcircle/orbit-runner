@@ -109,6 +109,11 @@ ROBLOX_OVERRIDES = {
     "RESULTS_STAR_FLAWLESS": ("Sin reapariciones", "No respawns"),
     "RESULTS_SAVED": ("Resultado registrado", "Result recorded"),
     "RESULTS_REJECTED": ("Resultado no válido: no se registra", "Invalid result: not recorded"),
+    "PROGRESS_NOT_SAVED": (
+        "Tu progreso no se está guardando ahora mismo",
+        "Your progress is not being saved right now",
+    ),
+    "RESULTS_WORLD_TOP": ("Mejores del mundo", "World best"),
     "SETTINGS_BACK": ("Volver", "Back"),
     "SETTINGS_ON": ("Sí", "On"),
     "SETTINGS_OFF": ("No", "Off"),

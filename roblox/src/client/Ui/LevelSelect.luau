@@ -1,7 +1,8 @@
 --!strict
 -- Selector mínimo: laboratorio, tutorial y mundo 1 en una fila desplazable (el hub real
--- es de la Fase 4). Muestra el mejor tiempo, la medalla que guarda el servidor y la
--- marca "Por aprobar" de los niveles que el dueño aún no ha aprobado.
+-- es de la Fase 4). Muestra el mejor tiempo, la medalla que guarda el servidor, la
+-- marca "Por aprobar" de los niveles que el dueño aún no ha aprobado y un aviso si el
+-- progreso no se está guardando (DataStore no disponible, R22).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -16,6 +17,7 @@ LevelSelect.__index = LevelSelect
 export type LevelSelect = typeof(setmetatable({} :: {
 	gui: ScreenGui,
 	cards: ScrollingFrame,
+	notice: TextLabel,
 	onPlay: (id: string) -> (),
 	onSettings: () -> (),
 }, LevelSelect))
@@ -49,9 +51,16 @@ function LevelSelect.new(parent: Instance): LevelSelect
 		PaddingRight = UDim.new(0, 10),
 		Parent = cards,
 	})
+	local notice = Theme.label(Strings.get("PROGRESS_NOT_SAVED"), 20, Theme.ORANGE, {
+		AnchorPoint = Vector2.new(0.5, 0),
+		Position = UDim2.new(0.5, 0, 0, 130),
+		Visible = false,
+		Parent = root,
+	}) :: TextLabel
 	local self = setmetatable({
 		gui = gui,
 		cards = cards,
+		notice = notice,
 		onPlay = function(_id: string) end,
 		onSettings = function() end,
 	}, LevelSelect)
@@ -68,6 +77,7 @@ function LevelSelect.open(self: LevelSelect, progress: { [string]: any }?)
 		end
 	end
 	local levels = if progress then progress.levels or {} else {}
+	self.notice.Visible = progress ~= nil and progress.persistent == false
 	for index, entry in LevelCatalog.entries do
 		local card = Theme.panel({
 			Size = UDim2.fromOffset(270, 300),

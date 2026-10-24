@@ -127,6 +127,18 @@ function Game.play(id: string)
 				tutorial = data.tutorial == true or data.lab == true,
 				hasNext = LevelCatalog.entries[index + 1] ~= nil,
 			}, summary)
+			if data.tutorial ~= true and data.lab ~= true then
+				local levelId = finishedSession.id
+				task.spawn(function()
+					task.wait(1.5) -- da tiempo a que el servidor publique el récord
+					local ok, entries = pcall(function()
+						return (Net:WaitForChild("GetLeaderboard") :: RemoteFunction):InvokeServer(levelId)
+					end)
+					if ok and typeof(entries) == "table" and currentId == levelId then
+						results:showLeaderboard(entries, player.UserId)
+					end
+				end)
+			end
 		end,
 	});
 	(newSession :: any).onEvent = function(event: string)

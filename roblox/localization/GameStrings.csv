@@ -39,6 +39,7 @@ PAUSE_QUIT,Exit to levels,,,Salir a niveles
 PAUSE_RESTART,Restart level,,,Reiniciar nivel
 PAUSE_RESUME,Resume,,,Continuar
 PAUSE_TITLE,Paused,,,Pausa
+PROGRESS_NOT_SAVED,Your progress is not being saved right now,,,Tu progreso no se está guardando ahora mismo
 RESULTS_BEST,Best:,,,Mejor:
 RESULTS_CHALLENGES,Challenges,,,Desafíos
 RESULTS_FINALE,Finale,,,Final
@@ -66,6 +67,7 @@ RESULTS_STREAK,{1}-day streak!,,,¡Racha de {1} días!
 RESULTS_TIME,Time,,,Tiempo
 RESULTS_TITLE,Level complete!,,,¡Nivel completado!
 RESULTS_TOWER_TITLE,Climb over!,,,¡Subida terminada!
+RESULTS_WORLD_TOP,World best,,,Mejores del mundo
 SELECT_BEST,Best: {1},,,Mejor: {1}
 SELECT_LAB,Mechanics lab,,,Laboratorio de mecánicas
 SELECT_LAB_HINT,"Measure jumps, props and hazards",,,"Mide saltos, props y peligros"

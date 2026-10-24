@@ -326,6 +326,21 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - **PvP:** queda **sin decidir**. Golpear o estorbar con el yo-yo choca con la identidad de la guía (el yo-yo es locomoción, no arma). Solo se hace si el dueño lo decide explícitamente.
 - **Motivo:** el progreso guardado sostiene la campaña. Los modos sociales ayudan a que el juego se descubra en Roblox (vuelta de jugadores, invitar amigos), y los dos primeros cuestan poco porque usan lo que ya existe.
 
+## R22 — Fase 3: progreso persistente en DataStore (2026-10-24, primer paso de R21)
+- **Mundo 1 aprobado:** el dueño aprobó los 10 niveles de R20. Se quita `pending` en `Shared/LevelCatalog`.
+- **`Services/ProgressStore`:** guarda el perfil (`sparks` y `levels`, el mismo `LevelRecord` de R12) en el `DataStore` `OrbitRunnerProgress`, clave `player_<UserId>`, documento `{ schema = 1, data, lock, savedAt }`.
+  - **Bloqueo de sesión:** al cargar, el servidor escribe `lock = { id, at }` con un GUID propio. Si otro servidor lo tiene y lo renovó hace menos de 300 s, espera 4 × 6 s y luego lo toma. Cada guardado comprueba que el bloqueo siga siendo suyo; si no, deja de guardar (`lost`). Así, dos servidores nunca se pisan aunque un teleport llegue antes del guardado de salida.
+  - **Cuándo se guarda:** al salir (libera el bloqueo), en `BindToClose` (espera a todos los guardados en curso, máximo 25 s) y cada 30 s si hay cambios. El bloqueo se renueva cada 120 s aunque no haya cambios. Todo con `UpdateAsync`, 3 intentos con espera creciente y control de presupuesto.
+  - **Sin DataStore** (caída o Studio sin acceso a las API): el perfil queda solo en memoria y no se escribe nunca, para no sobrescribir datos buenos con uno vacío. El selector y los resultados avisan con "Tu progreso no se está guardando ahora mismo". Un error 403 no se reintenta.
+  - **Carga tolerante:** `sanitize` copia solo los campos con el tipo esperado; los datos corruptos o de versiones futuras no rompen la carga.
+- **`Services/LeaderboardService`:** un `OrderedDataStore` `OrbitRunnerTimes_<nivel>` por nivel con medallas (no se incluyen tutorial ni laboratorio). Clave `UserId`, valor = tiempo en ms (orden ascendente).
+  - Solo se escribe al batir el récord propio aceptado por `RunValidator`, y solo si mejora lo guardado.
+  - El top 10 se cachea 60 s. `Net/GetLeaderboard` admite una consulta cada 2 s por jugador.
+  - Los resultados muestran el top 5 mundial y resaltan al jugador.
+- **Para probar en Studio:** Game Settings → Security → "Enable Studio Access to API Services". Ojo: así Studio lee y escribe los datos reales del lugar publicado.
+- **Comprobado:** `rojo build` compila el proyecto.
+- **Sin comprobar:** no había ninguna instancia de Studio conectada al MCP, así que falta probar en Play cargar y guardar, el aviso sin acceso y el top. También falta la prueba de dos servidores (bloqueo), que solo se puede hacer con el juego publicado.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

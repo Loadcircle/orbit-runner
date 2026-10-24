@@ -1,5 +1,5 @@
 --!strict
--- Catálogo: laboratorio de mecánicas + tutorial + mundo 1 (Fase 2, R20). Los datos de
+-- Catálogo: laboratorio de mecánicas + tutorial + mundo 1 (Fase 2, R20; aprobado 2026-10-24). Los datos de
 -- cada nivel son los ModuleScripts de ReplicatedStorage.Levels (JSON del esquema v1,
 -- generados con roblox/scripts/build_*.py); el laboratorio se genera en código
 -- (Shared/LabLevel). `pending` marca los niveles que el dueño aún no ha aprobado.
@@ -30,7 +30,6 @@ for index = 1, 10 do
 		hintKey = key .. "_HINT",
 		tutorial = false,
 		lab = false,
-		pending = true,
 	})
 end
 

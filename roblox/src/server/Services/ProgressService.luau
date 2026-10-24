@@ -1,56 +1,29 @@
 --!strict
--- Progreso del jugador en el servidor (port de progress.gd: submit_run, mastery). En la
--- Fase 1 se guarda EN MEMORIA; la persistencia con DataStore llega en la Fase 3.
--- Conecta los RemoteEvents de Shared/Net con RunValidator.
+-- Progreso del jugador en el servidor (port de progress.gd: submit_run, mastery). Desde
+-- la Fase 3 (R22) el perfil se guarda en DataStore (ProgressStore) y los récords se
+-- publican en tablas por nivel (LeaderboardService). Conecta los RemoteEvents de
+-- Shared/Net con RunValidator.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local LevelCatalog = require(Shared:WaitForChild("LevelCatalog"))
+local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
+local ProgressStore = require(script.Parent:WaitForChild("ProgressStore"))
 local RunValidator = require(script.Parent:WaitForChild("RunValidator"))
 
 local Net = Shared:WaitForChild("Net")
 
-export type LevelRecord = {
-	completed: boolean,
-	bestTime: number,
-	medal: number,
-	gems: { boolean },
-	bestSparks: number,
-	sparksTotal: number,
-	flawless: boolean,
-	allSparks: boolean,
-}
-
-export type Profile = { sparks: number, levels: { [string]: LevelRecord } }
+export type LevelRecord = ProgressStore.LevelRecord
+export type Profile = ProgressStore.Profile
 
 local ProgressService = {}
-
-local profiles: { [Player]: Profile } = {}
-
-local function profileFor(player: Player): Profile
-	local profile = profiles[player]
-	if not profile then
-		profile = { sparks = 0, levels = {} }
-		profiles[player] = profile
-	end
-	return profile
-end
 
 local function recordFor(profile: Profile, levelId: string): LevelRecord
 	local record = profile.levels[levelId]
 	if not record then
-		record = {
-			completed = false,
-			bestTime = 0,
-			medal = 0,
-			gems = { false, false, false },
-			bestSparks = 0,
-			sparksTotal = 0,
-			flawless = false,
-			allSparks = false,
-		}
+		record = ProgressStore.newRecord()
 		profile.levels[levelId] = record
 	end
 	return record
@@ -80,7 +53,10 @@ function ProgressService.submit(player: Player, report: RunValidator.Report): { 
 		return { accepted = false, reason = reason }
 	end
 	local data = run.data
-	local profile = profileFor(player)
+	local profile = ProgressStore.get(player)
+	if not profile then
+		return { accepted = false, reason = "no_profile" }
+	end
 	local record = recordFor(profile, run.levelId)
 	local tutorial = data.tutorial == true
 	local wasCompleted = record.completed
@@ -126,6 +102,11 @@ function ProgressService.submit(player: Player, report: RunValidator.Report): { 
 	profile.sparks += report.sparks
 	summary.wallet = profile.sparks
 	summary.bestTime = record.bestTime
+	summary.persistent = ProgressStore.isPersistent(player)
+	ProgressStore.markDirty(player)
+	if summary.newBest and not tutorial then
+		task.spawn(LeaderboardService.submit, player, run.levelId, time)
+	end
 	print(string.format("[ProgressService] %s terminó %s en %.2f s (medalla %d, chispas %d/%d)", player.Name,
 		run.levelId, time, summary.medal, report.sparks, sparksTotal))
 	return summary
@@ -133,7 +114,10 @@ end
 
 -- Resumen para el selector y para las gemas fantasma.
 function ProgressService.snapshot(player: Player): { [string]: any }
-	local profile = profileFor(player)
+	local profile = ProgressStore.get(player)
+	if not profile then
+		return { sparks = 0, levels = {}, persistent = false }
+	end
 	local levels = {}
 	for id, record in profile.levels do
 		levels[id] = {
@@ -143,7 +127,7 @@ function ProgressService.snapshot(player: Player): { [string]: any }
 			mastery = ProgressService.mastery(record),
 		}
 	end
-	return { sparks = profile.sparks, levels = levels }
+	return { sparks = profile.sparks, levels = levels, persistent = ProgressStore.isPersistent(player) }
 end
 
 function ProgressService.start()
@@ -152,6 +136,8 @@ function ProgressService.start()
 	local runGem = Net:WaitForChild("RunGem") :: RemoteEvent
 	local runFinish = Net:WaitForChild("RunFinish") :: RemoteFunction
 	local getProgress = Net:WaitForChild("GetProgress") :: RemoteFunction
+	local getLeaderboard = Net:WaitForChild("GetLeaderboard") :: RemoteFunction
+	ProgressStore.start()
 	runStart.OnServerEvent:Connect(function(player: Player, levelId: any)
 		if typeof(levelId) == "string" then
 			RunValidator.start(player, levelId)
@@ -169,9 +155,19 @@ function ProgressService.start()
 	getProgress.OnServerInvoke = function(player: Player)
 		return ProgressService.snapshot(player)
 	end
+	getLeaderboard.OnServerInvoke = function(player: Player, levelId: any)
+		if typeof(levelId) ~= "string" then
+			return {}
+		end
+		local entry = LevelCatalog.get(levelId)
+		if not entry or entry.lab or entry.tutorial then
+			return {}
+		end
+		return LeaderboardService.request(player, levelId)
+	end
 	Players.PlayerRemoving:Connect(function(player)
-		profiles[player] = nil
 		RunValidator.clear(player)
+		LeaderboardService.clear(player)
 	end)
 end
 

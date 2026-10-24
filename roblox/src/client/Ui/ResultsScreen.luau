@@ -1,7 +1,8 @@
 --!strict
 -- Pantalla de resultados (scripts/ui/results_screen.gd): tiempo, nuevo récord, medalla y
 -- tiempos de medalla, gemas, chispas, sin caídas, estrellas de maestría y chispas
--- ganadas, con el veredicto del servidor (RunValidator). Reintentar / Siguiente / Niveles.
+-- ganadas, con el veredicto del servidor (RunValidator) y el top mundial del nivel
+-- (LeaderboardService, llega después). Reintentar / Siguiente / Niveles.
 
 local Strings = require(script.Parent.Parent:WaitForChild("Strings"))
 local Theme = require(script.Parent:WaitForChild("Theme"))
@@ -26,6 +27,7 @@ export type ResultsScreen = typeof(setmetatable({} :: {
 	gui: ScreenGui,
 	content: Frame,
 	nextButton: TextButton,
+	order: number,
 }, ResultsScreen))
 
 function ResultsScreen.new(parent: Instance, callbacks: Callbacks): ResultsScreen
@@ -62,7 +64,7 @@ function ResultsScreen.new(parent: Instance, callbacks: Callbacks): ResultsScree
 		{ LayoutOrder = 2, Size = UDim2.fromOffset(180, 56), Parent = buttons })
 	Theme.button(Strings.get("RESULTS_LEVELS"), Color3.new(0.3, 0.38, 0.6), callbacks.levels,
 		{ LayoutOrder = 3, Size = UDim2.fromOffset(180, 56), Parent = buttons })
-	return setmetatable({ gui = gui, content = content, nextButton = nextButton }, ResultsScreen)
+	return setmetatable({ gui = gui, content = content, nextButton = nextButton, order = 0 }, ResultsScreen)
 end
 
 function ResultsScreen.open(self: ResultsScreen, run: Run, summary: { [string]: any }?)
@@ -71,10 +73,9 @@ function ResultsScreen.open(self: ResultsScreen, run: Run, summary: { [string]: 
 			child:Destroy()
 		end
 	end
-	local order = 0
+	self.order = 0
 	local function line(text: string, size: number, color: Color3?)
-		order += 1
-		Theme.label(text, size, color, { LayoutOrder = order, Parent = self.content, TextWrapped = true })
+		self:line(text, size, color)
 	end
 	line(Strings.get("RESULTS_TITLE"), 42, Theme.GOLD)
 	line(Strings.get("RESULTS_TIME") .. "  " .. Strings.formatTime(run.time), 36, Theme.WHITE)
@@ -114,12 +115,33 @@ function ResultsScreen.open(self: ResultsScreen, run: Run, summary: { [string]: 
 		if summary.accepted then
 			line(string.format("+%d %s   ·   %s", summary.sparksEarned or 0, Strings.get("RESULTS_SPARKS"),
 				Strings.get("RESULTS_SAVED")), 18, Theme.DIM)
+			if summary.persistent == false then
+				line(Strings.get("PROGRESS_NOT_SAVED"), 18, Theme.ORANGE)
+			end
 		else
 			line(Strings.get("RESULTS_REJECTED") .. " (" .. tostring(summary.reason) .. ")", 18, Theme.ORANGE)
 		end
 	end
 	self.nextButton.Visible = run.hasNext
 	self.gui.Enabled = true
+end
+
+function ResultsScreen.line(self: ResultsScreen, text: string, size: number, color: Color3?)
+	self.order += 1
+	Theme.label(text, size, color, { LayoutOrder = self.order, Parent = self.content, TextWrapped = true })
+end
+
+-- Top mundial del nivel; resalta la fila del jugador local.
+function ResultsScreen.showLeaderboard(self: ResultsScreen, entries: { { [string]: any } }, userId: number)
+	if not self.gui.Enabled or #entries == 0 then
+		return
+	end
+	self:line(Strings.get("RESULTS_WORLD_TOP"), 22, Theme.CYAN)
+	for index = 1, math.min(#entries, 5) do
+		local entry = entries[index]
+		self:line(string.format("%d. %s  ·  %s", entry.rank, tostring(entry.name), Strings.formatTime(entry.time)), 18,
+			if entry.userId == userId then Theme.ORANGE else Theme.WHITE)
+	end
 end
 
 function ResultsScreen.close(self: ResultsScreen)
