@@ -223,6 +223,7 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - En la Fase 2 ya no se migran los niveles validados por el bot de Godot.
   - El esquema JSON v1 y `LevelBuilder` se pueden seguir usando como formato.
   - El tutorial y `w1_l1` actuales quedan como provisionales.
+- **Regla de diseño:** [`ALCANCES_MOVIMIENTO.md`](ALCANCES_MOVIMIENTO.md) recoge los alcances medidos en Studio el 2026-10-23 y los escalones de hueco y subida (E0–E6 y Y1–Y4). Todos los niveles nuevos se diseñan con ellos.
 
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
