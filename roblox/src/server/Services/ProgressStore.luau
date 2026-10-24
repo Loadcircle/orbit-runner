@@ -221,9 +221,12 @@ local function save(player: Player, session: Session, release: boolean)
 	end
 end
 
--- Perfil del jugador; espera a que termine la carga (nil si se fue antes).
+-- Perfil del jugador; espera a que termine la carga (nil si se fue antes). No depende de
+-- `loading`: el orden de las conexiones a PlayerAdded no está garantizado y quien llama
+-- puede llegar antes de que la carga empiece.
 function ProgressStore.get(player: Player): Profile?
-	while loading[player] do
+	local started = os.clock()
+	while not sessions[player] and player.Parent == Players and os.clock() - started < 60 do
 		task.wait(0.1)
 	end
 	local session = sessions[player]

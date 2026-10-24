@@ -114,6 +114,13 @@ ROBLOX_OVERRIDES = {
         "Your progress is not being saved right now",
     ),
     "RESULTS_WORLD_TOP": ("Mejores del mundo", "World best"),
+    # Vestíbulo y panel de mundo (R23).
+    "HUB_PORTAL_ACTION": ("Ver niveles", "Levels"),
+    "HUB_RANKING_TITLE": ("Ranking", "Ranking"),
+    "HUB_RANKING_METRIC": ("Estrellas totales (provisional)", "Total stars (provisional)"),
+    "SELECT_CLOSE": ("Cerrar", "Close"),
+    "SELECT_LOCKED": ("Bloqueado: completa el nivel anterior", "Locked: beat the previous level"),
+    "SELECT_GEMS": ("Gemas {1}/3", "Gems {1}/3"),
     "SETTINGS_BACK": ("Volver", "Back"),
     "SETTINGS_ON": ("Sí", "On"),
     "SETTINGS_OFF": ("No", "Off"),

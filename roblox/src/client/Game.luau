@@ -1,10 +1,12 @@
 --!strict
 -- Capa de juego del cliente: en cada aparición del personaje crea su cuerpo (Character,
 -- sobre el control de la plantilla Platformer) y el yo-yo; monta la interfaz (HUD y
--- menús) y alterna entre el vestíbulo (el escenario de la plantilla) con el selector y la
--- sesión de nivel. Equivale al SceneRouter + Level de Godot.
+-- menús) y alterna entre el vestíbulo (el escenario de la plantilla, con un portal por
+-- mundo que abre su panel de niveles, R23) y la sesión de nivel. Equivale al
+-- SceneRouter + Level de Godot.
 
 local Players = game:GetService("Players")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
@@ -79,17 +81,75 @@ local function returnToLobby(current: Character.Character)
 	end
 end
 
-local function showSelect()
-	closeSession()
-	currentId = nil
+-- Panel de niveles de un mundo (portal del vestíbulo); 0 = laboratorio.
+local function openWorld(world: number)
 	local current = controller
 	if current then
-		returnToLobby(current)
 		current.inputEnabled = false
 	end
 	task.spawn(function()
 		refreshProgress()
-		levelSelect:open(progress)
+		levelSelect:open(world, progress)
+	end)
+end
+
+-- Vuelve al vestíbulo caminando; con `world`, reabre el panel de ese mundo.
+local function goToLobby(world: number?)
+	closeSession()
+	currentId = nil
+	levelSelect:close()
+	local current = controller
+	if current then
+		returnToLobby(current)
+		current.inputEnabled = true
+	end
+	if world then
+		openWorld(world)
+	else
+		task.spawn(refreshProgress)
+	end
+end
+
+local function worldOf(id: string?): number?
+	local entry = if id then LevelCatalog.get(id) else nil
+	return if entry then entry.world else nil
+end
+
+-- Textos del vestíbulo (los construye HubService con atributos TextKey/ActionKey).
+local function localizeHub(instance: Instance)
+	local key = instance:GetAttribute("TextKey")
+	if typeof(key) == "string" and instance:IsA("TextLabel") then
+		instance.Text = Strings.get(key)
+	end
+	if instance:IsA("ProximityPrompt") then
+		local action, object = instance:GetAttribute("ActionKey"), instance:GetAttribute("ObjectKey")
+		if typeof(action) == "string" then
+			instance.ActionText = Strings.get(action)
+		end
+		if typeof(object) == "string" then
+			instance.ObjectText = Strings.get(object)
+		end
+	end
+end
+
+local function watchHub()
+	task.spawn(function()
+		local hub = workspace:WaitForChild("Hub", 30)
+		if not hub then
+			return
+		end
+		for _, descendant in hub:GetDescendants() do
+			localizeHub(descendant)
+		end
+		hub.DescendantAdded:Connect(function(descendant)
+			task.defer(localizeHub, descendant)
+		end)
+	end)
+	ProximityPromptService.PromptTriggered:Connect(function(prompt: ProximityPrompt, who: Player)
+		local world = prompt:GetAttribute("World")
+		if who == player and typeof(world) == "number" and not session and not levelSelect.gui.Enabled then
+			openWorld(world)
+		end
 	end)
 end
 
@@ -243,8 +303,8 @@ local function registerProbe()
 		Game.play(id)
 		return true
 	end)
-	DebugProbe.command("select", function()
-		showSelect()
+	DebugProbe.command("select", function(world: number?)
+		goToLobby(world or 1)
 		return true
 	end)
 	DebugProbe.command("teleport", function(x: number, y: number, z: number, yawDegrees: number?)
@@ -283,7 +343,9 @@ function Game.start()
 		settings = function()
 			settingsPanel:open()
 		end,
-		quit = showSelect,
+		quit = function()
+			goToLobby(nil)
+		end,
 	})
 	results = ResultsScreen.new(gui, {
 		retry = function()
@@ -298,15 +360,23 @@ function Game.start()
 					return
 				end
 			end
-			showSelect()
+			goToLobby(worldOf(currentId))
 		end,
-		levels = showSelect,
+		levels = function()
+			goToLobby(worldOf(currentId))
+		end,
 	})
 	levelSelect = LevelSelect.new(gui)
 	levelSelect.onPlay = Game.play
 	levelSelect.onSettings = function()
 		settingsPanel:open()
 	end
+	levelSelect.onClose = function()
+		if controller and not session then
+			controller.inputEnabled = true
+		end
+	end
+	watchHub()
 	InputRouter.onPressed("yoyo", function()
 		if controller then
 			controller:requestYoyo()
@@ -345,7 +415,7 @@ function Game.start()
 	end
 	RunService.PreSimulation:Connect(step)
 	RunService.RenderStepped:Connect(render)
-	showSelect()
+	goToLobby(nil)
 end
 
 return Game

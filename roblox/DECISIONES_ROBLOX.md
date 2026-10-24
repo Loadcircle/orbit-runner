@@ -346,6 +346,33 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - **Sin comprobar:** el aviso sin acceso a las API y la prueba con dos servidores (bloqueo), que solo se puede hacer con el juego publicado.
 - **Bug corregido de paso:** el selector tenía la fila de tarjetas centrada en un `ScrollingFrame` y desbordaba por la izquierda: el laboratorio y el tutorial quedaban fuera del scroll. Ahora la fila se alinea a la izquierda.
 
+## R23 — Vestíbulo social mínimo con portales y ranking (2026-10-24, VERSIÓN SENCILLA)
+- **Pedido del dueño:** al entrar, el jugador aparece en un escenario compartido con otros jugadores, donde hay una tabla de ranking y un portal por mundo. Al acercarse a un portal salen los niveles de ese mundo. El panel de niveles muestra **solo los datos propios**. El dueño pidió hacerlo sencillo por ahora; **queda pendiente reformar bien el hub social**.
+- **`Services/HubService`** construye `workspace.Hub` en el servidor, en el lado −X del spawn de la plantilla (que mira a +Z):
+  - un portal por mundo (pilares, dintel y núcleo de neón), con `ProximityPrompt` "Ver niveles" (tecla F, botón táctil nativo) y atributo `World`;
+  - el portal del laboratorio, solo en Studio;
+  - un cartel de ranking con `SurfaceGui`: top 10 de `OrderedDataStore` `OrbitRunnerStarsTotal`, refrescado cada 60 s y 3 s después de cada publicación.
+  - Los textos llevan los atributos `TextKey`/`ActionKey`/`ObjectKey` y los traduce cada cliente con `Strings`.
+- **Métrica del ranking: PROVISIONAL.** Es el total de estrellas de maestría de la campaña, sin tutorial ni laboratorio. Se publica al entrar y al ganar estrellas. El dueño definirá la métrica real (una suma de algo, no todos los niveles).
+- **Flujo del cliente (`Game`):**
+  - se empieza caminando en el vestíbulo, sin menú;
+  - el portal abre el panel de su mundo (`LevelSelect.open(world, progress)`), y mientras está abierto el personaje no se mueve;
+  - "Cerrar" devuelve el control;
+  - desde los resultados, "Niveles" vuelve al vestíbulo con el panel del mundo abierto;
+  - "Salir" en la pausa vuelve al vestíbulo sin panel.
+- **Panel de mundo:** cada tarjeta muestra el mejor tiempo con el color de su medalla, ★ x/4 y gemas x/3, siempre del propio jugador.
+  - Los niveles sin desbloquear salen como "Bloqueado: completa el nivel anterior". Es la regla de `progress.gd: is_unlocked`: el primero siempre está abierto, y el resto si el anterior está completado o si ya lo completaste.
+  - El servidor rechaza `RunStart` de niveles bloqueados.
+- **Catálogo:** `Entry.world` (0 = laboratorio, 1 = tutorial y mundo 1), `LevelCatalog.world()` y `LevelCatalog.isUnlocked()`.
+- **Bug corregido:** `ProgressStore.get` esperaba al flag `loading`. Como el orden de las conexiones a `PlayerAdded` no está garantizado, quien llamaba podía llegar antes de que empezara la carga y recibir `nil`. Ahora espera a que exista la sesión o a que el jugador se vaya.
+- **Comprobado en Play:**
+  - el perfil persiste entre sesiones (carga con 1 nivel);
+  - el portal 1 abre el panel con tutorial y mundo 1, `w1_l1`, `w1_l2` y `w1_l3` abiertos por la regla y el resto bloqueados;
+  - la tarjeta de `w1_l2` muestra 00:40.42 en plata, ★ 1/4 y gemas 3/3;
+  - el ranking muestra "1. BabyYisus96 ★ 1";
+  - capturas del vestíbulo con portales y cartel legibles.
+- **Sin comprobar:** el prompt con toque real en el teléfono y la convivencia de dos jugadores en el vestíbulo.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

@@ -3,6 +3,7 @@
 -- cada nivel son los ModuleScripts de ReplicatedStorage.Levels (JSON del esquema v1,
 -- generados con roblox/scripts/build_*.py); el laboratorio se genera en código
 -- (Shared/LabLevel). `pending` marca los niveles que el dueño aún no ha aprobado.
+-- `world` agrupa los niveles por portal del vestíbulo (0 = laboratorio, R23).
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -12,14 +13,15 @@ export type Entry = {
 	hintKey: string,
 	tutorial: boolean,
 	lab: boolean,
+	world: number,
 	pending: boolean?,
 }
 
 local LevelCatalog = {}
 
 LevelCatalog.entries = {
-	{ id = "lab", titleKey = "SELECT_LAB", hintKey = "SELECT_LAB_HINT", tutorial = false, lab = true },
-	{ id = "tutorial", titleKey = "LEVEL_TUTORIAL", hintKey = "LEVEL_TUTORIAL_HINT", tutorial = true, lab = false },
+	{ id = "lab", titleKey = "SELECT_LAB", hintKey = "SELECT_LAB_HINT", tutorial = false, lab = true, world = 0 },
+	{ id = "tutorial", titleKey = "LEVEL_TUTORIAL", hintKey = "LEVEL_TUTORIAL_HINT", tutorial = true, lab = false, world = 1 },
 } :: { Entry }
 
 for index = 1, 10 do
@@ -30,6 +32,7 @@ for index = 1, 10 do
 		hintKey = key .. "_HINT",
 		tutorial = false,
 		lab = false,
+		world = 1,
 	})
 end
 
@@ -40,6 +43,35 @@ function LevelCatalog.get(id: string): Entry?
 		end
 	end
 	return nil
+end
+
+-- Niveles de un mundo, en orden de campaña.
+function LevelCatalog.world(world: number): { Entry }
+	local list = {}
+	for _, entry in LevelCatalog.entries do
+		if entry.world == world then
+			table.insert(list, entry)
+		end
+	end
+	return list
+end
+
+-- Desbloqueo (progress.gd: is_unlocked): el primero de la campaña siempre; los demás si
+-- el anterior está completado. Un nivel completado sigue abierto aunque se inserten
+-- niveles antes. El laboratorio siempre está abierto.
+function LevelCatalog.isUnlocked(id: string, isCompleted: (id: string) -> boolean): boolean
+	local previous: Entry? = nil
+	for _, entry in LevelCatalog.entries do
+		if not entry.lab then
+			if entry.id == id then
+				return previous == nil or isCompleted(id) or isCompleted(previous.id)
+			end
+			previous = entry
+		elseif entry.id == id then
+			return true
+		end
+	end
+	return false
 end
 
 -- Datos del nivel (tabla con el esquema JSON v1).

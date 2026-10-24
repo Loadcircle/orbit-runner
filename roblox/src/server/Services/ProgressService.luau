@@ -9,6 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local LevelCatalog = require(Shared:WaitForChild("LevelCatalog"))
+local HubService = require(script.Parent:WaitForChild("HubService"))
 local LeaderboardService = require(script.Parent:WaitForChild("LeaderboardService"))
 local ProgressStore = require(script.Parent:WaitForChild("ProgressStore"))
 local RunValidator = require(script.Parent:WaitForChild("RunValidator"))
@@ -44,6 +45,25 @@ local function countStars(stars: { boolean }): number
 		end
 	end
 	return count
+end
+
+-- Estrellas de maestría de toda la campaña: métrica PROVISIONAL del ranking (R23).
+local function totalStars(profile: Profile): number
+	local total = 0
+	for id, record in profile.levels do
+		local entry = LevelCatalog.get(id)
+		if entry and not entry.tutorial and not entry.lab then
+			total += countStars(ProgressService.mastery(record))
+		end
+	end
+	return total
+end
+
+local function isCompletedFor(profile: Profile): (id: string) -> boolean
+	return function(id: string): boolean
+		local record = profile.levels[id]
+		return record ~= nil and record.completed
+	end
 end
 
 function ProgressService.submit(player: Player, report: RunValidator.Report): { [string]: any }
@@ -107,6 +127,9 @@ function ProgressService.submit(player: Player, report: RunValidator.Report): { 
 	if summary.newBest and not tutorial then
 		task.spawn(LeaderboardService.submit, player, run.levelId, time)
 	end
+	if summary.masteryNew > 0 then
+		task.spawn(HubService.submitStars, player, totalStars(profile))
+	end
 	print(string.format("[ProgressService] %s terminó %s en %.2f s (medalla %d, chispas %d/%d)", player.Name,
 		run.levelId, time, summary.medal, report.sparks, sparksTotal))
 	return summary
@@ -121,13 +144,25 @@ function ProgressService.snapshot(player: Player): { [string]: any }
 	local levels = {}
 	for id, record in profile.levels do
 		levels[id] = {
+			completed = record.completed,
 			bestTime = record.bestTime,
 			medal = record.medal,
 			gems = table.clone(record.gems),
 			mastery = ProgressService.mastery(record),
 		}
 	end
-	return { sparks = profile.sparks, levels = levels, persistent = ProgressStore.isPersistent(player) }
+	local unlocked = {}
+	local isCompleted = isCompletedFor(profile)
+	for _, entry in LevelCatalog.entries do
+		unlocked[entry.id] = LevelCatalog.isUnlocked(entry.id, isCompleted)
+	end
+	return {
+		sparks = profile.sparks,
+		stars = totalStars(profile),
+		levels = levels,
+		unlocked = unlocked,
+		persistent = ProgressStore.isPersistent(player),
+	}
 end
 
 function ProgressService.start()
@@ -139,9 +174,16 @@ function ProgressService.start()
 	local getLeaderboard = Net:WaitForChild("GetLeaderboard") :: RemoteFunction
 	ProgressStore.start()
 	runStart.OnServerEvent:Connect(function(player: Player, levelId: any)
-		if typeof(levelId) == "string" then
-			RunValidator.start(player, levelId)
+		if typeof(levelId) ~= "string" then
+			return
 		end
+		local profile = ProgressStore.get(player)
+		if profile and not LevelCatalog.isUnlocked(levelId, isCompletedFor(profile)) then
+			warn(string.format("[ProgressService] %s intentó empezar %s sin desbloquear", player.Name, levelId))
+			RunValidator.clear(player)
+			return
+		end
+		RunValidator.start(player, levelId)
 	end)
 	runCheckpoint.OnServerEvent:Connect(function(player: Player, index: any)
 		RunValidator.checkpoint(player, index)
@@ -164,6 +206,18 @@ function ProgressService.start()
 			return {}
 		end
 		return LeaderboardService.request(player, levelId)
+	end
+	-- Publica en el ranking las estrellas que ya trae el perfil (ProgressStore conecta
+	-- antes su PlayerAdded, así que get() espera a la carga).
+	local function publishStars(player: Player)
+		local profile = ProgressStore.get(player)
+		if profile then
+			HubService.submitStars(player, totalStars(profile))
+		end
+	end
+	Players.PlayerAdded:Connect(publishStars)
+	for _, player in Players:GetPlayers() do
+		task.spawn(publishStars, player)
 	end
 	Players.PlayerRemoving:Connect(function(player)
 		RunValidator.clear(player)
