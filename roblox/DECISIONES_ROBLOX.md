@@ -212,6 +212,18 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Por eso, en el S25 la cámara miraba hacia atrás al pulsar "Siguiente" y al reaparecer.
   - Con Classic, el `snap` y la asistencia funcionan en todos los dispositivos.
 
+## R18 — Los niveles se rehacen para el movimiento de la plantilla (2026-10-23)
+- **Decisión del dueño:** se mantiene definitivamente la sensación de la plantilla (doble salto, dash, rodar, salto largo y yo-yo). Los niveles no se recalibran: **se diseñan de nuevo**. Se descarta la opción de Gravity 118 / WalkSpeed 28 de R16.
+- **Motivo:** no es solo que cambien los alcances. Las combinaciones de acciones en el aire (dash → salto → doble salto → yo-yo → dash → salto) abren un espacio de diseño distinto.
+- **Dirección de diseño:** juego más "flotante", con gran parte del tiempo en el aire.
+  - Huecos más amplios y escalonados: unos de 1 salto, otros de doble salto, otros de altura con el yo-yo.
+  - Tramos difíciles que exijan combinaciones.
+- **Más adelante (no ahora):** salto contra muro, para alargar aún más la distancia y la altura.
+- **Consecuencias:**
+  - En la Fase 2 ya no se migran los niveles validados por el bot de Godot.
+  - El esquema JSON v1 y `LevelBuilder` se pueden seguir usando como formato.
+  - El tutorial y `w1_l1` actuales quedan como provisionales.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.
@@ -235,6 +247,4 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 
 **Fase 1 cerrada el 2026-10-23 con el visto bueno del dueño.**
 
-Antes de empezar la Fase 2 (migración de niveles) hay que decidir la recalibración de alcances (ver R16):
-- mantener la sensación de la plantilla y revisar los niveles;
-- o igualar el salto de Godot con Gravity ≈118 y WalkSpeed ≈28.
+La recalibración quedó decidida en R18: los niveles se rehacen.
