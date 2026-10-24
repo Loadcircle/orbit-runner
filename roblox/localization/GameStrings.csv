@@ -74,20 +74,28 @@ SETTINGS_TITLE,Settings,,,Ajustes
 SETTINGS_TOUCH_OPACITY,Touch controls opacity,,,Opacidad de controles
 SETTINGS_TOUCH_SIZE,Touch controls size,,,Tamaño de controles táctiles
 SETTINGS_VIBRATION,Vibration,,,Vibración
+TUT_COMBO,"Combine: jump, double jump and dash at the end to make it across.",,,"Combina: salto, doble salto y dash al final para cruzar."
 TUT_DASH,Jump and press Shift in the air to dash.,,,Salta y pulsa Mayús en el aire para hacer un dash.
 TUT_DASH_TOUCH,Jump and press Dash/Roll in the air to dash.,,,Salta y pulsa Dash/Roll en el aire para hacer un dash.
+TUT_DOUBLE_JUMP,"Big gap: jump, then press Space again in the air. Double jump!",,,Hueco grande: salta y pulsa Espacio otra vez en el aire. ¡Doble salto!
+TUT_DOUBLE_JUMP_TOUCH,"Big gap: jump, then press jump again in the air. Double jump!",,,Hueco grande: salta y pulsa salto otra vez en el aire. ¡Doble salto!
+TUT_DOUBLE_JUMP_UP,Double jump to climb too: do the second jump at the top of the first.,,,El doble salto también sube: haz el segundo salto en lo más alto.
+TUT_FINAL,"Final challenge: chain it all. Jump, double jump, yo-yo, jump and dash.",,,"Último reto: encadénalo todo. Salto, doble salto, yo-yo, salto y dash."
+TUT_FINAL_TOUCH,"Final challenge: chain it all. Jump, double jump, Yo-yo, jump and Dash.",,,"Último reto: encadénalo todo. Salto, doble salto, Yo-yo, salto y Dash."
 TUT_GOAL,Go through the golden arch to finish!,,,¡Cruza el arco dorado para terminar!
-TUT_JUMP,Press Space to jump. Press it again in the air to double jump!,,,Pulsa Espacio para saltar. ¡Pulsa otra vez en el aire para un doble salto!
-TUT_JUMP_TOUCH,Press the jump button. Press it again in the air to double jump!,,,Pulsa el botón de salto. ¡Pulsa otra vez en el aire para un doble salto!
-TUT_LONG_JUMP,"Long jump: roll, then jump right away.",,,Salto largo: rueda y salta justo después.
+TUT_JUMP,Press Space to jump over the gaps.,,,Pulsa Espacio para saltar los huecos.
+TUT_JUMP_TOUCH,Press the jump button to jump over the gaps.,,,Pulsa el botón de salto para saltar los huecos.
+TUT_LONG_JUMP,"Long jump: run, press Shift to roll and jump right away.",,,"Salto largo: corre, pulsa Mayús para rodar y salta enseguida."
+TUT_LONG_JUMP_TOUCH,"Long jump: run, press Dash/Roll to roll and jump right away.",,,"Salto largo: corre, pulsa Dash/Roll para rodar y salta enseguida."
 TUT_MOVE,Use W A S D or the arrow keys to move. You set the pace!,,,Usa W A S D o las flechas para moverte. ¡Tú decides el ritmo!
 TUT_MOVE_TOUCH,Use the joystick on the left to move.,,,Usa el joystick de la izquierda para moverte.
 TUT_SLIDE,Run and press Shift to roll under the laser.,,,Corre y pulsa Mayús para rodar bajo el láser.
 TUT_SLIDE_TOUCH,Run and press Dash/Roll to roll under the laser.,,,Corre y pulsa Dash/Roll para rodar bajo el láser.
 TUT_TRAMPOLINE,Yellow trampolines launch you high. Step on the arrow!,,,Los trampolines amarillos te lanzan muy alto. ¡Pisa la flecha!
 TUT_WIND,Drop into the air current to rise.,,,Déjate caer en la corriente de viento para subir.
-TUT_YOYO_AIR,Jump and press E in the air: the disc appears below you. Bounce across the gap!,,,Salta y pulsa E en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar el vacío!
-TUT_YOYO_AIR_TOUCH,Jump and press Yo-yo in the air: the disc appears below you. Bounce across!,,,Salta y pulsa Yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!
-TUT_YOYO_GROUND,Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce up!,,,Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre sobre él para rebotar hasta arriba!
+TUT_YOYO_AIR,"Jump and press E in the air: the disc appears below. Bounce, then double jump to climb.",,,Salta y pulsa E en el aire: el disco aparece debajo. Rebota y usa el doble salto para subir.
+TUT_YOYO_AIR_TOUCH,"Jump and press Yo-yo in the air: the disc appears below. Bounce, then double jump to climb.",,,Salta y pulsa Yo-yo en el aire: el disco aparece debajo. Rebota y usa el doble salto para subir.
+TUT_YOYO_GROUND,Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce!,,,Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre encima para rebotar!
 TUT_YOYO_GROUND_TOUCH,Press Yo-yo: a disc appears ahead. Run onto it to bounce up!,,,Pulsa Yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!
+TUT_YOYO_RECHARGE,"Bouncing gives you back your double jump and dash. Bounce on the disc, then jump again.",,,Rebotar te devuelve el doble salto y el dash. Rebota en el disco y salta otra vez.
 WORLD_1,Breeze Isles,,,Islas de la Brisa

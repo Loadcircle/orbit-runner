@@ -32,23 +32,61 @@ ROBLOX_OVERRIDES = {
         "Keyboard: WASD/arrows move · Space jump (again in the air: double jump) · Shift roll / air dash · "
         "E yo-yo · mouse camera · P pause. Gamepad: left stick move · A jump · X roll/dash · Y yo-yo · right stick camera · Start pause.",
     ),
-    "TUT_JUMP": (
-        "Pulsa Espacio para saltar. ¡Pulsa otra vez en el aire para un doble salto!",
-        "Press Space to jump. Press it again in the air to double jump!",
+    # Tutorial de la Fase 2 (R18, scripts/build_tutorial.py): una acción por aviso.
+    "TUT_JUMP": ("Pulsa Espacio para saltar los huecos.", "Press Space to jump over the gaps."),
+    "TUT_JUMP_TOUCH": ("Pulsa el botón de salto para saltar los huecos.", "Press the jump button to jump over the gaps."),
+    "TUT_DOUBLE_JUMP": (
+        "Hueco grande: salta y pulsa Espacio otra vez en el aire. ¡Doble salto!",
+        "Big gap: jump, then press Space again in the air. Double jump!",
     ),
-    "TUT_JUMP_TOUCH": (
-        "Pulsa el botón de salto. ¡Pulsa otra vez en el aire para un doble salto!",
-        "Press the jump button. Press it again in the air to double jump!",
+    "TUT_DOUBLE_JUMP_TOUCH": (
+        "Hueco grande: salta y pulsa salto otra vez en el aire. ¡Doble salto!",
+        "Big gap: jump, then press jump again in the air. Double jump!",
+    ),
+    "TUT_DOUBLE_JUMP_UP": (
+        "El doble salto también sube: haz el segundo salto en lo más alto.",
+        "Double jump to climb too: do the second jump at the top of the first.",
+    ),
+    "TUT_COMBO": (
+        "Combina: salto, doble salto y dash al final para cruzar.",
+        "Combine: jump, double jump and dash at the end to make it across.",
+    ),
+    "TUT_LONG_JUMP": (
+        "Salto largo: corre, pulsa Mayús para rodar y salta enseguida.",
+        "Long jump: run, press Shift to roll and jump right away.",
+    ),
+    "TUT_LONG_JUMP_TOUCH": (
+        "Salto largo: corre, pulsa Dash/Roll para rodar y salta enseguida.",
+        "Long jump: run, press Dash/Roll to roll and jump right away.",
+    ),
+    "TUT_YOYO_GROUND": (
+        "Pulsa E: el yo-yo se convierte en un disco delante de ti. ¡Corre encima para rebotar!",
+        "Press E: the yo-yo becomes a disc in front of you. Run onto it to bounce!",
+    ),
+    "TUT_YOYO_RECHARGE": (
+        "Rebotar te devuelve el doble salto y el dash. Rebota en el disco y salta otra vez.",
+        "Bouncing gives you back your double jump and dash. Bounce on the disc, then jump again.",
+    ),
+    "TUT_YOYO_AIR": (
+        "Salta y pulsa E en el aire: el disco aparece debajo. Rebota y usa el doble salto para subir.",
+        "Jump and press E in the air: the disc appears below. Bounce, then double jump to climb.",
+    ),
+    "TUT_FINAL": (
+        "Último reto: encadénalo todo. Salto, doble salto, yo-yo, salto y dash.",
+        "Final challenge: chain it all. Jump, double jump, yo-yo, jump and dash.",
+    ),
+    "TUT_FINAL_TOUCH": (
+        "Último reto: encadénalo todo. Salto, doble salto, Yo-yo, salto y Dash.",
+        "Final challenge: chain it all. Jump, double jump, Yo-yo, jump and Dash.",
     ),
     "TUT_MOVE_TOUCH": ("Usa el joystick de la izquierda para moverte.", "Use the joystick on the left to move."),
     "TUT_DASH": ("Salta y pulsa Mayús en el aire para hacer un dash.", "Jump and press Shift in the air to dash."),
     "TUT_DASH_TOUCH": ("Salta y pulsa Dash/Roll en el aire para hacer un dash.", "Jump and press Dash/Roll in the air to dash."),
     "TUT_SLIDE": ("Corre y pulsa Mayús para rodar bajo el láser.", "Run and press Shift to roll under the laser."),
     "TUT_SLIDE_TOUCH": ("Corre y pulsa Dash/Roll para rodar bajo el láser.", "Run and press Dash/Roll to roll under the laser."),
-    "TUT_LONG_JUMP": ("Salto largo: rueda y salta justo después.", "Long jump: roll, then jump right away."),
     "TUT_YOYO_AIR_TOUCH": (
-        "Salta y pulsa Yo-yo en el aire: el disco aparece bajo tus pies. ¡Rebota para cruzar!",
-        "Jump and press Yo-yo in the air: the disc appears below you. Bounce across!",
+        "Salta y pulsa Yo-yo en el aire: el disco aparece debajo. Rebota y usa el doble salto para subir.",
+        "Jump and press Yo-yo in the air: the disc appears below. Bounce, then double jump to climb.",
     ),
     "TUT_YOYO_GROUND_TOUCH": (
         "Pulsa Yo-yo: aparece un disco delante. ¡Corre sobre él para rebotar hasta arriba!",

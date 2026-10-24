@@ -225,6 +225,41 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - El tutorial y `w1_l1` actuales quedan como provisionales.
 - **Regla de diseño:** [`ALCANCES_MOVIMIENTO.md`](ALCANCES_MOVIMIENTO.md) recoge los alcances medidos en Studio el 2026-10-23 y los escalones de hueco y subida (E0–E6 y Y1–Y4). Todos los niveles nuevos se diseñan con ellos.
 
+## R19 — Tutorial nuevo de la Fase 2 (2026-10-23)
+
+### Cómo se escribe
+- `levels_json/tutorial.json` ya no sale del exportador de Godot. Lo genera `scripts/build_tutorial.py` con el kit `scripts/level_kit.py`.
+- El kit genera el esquema JSON v1 a partir de una secuencia de plataformas, cada una con su hueco de borde a borde y su subida. También coloca la ruta, las cámaras, las chispas guía, los avisos, los checkpoints, el decorado y la meta.
+- `depth` hace bloques gruesos: con hueco 0, la cara delantera queda como pared, para las repisas del yo-yo.
+
+### Recorrido
+12 plataformas en línea recta, unos 167 m. Una lección por tramo, con los escalones de `ALCANCES_MOVIMIENTO.md`:
+
+| # | Lección | Tramo |
+|---|---|---|
+| 1 | Moverse y saltar (E1) | Huecos de 2,5 m y 2,3 m, con +1 m de subida |
+| 2 | Doble salto (E2) | Hueco de 5 m y luego subida de 3,2 m |
+| 3 | Rodar bajo el láser | Láser siempre encendido; checkpoint 1 |
+| 4 | Salto + dash (E3) | Hueco de 7 m |
+| 5 | Doble salto + dash (E4) | Hueco de 9 m; checkpoint 2 |
+| 6 | Salto largo (E5) | Hueco de 10 m con bajada de 2 m y 12 m de carrerilla |
+| 7 | Yo-yo desde el suelo (Y1) | Repisa de 3,5 m; después, pared de 5,5 m que pide rebote + salto ("el rebote devuelve el doble salto y el dash"); checkpoint 3 |
+| 8 | Yo-yo en el aire (Y3) | Hueco de 7 m con subida de 5 m; checkpoint 4 |
+| 9 | Reto final | Hueco de 14 m que pide combo (salto, doble salto, yo-yo, salto y dash, o salto largo + doble + dash) y meta |
+
+### Textos y medallas
+- Avisos nuevos: `TUT_DOUBLE_JUMP`, `TUT_DOUBLE_JUMP_UP`, `TUT_COMBO`, `TUT_YOYO_RECHARGE` y `TUT_FINAL`, con variantes `_TOUCH` cuando el texto nombra una tecla.
+- Se reescribieron `TUT_JUMP`, `TUT_LONG_JUMP`, `TUT_YOYO_GROUND` y `TUT_YOYO_AIR`.
+- Todos están en `scripts/build_localization.py`.
+- El trampolín y el viento ya no salen en el tutorial. Se enseñarán en los niveles del mundo 1; sus textos `TUT_TRAMPOLINE` y `TUT_WIND` se conservan.
+- Medallas provisionales: oro 40 s y plata 70 s. El tutorial no valida el oro en el servidor.
+
+### Comprobación en Studio (2026-10-23, teclado real)
+- Cada tramo se cruzó con el movimiento previsto y se llegó a la meta.
+- El tramo 8 sin yo-yo (salto + doble + dash) falla, como estaba previsto.
+- El hueco con subida del tramo 1 se bajó de 2,6 m a 2,3 m porque se aterrizaba a 0,5 m del borde.
+- Consola sin errores nuevos.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.
