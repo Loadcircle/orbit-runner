@@ -1,6 +1,7 @@
 --!strict
--- Selector mínimo de la Fase 1: laboratorio, tutorial y w1_l1 (el hub real es de la
--- Fase 4). Muestra el mejor tiempo y la medalla que guarda el servidor.
+-- Selector mínimo: laboratorio, tutorial y mundo 1 en una fila desplazable (el hub real
+-- es de la Fase 4). Muestra el mejor tiempo, la medalla que guarda el servidor y la
+-- marca "Por aprobar" de los niveles que el dueño aún no ha aprobado.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -14,7 +15,7 @@ LevelSelect.__index = LevelSelect
 
 export type LevelSelect = typeof(setmetatable({} :: {
 	gui: ScreenGui,
-	cards: Frame,
+	cards: ScrollingFrame,
 	onPlay: (id: string) -> (),
 	onSettings: () -> (),
 }, LevelSelect))
@@ -29,14 +30,25 @@ function LevelSelect.new(parent: Instance): LevelSelect
 		Position = UDim2.new(0.5, 0, 0, 70),
 		Parent = root,
 	})
-	local cards = Theme.create("Frame", {
+	local cards = Theme.create("ScrollingFrame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.52),
-		AutomaticSize = Enum.AutomaticSize.XY,
+		Size = UDim2.new(1, -60, 0, 340),
 		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ScrollingDirection = Enum.ScrollingDirection.X,
+		AutomaticCanvasSize = Enum.AutomaticSize.X,
+		CanvasSize = UDim2.fromOffset(0, 0),
+		ScrollBarThickness = 8,
+		ScrollBarImageColor3 = Theme.CYAN,
 		Parent = root,
-	}) :: Frame
+	}) :: ScrollingFrame
 	Theme.list(Enum.FillDirection.Horizontal, 20).Parent = cards
+	Theme.create("UIPadding", {
+		PaddingLeft = UDim.new(0, 10),
+		PaddingRight = UDim.new(0, 10),
+		Parent = cards,
+	})
 	local self = setmetatable({
 		gui = gui,
 		cards = cards,
@@ -58,7 +70,7 @@ function LevelSelect.open(self: LevelSelect, progress: { [string]: any }?)
 	local levels = if progress then progress.levels or {} else {}
 	for index, entry in LevelCatalog.entries do
 		local card = Theme.panel({
-			Size = UDim2.fromOffset(300, 300),
+			Size = UDim2.fromOffset(270, 300),
 			LayoutOrder = index,
 			Parent = self.cards,
 		})
@@ -69,18 +81,21 @@ function LevelSelect.open(self: LevelSelect, progress: { [string]: any }?)
 			Parent = card,
 			TextWrapped = true,
 			AutomaticSize = Enum.AutomaticSize.Y,
-			Size = UDim2.fromOffset(260, 0),
+			Size = UDim2.fromOffset(240, 0),
 			Font = Theme.FONT_REGULAR,
 		})
+		if entry.pending then
+			Theme.label(Strings.get("SELECT_PENDING"), 20, Theme.ORANGE, { LayoutOrder = 3, Parent = card })
+		end
 		local record = levels[entry.id]
 		if record and record.bestTime and record.bestTime > 0 then
 			local medal = record.medal or 0
 			Theme.label(Strings.get("SELECT_BEST", Strings.formatTime(record.bestTime)), 22,
-				if medal > 0 then Theme.MEDAL_COLORS[medal] else Theme.WHITE, { LayoutOrder = 3, Parent = card })
+				if medal > 0 then Theme.MEDAL_COLORS[medal] else Theme.WHITE, { LayoutOrder = 4, Parent = card })
 		end
 		Theme.button(Strings.get("SELECT_PLAY"), if entry.lab then Theme.CYAN else Theme.ORANGE, function()
 			self.onPlay(entry.id)
-		end, { LayoutOrder = 4, Size = UDim2.fromOffset(220, 56), Parent = card })
+		end, { LayoutOrder = 5, Size = UDim2.fromOffset(220, 56), Parent = card })
 	end
 	self.gui.Enabled = true
 end

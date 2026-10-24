@@ -260,6 +260,56 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
 - El hueco con subida del tramo 1 se bajó de 2,6 m a 2,3 m porque se aterrizaba a 0,5 m del borde.
 - Consola sin errores nuevos.
 
+## R20 — Mundo 1 rehecho con el kit: 10 niveles POR APROBAR (2026-10-23)
+
+### Estado
+- Los diez niveles `w1_l1` … `w1_l10` son una **propuesta pendiente de aprobación del dueño**. `Shared/LevelCatalog` los marca con `pending = true` y el selector muestra "Por aprobar" en su tarjeta.
+- Se generan con `scripts/build_world1.py` (`python build_world1.py [w1_l3 …]`). Sustituyen al `w1_l1` migrado de Godot.
+- Los temas y los nombres salen de las claves `LEVEL_W1_L*` de Godot.
+- Las medallas son provisionales. El oro se calcula como recorrido / 5 m/s + 2,5 s por cada plataforma móvil o temporizada, y la plata es oro × 1,6. El servidor rechaza los tiempos por debajo de 0,6 × oro, así que hay que medirlas jugando antes de aprobarlas.
+
+### Kit ampliado (`scripts/level_kit.py`)
+- **Giros:** `turn` hace girar la pieza en el cuadrado final de la anterior, y `x` la desplaza de lado. Las cámaras, los láseres, los checkpoints y la meta siguen la yaw de la pieza.
+- **Piezas de la cadena:** además de las plataformas, `moving` (hacia delante o de lado), `timed` y `crumble`.
+- **Props:** `trampoline`, `wind`, `boost`, `hazard` y `gem`, y `extra` para los desvíos opcionales con gema.
+- **`report()`:** dice qué movimiento mínimo pide cada hueco según la tabla medida, con un 85 % de margen.
+- **`check_overlaps()`:** avisa de bloques que se cruzan o que dejan menos de 2,5 m de altura libre.
+- En `build_world1.py`, las chispas guía (filas, arcos y columnas) y el decorado se colocan solos.
+
+### Niveles
+| Nivel | Tema | Lo nuevo |
+|---|---|---|
+| 1 Islas de la Brisa (fácil) | Saltos y trampolines | Saltos simples y dobles; dos trampolines a +5 m y +5,5 m |
+| 2 Saltos del Viento (fácil) | Viento y móviles | Tres columnas de viento (+6 a +6,5 m); móviles hacia delante y de lado |
+| 3 Puentes de Cristal (fácil) | Losas y saltos largos | Saltos largos de 8, 9 y 10,5 m; cadenas de losas que se rompen |
+| 4 Cumbre de las Nubes (medio) | Escalada | Paredes de 3,5 m, 5 m y 6 m (yo-yo); trampolín; combo de 7 m a +4 m |
+| 5 Praderas Flotantes (medio) | Temporizadas y losas | Ola de temporizadas (fases 0 / 0,2 / 0,4); escalones frágiles que suben |
+| 6 Arco de las Gaviotas (medio) | Giros y pinchos | Seis giros de 90°; pinchos, tres spinners y una patrulla |
+| 7 Colinas Saltarinas (medio) | Trampolines altos | Trampolines encadenados; dos fuertes (fuerza 24, unos 10 m) a +8 m y +8,5 m |
+| 8 Puente de Cometas (difícil) | Yo-yo y móviles | Salto + yo-yo a +4,2 m y +4,5 m; hueco de 13 m; combo con yo-yo desde una móvil |
+| 9 Acantilados Celestes (difícil) | Móviles sobre el vacío | Seis móviles; láseres intermitentes y patrullas |
+| 10 Ojo del Huracán (difícil) | De todo | Espiral con tres giros; viento alto (9 m); temporizadas; combo final de 14 m |
+
+- Cada nivel tiene 3 gemas en sitios opcionales: desvíos laterales, alturas que piden trampolín o viento + doble salto, y lo alto de los huecos grandes. Tiene además 2 checkpoints y entre 41 y 73 chispas.
+
+### Comprobación en Studio (2026-10-23)
+- **Carga:** los diez niveles se construyen en Play sin errores ni avisos nuevos.
+- **Selector:** muestra las 12 tarjetas en una fila desplazable, con 10 marcas "Por aprobar".
+- **Studio no renderizaba** mientras el dueño estaba fuera (RenderStepped = 0). Sin render no llega el teclado simulado ni corre el `ControlScript` de la plantilla, así que **no se pudieron probar el doble salto, el dash ni el yo-yo en estos niveles**.
+- **Tramos con ayuda:** se probaron caminando con `Humanoid:Move` en Heartbeat. Los 14 tramos con trampolín o viento (todos los que hay) se cruzan, también el giro de L10 con viento.
+- **Ajustes de la prueba:**
+  - Tres tramos de trampolín a +5,5 m bajaron de 1,5 m a 1,0 m de hueco, porque se aterrizaba a 1,1 m del borde.
+  - El trampolín fuerte a +8 m de L7 bajó de 5 m a 2,5 m.
+  - En L10, el giro que había justo tras un trampolín pasó a la pieza siguiente, porque no se llegaba girando en el aire.
+- **Cámara:** en las piezas giradas la zona de cámara pone la yaw a 90°.
+- **Pendiente de jugar con el moveset completo:**
+  - los huecos con doble salto, dash y yo-yo (salen de la tabla medida, al 85 %);
+  - las gemas;
+  - el ritmo de las temporizadas y las móviles;
+  - los spinners;
+  - las medallas.
+- **Visto de paso:** en el tutorial, la repisa de 3,5 m de la lección del yo-yo desde el suelo también se sube con doble salto (cabe en E2).
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.

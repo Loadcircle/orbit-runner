@@ -1,8 +1,8 @@
 --!strict
--- Catálogo de la Fase 1: laboratorio de mecánicas + tutorial + w1_l1 (el catálogo
--- completo de 31 niveles llega en la Fase 2, §4.4). Los datos de cada nivel son los
--- ModuleScripts de ReplicatedStorage.Levels (JSON exportado desde Godot, esquema v1);
--- el laboratorio se genera en código (Shared/LabLevel).
+-- Catálogo: laboratorio de mecánicas + tutorial + mundo 1 (Fase 2, R20). Los datos de
+-- cada nivel son los ModuleScripts de ReplicatedStorage.Levels (JSON del esquema v1,
+-- generados con roblox/scripts/build_*.py); el laboratorio se genera en código
+-- (Shared/LabLevel). `pending` marca los niveles que el dueño aún no ha aprobado.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -12,6 +12,7 @@ export type Entry = {
 	hintKey: string,
 	tutorial: boolean,
 	lab: boolean,
+	pending: boolean?,
 }
 
 local LevelCatalog = {}
@@ -19,8 +20,19 @@ local LevelCatalog = {}
 LevelCatalog.entries = {
 	{ id = "lab", titleKey = "SELECT_LAB", hintKey = "SELECT_LAB_HINT", tutorial = false, lab = true },
 	{ id = "tutorial", titleKey = "LEVEL_TUTORIAL", hintKey = "LEVEL_TUTORIAL_HINT", tutorial = true, lab = false },
-	{ id = "w1_l1", titleKey = "LEVEL_W1_L1", hintKey = "LEVEL_W1_L1_HINT", tutorial = false, lab = false },
 } :: { Entry }
+
+for index = 1, 10 do
+	local key = "LEVEL_W1_L" .. index
+	table.insert(LevelCatalog.entries, {
+		id = "w1_l" .. index,
+		titleKey = key,
+		hintKey = key .. "_HINT",
+		tutorial = false,
+		lab = false,
+		pending = true,
+	})
+end
 
 function LevelCatalog.get(id: string): Entry?
 	for _, entry in LevelCatalog.entries do

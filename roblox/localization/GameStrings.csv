@@ -12,6 +12,22 @@ LEVEL_W1_L1,Breeze Isles,,,Islas de la Brisa
 LEVEL_W1_L10,Eye of the Storm,,,Ojo del Huracán
 LEVEL_W1_L10_HINT,"Wind, bounces and precision",,,"Viento, rebotes y precisión"
 LEVEL_W1_L1_HINT,Jumps and trampolines,,,Saltos y trampolines
+LEVEL_W1_L2,Wind Leaps,,,Saltos del Viento
+LEVEL_W1_L2_HINT,Air currents and moving platforms,,,Corrientes y plataformas móviles
+LEVEL_W1_L3,Crystal Bridges,,,Puentes de Cristal
+LEVEL_W1_L3_HINT,Crumbling tiles and long jumps,,,Losas que se rompen y saltos largos
+LEVEL_W1_L4,Cloud Summit,,,Cumbre de las Nubes
+LEVEL_W1_L4_HINT,A big climb,,,Una gran escalada
+LEVEL_W1_L5,Floating Meadows,,,Praderas Flotantes
+LEVEL_W1_L5_HINT,Steps and fragile tiles,,,Escalones y losas frágiles
+LEVEL_W1_L6,Gull Arch,,,Arco de las Gaviotas
+LEVEL_W1_L6_HINT,Turns and spikes,,,Giros y pinchos
+LEVEL_W1_L7,Bouncy Hills,,,Colinas Saltarinas
+LEVEL_W1_L7_HINT,High trampolines,,,Trampolines altos
+LEVEL_W1_L8,Kite Bridge,,,Puente de Cometas
+LEVEL_W1_L8_HINT,Yo-yo disc and moving platforms,,,Disco de yo-yo y plataformas móviles
+LEVEL_W1_L9,Sky Cliffs,,,Acantilados Celestes
+LEVEL_W1_L9_HINT,Moving platforms over the void,,,Plataformas móviles sobre el vacío
 MEDAL_BRONZE,Bronze,,,Bronce
 MEDAL_GOLD,Gold,,,Oro
 MEDAL_SILVER,Silver,,,Plata
@@ -53,6 +69,7 @@ RESULTS_TOWER_TITLE,Climb over!,,,¡Subida terminada!
 SELECT_BEST,Best: {1},,,Mejor: {1}
 SELECT_LAB,Mechanics lab,,,Laboratorio de mecánicas
 SELECT_LAB_HINT,"Measure jumps, props and hazards",,,"Mide saltos, props y peligros"
+SELECT_PENDING,Pending approval,,,Por aprobar
 SELECT_PLAY,Play,,,Jugar
 SELECT_TITLE,Choose a run,,,Elige una prueba
 SETTINGS_BACK,Back,,,Volver

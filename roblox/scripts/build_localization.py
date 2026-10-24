@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "orbit_runner_game" / "localization" / "strings.csv"
 TARGET = ROOT / "roblox" / "localization" / "GameStrings.csv"
 
-PREFIXES = ("HUD_", "TUT_", "PAUSE_", "RESULTS_", "MEDAL_", "SETTINGS_", "LEVEL_TUTORIAL", "LEVEL_W1_L1",
+PREFIXES = ("HUD_", "TUT_", "PAUSE_", "RESULTS_", "MEDAL_", "SETTINGS_", "LEVEL_TUTORIAL", "LEVEL_W1_",
             "WORLD_1", "MENU_PLAY", "MENU_SETTINGS", "MENU_LEVELS")
 SKIP = {"SETTINGS_LANGUAGE", "SETTINGS_LANG_AUTO", "SETTINGS_QUALITY", "SETTINGS_Q_LOW", "SETTINGS_Q_MEDIUM",
         "SETTINGS_Q_HIGH", "SETTINGS_FPS", "SETTINGS_QUALITY_NOTE", "SETTINGS_NOTIFICATIONS"}
@@ -96,6 +96,7 @@ ROBLOX_OVERRIDES = {
     "SELECT_LAB": ("Laboratorio de mecánicas", "Mechanics lab"),
     "SELECT_LAB_HINT": ("Mide saltos, props y peligros", "Measure jumps, props and hazards"),
     "SELECT_PLAY": ("Jugar", "Play"),
+    "SELECT_PENDING": ("Por aprobar", "Pending approval"),
     "SELECT_BEST": ("Mejor: {1}", "Best: {1}"),
     "HUD_PAUSE": ("Pausa", "Pause"),
     "RESULTS_TIME": ("Tiempo", "Time"),
