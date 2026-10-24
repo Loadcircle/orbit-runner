@@ -310,6 +310,22 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - las medallas.
 - **Visto de paso:** en el tutorial, la repisa de 3,5 m de la lección del yo-yo desde el suelo también se sube con doble salto (cabe en E2).
 
+## R21 — Plan de modos y progreso guardado (2026-10-24, PLAN, sin implementar)
+- **Contexto:** en Roblox no hay single player aislado; cada partida corre en un servidor. El dueño quiere conservar la campaña en solitario de pasar mundos y añadir modos cooperativos y competitivos.
+- **Campaña en solitario:** se mantiene R-D. El lobby es compartido y cada jugador juega su nivel con su propio progreso. No se fija un máximo de 1 jugador por servidor, porque se perdería la parte social.
+  - **Pendiente:** hoy los personajes chocan si dos juegan el mismo nivel; R-D pedía fantasmas sin colisión. Se resuelve con `CollisionGroup`s (y transparencia opcional) cuando haya modos multijugador.
+- **Orden acordado:**
+  1. **Fase 3: progreso persistente en `DataStoreService`.** Es requisito de la campaña.
+     - **Datos:** se guardan por `UserId` (niveles, récords, medallas, gemas, chispas y estrellas). Hoy están en memoria (R12).
+     - **Guardado:** lo escribe solo el servidor, al entrar, cada cierto tiempo, en `PlayerRemoving` y en `BindToClose`. Lleva reintentos y bloqueo de sesión para no pisar datos entre servidores.
+     - **Tablas de récords:** se publican con `OrderedDataStore`.
+  2. **Fase 4: carrera (VS) y contrarreloj contra fantasmas.** Reutilizan los niveles existentes.
+     - **Carrera:** servidor reservado (`TeleportService:ReserveServer`) o zona de partida en el lobby, cuenta atrás y gana el primero en la meta. Sin colisión entre jugadores. El validador de R12 también vale aquí.
+     - **Fantasmas:** son asíncronos. Se graba la trayectoria del récord y se reproduce la del mejor amigo o la mundial.
+  3. **Después: cooperativo.** Grupo en un servidor reservado y niveles pensados para dos: uno activa algo para que pase el otro, y el disco del yo-yo de uno sirve de plataforma al otro. Necesita diseño de niveles propio.
+- **PvP:** queda **sin decidir**. Golpear o estorbar con el yo-yo choca con la identidad de la guía (el yo-yo es locomoción, no arma). Solo se hace si el dueño lo decide explícitamente.
+- **Motivo:** el progreso guardado sostiene la campaña. Los modos sociales ayudan a que el juego se descubra en Roblox (vuelta de jugadores, invitar amigos), y los dos primeros cuestan poco porque usan lo que ya existe.
+
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
 - [x] Tabla de alcances a ±5 % a 60 FPS. A 30 FPS todo dentro salvo el dash, en el límite (+5.0 %). Ver R4.
