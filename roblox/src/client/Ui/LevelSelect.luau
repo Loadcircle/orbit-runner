@@ -45,7 +45,8 @@ function LevelSelect.new(parent: Instance): LevelSelect
 		ScrollBarImageColor3 = Theme.CYAN,
 		Parent = root,
 	}) :: ScrollingFrame
-	Theme.list(Enum.FillDirection.Horizontal, 20).Parent = cards
+	-- Alineada a la izquierda: centrada, la fila desborda por la izquierda fuera del scroll.
+	Theme.list(Enum.FillDirection.Horizontal, 20, Enum.HorizontalAlignment.Left).Parent = cards
 	Theme.create("UIPadding", {
 		PaddingLeft = UDim.new(0, 10),
 		PaddingRight = UDim.new(0, 10),

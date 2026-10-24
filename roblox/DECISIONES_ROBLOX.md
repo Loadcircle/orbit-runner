@@ -339,7 +339,12 @@ Decisiones del port a Roblox (rama `feature/roblox`). Cada entrada: decisión, m
   - Los resultados muestran el top 5 mundial y resaltan al jugador.
 - **Para probar en Studio:** Game Settings → Security → "Enable Studio Access to API Services". Ojo: así Studio lee y escribe los datos reales del lugar publicado.
 - **Comprobado:** `rojo build` compila el proyecto.
-- **Sin comprobar:** no había ninguna instancia de Studio conectada al MCP, así que falta probar en Play cargar y guardar, el aviso sin acceso y el top. También falta la prueba de dos servidores (bloqueo), que solo se puede hacer con el juego publicado.
+- **Comprobado en Play** (el dueño activó el acceso a las API):
+  - el perfil se carga desde DataStore;
+  - tras jugar `w1_l2` (40.42 s, plata), el documento guardado tiene el nivel, las chispas y el bloqueo renovado;
+  - `OrbitRunnerTimes_w1_l2` tiene el tiempo (40417 ms).
+- **Sin comprobar:** el aviso sin acceso a las API y la prueba con dos servidores (bloqueo), que solo se puede hacer con el juego publicado.
+- **Bug corregido de paso:** el selector tenía la fila de tarjetas centrada en un `ScrollingFrame` y desbordaba por la izquierda: el laboratorio y el tutorial quedaban fuera del scroll. Ahora la fila se alinea a la izquierda.
 
 ## Estado de la lista de aceptación (§3.9) a 2026-10-22
 - [x] Salto completo: 2.27 m (= Godot a 60 Hz), 0.70 s, a 60 FPS. A 30 FPS: 2.27 m. 120+ FPS pendiente (S25).
