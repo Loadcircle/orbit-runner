@@ -260,6 +260,8 @@ Decisiones del propietario:
 
 ### Pendiente (freemium)
 
+Plan de paso a producción (2026-10-25): pasos del propietario en [`PRODUCTION_HUMAN_CHECKLIST.md`](PRODUCTION_HUMAN_CHECKLIST.md) y guía técnica para el agente en [`PRODUCTION_INTEGRATION.md`](PRODUCTION_INTEGRATION.md).
+
 1. **Integración real** con Firebase (decisión del propietario). Solo hay que cambiar los proveedores en `Services.reload()`:
    - Authentication (Google; Facebook requiere crear una app de Facebook);
    - Firestore y Functions para rankings, amigos y validación de marcas con las repeticiones;
